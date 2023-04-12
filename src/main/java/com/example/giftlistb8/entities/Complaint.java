@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "complaints")
@@ -14,20 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Complaint {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "complaint_seq")
-    @SequenceGenerator(name = "complaint_seq",allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "complaint_id_gen")
+    @SequenceGenerator(name = "complaint_id_gen",
+                       sequenceName = "complaint_id_seq")
     private Long id;
     private String complaint;
     private Boolean seen;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn()
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @JoinColumn
     private User user;
-
-    public Complaint(String complaint, Boolean seen) {
-        this.complaint = complaint;
-        this.seen = seen;
-    }
-
 }

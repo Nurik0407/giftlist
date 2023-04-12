@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
+import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "charities")
@@ -16,36 +16,24 @@ import java.util.List;
 @AllArgsConstructor
 public class Charity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "charity_seq")
-    @SequenceGenerator(name = "charity_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "charity_id_gen")
+    @SequenceGenerator(name = "charity_id_gen",
+                       sequenceName = "charity_id_seq")
     private Long id;
     private String name;
     private String state;
     private String category;
-    @Column(name = "sub_category")
     private String subCategory;
     private String description;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn()
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH,DETACH})
+    @JoinColumn
     private User user;
-
     @ElementCollection
     private List<String> images;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn()
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn
     private List<Complaint> complaints;
-
-    @OneToOne(mappedBy = "charity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+    @OneToOne(mappedBy = "charity", cascade = {PERSIST, MERGE, REFRESH,DETACH})
     private Reserve reserve;
 
-    public Charity(String name, String state, String category, String subCategory, String description) {
-        this.name = name;
-        this.state = state;
-        this.category = category;
-        this.subCategory = subCategory;
-        this.description = description;
-    }
 }

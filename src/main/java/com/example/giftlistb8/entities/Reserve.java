@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "reserves")
 @Data
@@ -14,26 +16,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Reserve {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reserve_seq")
-    @SequenceGenerator(name = "reserve_seq",allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reserve_id_gen")
+    @SequenceGenerator(name = "reserve_id_gen",
+                       sequenceName = "reserve_id_seq")
     private Long id;
-    @Column(name = "is_anonymous")
     private Boolean isAnonymous;
-
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
-    @JoinColumn(name = "charity_id")
+    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @JoinColumn
     private Charity charity;
-
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
-    @JoinColumn(name = "wish_id")
+    @OneToOne(cascade = {PERSIST, MERGE, REFRESH,DETACH})
+    @JoinColumn
     private Wish wish;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH,DETACH})
+    @JoinColumn
     private User user;
-
-    public Reserve(Boolean isAnonymous) {
-        this.isAnonymous = isAnonymous;
-    }
 }

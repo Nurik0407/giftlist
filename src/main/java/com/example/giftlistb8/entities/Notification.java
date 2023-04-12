@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
-
 import static jakarta.persistence.CascadeType.*;
 
 @Entity
@@ -19,36 +17,24 @@ import static jakarta.persistence.CascadeType.*;
 @AllArgsConstructor
 public class Notification {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_seq")
-    @SequenceGenerator(name = "notification_seq",allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_id_gen")
+    @SequenceGenerator(name = "notification_id_gen",
+                       sequenceName = "notification_id_seq")
     private Long id;
     private Type type;
     private String message;
     private Boolean seen;
-    @Column(name = "created_at")
     private LocalDate createdAt;
-
-    @ManyToOne(cascade = {PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn()
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @JoinColumn
     private User fromWhomUser;
-
-    @OneToOne(cascade = {PERSIST,MERGE,DETACH,REFRESH},orphanRemoval = true)
-    @JoinColumn(name = "wish_id")
+    @OneToOne(cascade = {PERSIST,MERGE,DETACH,REFRESH})
+    @JoinColumn
     private Wish wish;
-
-    @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH}, orphanRemoval = true)
-    @JoinColumn(name = "charity_id")
+    @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH})
+    @JoinColumn
     private Charity charity;
-
-    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, orphanRemoval = true)
-    @JoinColumn(name = "reserve_id")
+    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @JoinColumn
     private Reserve reserve;
-
-    public Notification(Type type, String message, Boolean seen, LocalDate createdAt) {
-        this.type = type;
-        this.message = message;
-        this.seen = seen;
-        this.createdAt = createdAt;
-    }
 }

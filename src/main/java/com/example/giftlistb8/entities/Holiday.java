@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.util.List;
+import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "holidays")
@@ -17,24 +17,16 @@ import java.util.List;
 @AllArgsConstructor
 public class Holiday {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "holiday_seq")
-    @SequenceGenerator(name = "holiday_seq",allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "holiday_id_gen")
+    @SequenceGenerator(name = "holiday_id_gen",
+                       sequenceName = "holiday_id_seq")
     private Long id;
     private String name;
     private LocalDate date;
     private String image;
-
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn()
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @JoinColumn
     private User user;
-
-    @OneToMany(mappedBy = "holiday", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "holiday", cascade = CascadeType.ALL)
     private List<Wish> wishes;
-
-    public Holiday(String name, LocalDate date, String image) {
-        this.name = name;
-        this.date = date;
-        this.image = image;
-    }
 }
