@@ -29,15 +29,16 @@ public class Wish {
     private String description;
     private LocalDate dateOfHoliday;
     private Boolean status;
+
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @JoinColumn
     private User user;
+
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn
     private List<Complaint> complaints;
+
     @OneToOne(mappedBy = "wish", cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private Reserve reserve;
+
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @JoinColumn
     private Holiday holiday;
 }

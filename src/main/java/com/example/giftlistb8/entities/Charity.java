@@ -27,14 +27,16 @@ public class Charity {
     private String category;
     private String subCategory;
     private String description;
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @JoinColumn
-    private User user;
+
     @ElementCollection
     private List<String> images;
+
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    private User user;
+
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn
     private List<Complaint> complaints;
+
     @OneToOne(mappedBy = "charity", cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private Reserve reserve;
 }

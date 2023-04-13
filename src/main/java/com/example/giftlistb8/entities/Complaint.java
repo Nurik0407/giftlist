@@ -22,7 +22,7 @@ public class Complaint {
     private Long id;
     private String complaint;
     private Boolean seen;
+
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @JoinColumn
     private User user;
 }

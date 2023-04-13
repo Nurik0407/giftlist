@@ -26,9 +26,10 @@ public class Holiday {
     private String name;
     private LocalDate date;
     private String image;
+
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @JoinColumn
     private User user;
+
     @OneToMany(mappedBy = "holiday", cascade = CascadeType.ALL)
     private List<Wish> wishes;
 }

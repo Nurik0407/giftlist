@@ -27,16 +27,16 @@ public class Notification {
     private String message;
     private Boolean seen;
     private LocalDate createdAt;
+
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @JoinColumn
     private User fromWhomUser;
+
     @OneToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
-    @JoinColumn
     private Wish wish;
+
     @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH})
-    @JoinColumn
     private Charity charity;
+
     @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @JoinColumn
     private Reserve reserve;
 }
