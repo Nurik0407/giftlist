@@ -2,7 +2,6 @@ package com.example.giftlistb8.entities;
 
 import com.example.giftlistb8.enums.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +23,6 @@ public class User {
     private Long id;
     private String firstName;
     private String lastName;
-    @NotBlank
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
@@ -32,7 +30,7 @@ public class User {
     private Boolean isBlocked;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private User_Info userInfo;
+    private UserInfo userInfo;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Charity> charities;

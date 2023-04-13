@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User_Info {
+public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_info_id_gen")
     @SequenceGenerator(name = "user_info_id_gen",
