@@ -6,6 +6,7 @@ import com.example.giftlistb8.dto.auth.requests.AuthRegisterRequest;
 import com.example.giftlistb8.dto.auth.responses.AuthRegisterResponse;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.enums.Role;
+import com.example.giftlistb8.exceptions.AlreadyExistsException;
 import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthRegisterResponse register(AuthRegisterRequest userRequest) {
+        if (userRepository.existsByEmail(userRequest.email())) {
+            throw new AlreadyExistsException("Sorry, this email is already registered. Please try a different email or login to your existing account");
+        }
         var user = User.builder()
                 .firstName(userRequest.firstName())
                 .lastName(userRequest.lastName())
