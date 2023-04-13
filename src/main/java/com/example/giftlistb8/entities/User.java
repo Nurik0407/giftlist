@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
     @SequenceGenerator(name = "user_id_gen",
-                       sequenceName = "user_id_seq")
+            sequenceName = "user_id_seq")
     private Long id;
     private String firstName;
     private String lastName;
@@ -32,20 +33,20 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private User_Info userInfo;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Charity> charities;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Complaint> complaints;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Wish> wishes;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reserve> reserves;
     @OneToMany(mappedBy = "fromWhomUser", cascade = CascadeType.ALL)
     private List<Notification> notifications;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Holiday> holidays;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<User> requestsForFriends;
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<User> friends;
 }

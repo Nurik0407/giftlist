@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+
 import static jakarta.persistence.CascadeType.*;
 
 @Entity
@@ -19,7 +21,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_id_gen")
     @SequenceGenerator(name = "notification_id_gen",
-                       sequenceName = "notification_id_seq")
+            sequenceName = "notification_id_seq")
     private Long id;
     private Type type;
     private String message;
@@ -28,7 +30,7 @@ public class Notification {
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
     @JoinColumn
     private User fromWhomUser;
-    @OneToOne(cascade = {PERSIST,MERGE,DETACH,REFRESH})
+    @OneToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
     @JoinColumn
     private Wish wish;
     @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH})

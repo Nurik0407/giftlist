@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
@@ -19,7 +20,7 @@ public class User_Info {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_info_id_gen")
     @SequenceGenerator(name = "user_info_id_gen",
-                       sequenceName = "user_info_id_seq")
+            sequenceName = "user_info_id_seq")
     private Long id;
     private String phoneNumber;
     private String image;

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
@@ -17,7 +18,7 @@ public class Mailing {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mailing_id_gen")
     @SequenceGenerator(name = "mailing_id_gen",
-                       sequenceName = "mailing_id_seq")
+            sequenceName = "mailing_id_seq")
     private Long id;
     private String title;
     private String description;
