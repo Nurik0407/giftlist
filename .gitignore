@@ -33,3 +33,4 @@ build/
 .vscode/
 
 /src/main/resources/application-bektursun.properties
+/src/main/resources/application-nurbek1.properties
