@@ -21,7 +21,7 @@ public class Wish {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wish_id_gen")
     @SequenceGenerator(name = "wish_id_gen",
-            sequenceName = "wish_id_seq")
+            sequenceName = "wish_id_seq",allocationSize = 1,initialValue = 10)
     private Long id;
     private String name;
     private String linkGift;

@@ -21,7 +21,7 @@ public class Holiday {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "holiday_id_gen")
     @SequenceGenerator(name = "holiday_id_gen",
-            sequenceName = "holiday_id_seq")
+            sequenceName = "holiday_id_seq",allocationSize = 1,initialValue = 10)
     private Long id;
     private String name;
     private LocalDate date;

@@ -20,7 +20,7 @@ public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_info_id_gen")
     @SequenceGenerator(name = "user_info_id_gen",
-            sequenceName = "user_info_id_seq")
+            sequenceName = "user_info_id_seq",allocationSize = 1,initialValue = 10)
     private Long id;
     private String phoneNumber;
     private String image;
