@@ -1,16 +1,16 @@
 package com.example.giftlistb8.exceptions.handler;
 
-import kg.peaksoft.giftlistb6.exceptions.BadCredentialsException;
-import kg.peaksoft.giftlistb6.exceptions.BadRequestException;
-import kg.peaksoft.giftlistb6.exceptions.ExceptionResponse;
-import kg.peaksoft.giftlistb6.exceptions.NotFoundException;
+import com.example.giftlistb8.exceptions.*;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class  GlobalExceptionHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -23,16 +23,16 @@ public class  GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionResponse handlerNotFoundException(BadCredentialsException e) {
-
+    @ExceptionHandler(AlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ExceptionResponse handlerNotFoundException(AlreadyExistsException e) {
         return new ExceptionResponse(
-                HttpStatus.FORBIDDEN,
+                HttpStatus.CONFLICT,
                 e.getClass().getSimpleName(),
                 e.getMessage()
         );
     }
+
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -40,6 +40,26 @@ public class  GlobalExceptionHandler {
 
         return new ExceptionResponse(
                 HttpStatus.BAD_REQUEST,
+                e.getClass().getSimpleName(),
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handlerNotFoundException(MethodArgumentNotValidException e) {
+        return new ExceptionResponse(
+                HttpStatus.BAD_REQUEST,
+                e.getClass().getSimpleName(),
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ExceptionResponse handlerNotFoundException(BadCredentialsException e) {
+        return new ExceptionResponse(
+                HttpStatus. UNAUTHORIZED,
                 e.getClass().getSimpleName(),
                 e.getMessage()
         );
