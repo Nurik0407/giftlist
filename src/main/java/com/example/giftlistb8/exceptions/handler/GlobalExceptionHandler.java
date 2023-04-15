@@ -37,7 +37,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handlerNotFoundException(BadRequestException e) {
-
         return new ExceptionResponse(
                 HttpStatus.BAD_REQUEST,
                 e.getClass().getSimpleName(),
