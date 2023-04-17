@@ -35,3 +35,5 @@ build/
 /src/main/resources/application-bektursun.properties
 
 /src/main/resources/application-nurik.properties
+
+/src/main/resources/application-nurbek.properties
