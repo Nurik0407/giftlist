@@ -125,7 +125,8 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtService.generateToken(user);
         log.info("Successfully works the authorization with google method");
         return AuthRegisterResponse.builder()
-                .email(firebaseToken.getEmail() + " token: " + token)
+                .email(firebaseToken.getEmail())
+                .token(token)
                 .build();
     }
 
