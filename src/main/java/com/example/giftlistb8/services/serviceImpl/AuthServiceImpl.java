@@ -103,13 +103,6 @@ public class AuthServiceImpl implements AuthService {
         } catch (IOException e) {
             log.error("IOException");
         }
-        if (!userRepository.existsByEmail("Admin@gmail.com")) {
-            User user = new User();
-            user.setEmail("Admin@gmail.com");
-            user.setPassword(passwordEncoder.encode("admin1234"));
-            user.setRole(Role.ADMIN);
-            userRepository.save(user);
-        }
     }
 
     @Override
