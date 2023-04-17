@@ -1,6 +1,7 @@
 package com.example.giftlistb8.exceptions;
 
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends RuntimeException{
+
     public NotFoundException() {
         super();
     }
