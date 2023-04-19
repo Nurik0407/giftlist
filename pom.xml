@@ -84,7 +84,17 @@
 			<version>RELEASE</version>
 			<scope>compile</scope>
 		</dependency>
-	</dependencies>
+		<!--Auth with Google-->
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>9.1.1</version>
+		</dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
