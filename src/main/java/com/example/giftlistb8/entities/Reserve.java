@@ -18,7 +18,7 @@ public class Reserve {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reserve_id_gen")
     @SequenceGenerator(name = "reserve_id_gen",
-            sequenceName = "reserve_id_seq")
+            sequenceName = "reserve_id_seq",allocationSize = 1,initialValue = 4)
     private Long id;
     private Boolean isAnonymous;
 

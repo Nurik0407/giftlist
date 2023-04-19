@@ -20,7 +20,7 @@ public class Charity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "charity_id_gen")
     @SequenceGenerator(name = "charity_id_gen",
-            sequenceName = "charity_id_seq")
+            sequenceName = "charity_id_seq",allocationSize = 1,initialValue = 10)
     private Long id;
     private String name;
     private String state;
