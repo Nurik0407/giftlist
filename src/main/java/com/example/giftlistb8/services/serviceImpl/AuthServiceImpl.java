@@ -10,6 +10,7 @@ import com.example.giftlistb8.exceptions.AlreadyExistsException;
 import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.AuthService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
