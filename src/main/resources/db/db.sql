@@ -7,7 +7,8 @@ values (2,33,'Kyrgyzstan','2004-12-12','https://www.facebook.com/profile.php?id=
        (7,46,'Kyrgyzstan','2000-10-05','https://www.facebook.com/profile.php?id=100076926076401','play cs 1.6','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996559290595',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
        (8,45,'Kyrgyzstan','1997-12-03','https://www.facebook.com/profile.php?id=100076926076401','play warface','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996959234845',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
        (9,42,'Kyrgyzstan','1998-12-12','https://www.facebook.com/profile.php?id=100076926076401','play aviator','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234595',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (10,34,'Kyrgyzstan','2002-10-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234595',43,'http://t.me/adilet_524','http://wa.me/996508206602');
+       (1,34,'Kyrgyzstan','2002-10-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234595',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
+       (10,34,'Kyrgyzstan','2002-9-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagran.com/nurkanowich?utm_medium=copy_link','+996999234535',43,'http://t.me/adilet_324','http://wa.me/996408206602');
 
 
 insert into users (id, email, first_name, is_blocked,last_name,password,role,user_info_id)
@@ -19,7 +20,8 @@ values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','nurislam1234
        (7,'nurisa.abdykalykova03@gmail.com','Nurisa',false,'Abdykalykova','nurisa1234','USER',7),
        (8,'programmist00707@gmail.com','Syimyk',false,'Ravshanbekov','admin1234','USER',8),
        (9,'adinai.sharshekeeva.kk@gmail.com','Adinai',false,'Sharshekeeva','sharshekeeva1234','USER',9),
-       (10,'a.asangazieva@gmail.com','Aijamal',false,'Asangazieva','asangazieva1234','USER',10);
+       (1,'a.asangazieva@gmail.com','Aijamal',false,'Asangazieva','asangaziev a1234','USER',1),
+       (10,'adminadminov@gmail.com','Admin',false,'Admin','admin1234','ADMIN',10);
 
 
 INSERT INTO charities (id,category, description, name, state, sub_category,user_id)
@@ -32,7 +34,7 @@ VALUES
     (6, 'Category 6', 'Description 6', 'Name 6', 'state 6', 'Sub-Category 6', 7),
     (7, 'Category 7', 'Description 7', 'Name 7', 'state 7', 'Sub-Category 7', 8),
     (8, 'Category 8', 'Description 8', 'Name 8', 'state 8', 'Sub-Category 8', 9),
-    (9, 'Category 9', 'Description 9', 'Name 9', 'state 9', 'Sub-Category 9', 10);
+    (9, 'Category 9', 'Description 9', 'Name 9', 'state 9', 'Sub-Category 9', 3);
 
 
 INSERT INTO charity_images(charity_id, images)
@@ -58,7 +60,7 @@ VALUES
 
 INSERT INTO holidays (id, date, image, name, user_id)
 VALUES
-    (1, '2023-01-01', 'image1.jpg', 'New Year', 10),
+    (1, '2023-01-01', 'image1.jpg', 'New Year', 1),
     (2, '2023-02-14', 'image2.jpg', 'Valentine''s Day', 2),
     (3, '2023-03-08', 'image3.jpg', 'International Women''s Day', 3),
     (4, '2023-04-01', 'image4.jpg', 'April Fool''s Day', 4),
@@ -71,7 +73,7 @@ VALUES
 
 INSERT INTO wishes (id, date_of_holiday, description, image, link_gift, name, status, holiday_id, user_id)
 VALUES
-    (1, '2023-01-01', 'Description 1','image1.jpg', 'https://www.amazon.com/giftcard', 'Amazon Gift Card',true, 1, 10),
+    (1, '2023-01-01', 'Description 1','image1.jpg', 'https://www.amazon.com/giftcard', 'Amazon Gift Card',true, 1, 1),
     (2, '2023-02-14', 'Description 2','image2.jpg', 'https://www.sephora.com/giftcard', 'Sephora Gift Card',true, 2, 2),
     (3, '2023-03-08', 'Description 3','image3.jpg', 'https://www.etsy.com/giftcard', 'Etsy Gift Card',false, 3, 3),
     (4, '2023-04-01', 'Description 4','image4.jpg', 'https://www.target.com/giftcard', 'Target Gift Card',true, 4, 4),
@@ -97,9 +99,9 @@ VALUES
 
 INSERT INTO users_friends(user_id, friends_id)
 VALUES
-    (10, 2),
-    (10, 3),
-    (10, 4),
+    (1, 2),
+    (1, 3),
+    (1, 4),
     (2, 3),
     (2, 4),
     (2, 5),
@@ -110,16 +112,16 @@ VALUES
 
 INSERT INTO users_requests_for_friends(user_id, requests_for_friends_id)
 VALUES
-    (10, 6),
-    (10, 7),
-    (10, 8);
+    (1, 6),
+    (1, 7),
+    (1, 8);
 
 
 INSERT INTO reserves (id, is_anonymous, charity_id, user_id, wish_id)
 VALUES
-(1, false, 9, 7, 7),
-(2, false, 2, 8, 8),
-(3, false, 3, 9, 9);
+    (1, false, 9, 7, 7),
+    (2, false, 2, 8, 8),
+    (3, false, 3, 9, 9);
 
 
 INSERT INTO complaints (id, complaint, seen, user_id)
