@@ -1,4 +1,4 @@
-package com.example.giftlistb8.dto.reserve.response;
+package com.example.giftlistb8.dto;
 
 import lombok.Builder;
 import org.springframework.http.HttpStatus;

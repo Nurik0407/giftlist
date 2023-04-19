@@ -6,6 +6,8 @@ import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.Reserve;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.entities.Wish;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +38,5 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
 
     @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.charity = :charity")
     Optional<Reserve> findByUserAndCharity(@Param("user") User user,@Param("charity") Charity charity);
+    Page<ReserveResponseWish> findAllReserveWish(Pageable pageable);
 }

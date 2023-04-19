@@ -1,8 +1,10 @@
 package com.example.giftlistb8.services;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestCharity;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestWish;
+import com.example.giftlistb8.dto.reserve.response.PaginationResponseCharity;
+import com.example.giftlistb8.dto.reserve.response.PaginationResponseWish;
 import com.example.giftlistb8.dto.reserve.response.ReserveGetAllResponse;
-import com.example.giftlistb8.dto.reserve.response.SimpleResponse;
+import com.example.giftlistb8.dto.SimpleResponse;
 
 public interface ReserveService {
     SimpleResponse wishReserve(ReserveRequestWish reserveRequest);
@@ -11,4 +13,6 @@ public interface ReserveService {
     SimpleResponse deleteWish(Long wishId);
     SimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity);
     SimpleResponse deleteCharity(Long charityId);
+    PaginationResponseWish getWishReservePagination(int page, int size);
+    PaginationResponseCharity getCharityReservePagination(int page, int size);
 }

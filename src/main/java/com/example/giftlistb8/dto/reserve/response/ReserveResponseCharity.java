@@ -1,5 +1,4 @@
 package com.example.giftlistb8.dto.reserve.response;
-
 import lombok.Builder;
 
 import java.time.LocalDate;

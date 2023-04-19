@@ -24,18 +24,18 @@ values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','nurislam1234
 
 
 
--- INSERT INTO charities (id, category, condition, description, sub_category, title, user_id)
-INSERT INTO charities (id,category, description, name, state, sub_category,user_id)
+-- INSERT INTO charities (id, category, condition, description, sub_category, date,title, user_id)
+INSERT INTO charities (id,category, description, name, state,date, sub_category,user_id)
 VALUES
-    (1, 'Category 1', 'Description 1', 'Name 1', 'state 1', 'Sub-Category 1', 2),
-    (2, 'Category 2', 'Description 2', 'Name 2', 'state 2', 'Sub-Category 2', 3),
-    (3, 'Category 3', 'Description 3', 'Name 3', 'state 3', 'Sub-Category 3', 4),
-    (4, 'Category 4', 'Description 4', 'Name 4', 'state 4', 'Sub-Category 4', 5),
-    (5, 'Category 5', 'Description 5', 'Name 5', 'state 5', 'Sub-Category 5', 6),
-    (6, 'Category 6', 'Description 6', 'Name 6', 'state 6', 'Sub-Category 6', 7),
-    (7, 'Category 7', 'Description 7', 'Name 7', 'state 7', 'Sub-Category 7', 8),
-    (8, 'Category 8', 'Description 8', 'Name 8', 'state 8', 'Sub-Category 8', 9),
-    (9, 'Category 9', 'Description 9', 'Name 9', 'state 9', 'Sub-Category 9', 10);
+    (1, 'Category 1', 'Description 1', 'Name 1', 'state 1','2023-01-02', 'Sub-Category 1', 2),
+    (2, 'Category 2', 'Description 2', 'Name 2', 'state 2','2023-02-03',  'Sub-Category 2', 3),
+    (3, 'Category 3', 'Description 3', 'Name 3', 'state 3','2022-02-04',  'Sub-Category 3', 4),
+    (4, 'Category 4', 'Description 4', 'Name 4', 'state 4','2023-05-07',  'Sub-Category 4', 5),
+    (5, 'Category 5', 'Description 5', 'Name 5', 'state 5', '2022-02-01', 'Sub-Category 5', 6),
+    (6, 'Category 6', 'Description 6', 'Name 6', 'state 6','2023-02-03',  'Sub-Category 6', 7),
+    (7, 'Category 7', 'Description 7', 'Name 7', 'state 7', '2022-10-05', 'Sub-Category 7', 8),
+    (8, 'Category 8', 'Description 8', 'Name 8', 'state 8','2023-01-25',  'Sub-Category 8', 9),
+    (9, 'Category 9', 'Description 9', 'Name 9', 'state 9','2021-02-07',  'Sub-Category 9', 10);
 
 
 INSERT INTO charity_images(charity_id, images)

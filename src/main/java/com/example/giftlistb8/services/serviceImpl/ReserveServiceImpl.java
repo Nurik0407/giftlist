@@ -1,14 +1,10 @@
 package com.example.giftlistb8.services.serviceImpl;
-
 import com.example.giftlistb8.config.JwtService;
+import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestCharity;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestWish;
-import com.example.giftlistb8.dto.reserve.response.ReserveGetAllResponse;
-import com.example.giftlistb8.dto.reserve.response.SimpleResponse;
-import com.example.giftlistb8.entities.Charity;
-import com.example.giftlistb8.entities.Reserve;
-import com.example.giftlistb8.entities.User;
-import com.example.giftlistb8.entities.Wish;
+import com.example.giftlistb8.dto.reserve.response.*;
+import com.example.giftlistb8.entities.*;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
 import com.example.giftlistb8.repositories.ReserveRepository;
@@ -16,8 +12,13 @@ import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.services.ReserveService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -124,5 +125,51 @@ public class ReserveServiceImpl implements ReserveService {
                 .build();
     }
 
+    @Override
+    public PaginationResponseWish getWishReservePagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Reserve> pagedWishes = reserveRepository.findAll(pageable);
+        List<ReserveResponseWish> responseWishes = pagedWishes.getContent().stream()
+                .map(reserve -> new ReserveResponseWish(
+                        reserve.getId(),
+                        reserve.getUser().getFirstName() + " " + reserve.getUser().getLastName(),
+                        reserve.getUser().getUserInfo().getImage(),
+                        reserve.getWish().getHoliday().getName(),
+                        reserve.getWish().getHoliday().getDate(),
+                        reserve.getWish().getName(),
+                        reserve.getWish().getImage()))
+                .collect(Collectors.toList());
 
+        PaginationResponseWish paginationResponseWish = new PaginationResponseWish();
+        paginationResponseWish.setReserveResponseWishes(responseWishes);
+        paginationResponseWish.setCurrentPage(pagedWishes.getNumber() + 1);
+        paginationResponseWish.setPageSize(pagedWishes.getSize());
+
+        return paginationResponseWish;
+
+    }
+
+    @Override
+    public PaginationResponseCharity getCharityReservePagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Reserve> pagedCharity = reserveRepository.findAll(pageable);
+        List<ReserveResponseCharity> responseCharities = pagedCharity.getContent().stream()
+                .map(reserve -> new ReserveResponseCharity(
+                        reserve.getId(),
+                        reserve.getUser().getFirstName() + " " + reserve.getUser().getLastName(),
+                        reserve.getUser().getUserInfo().getImage(),
+                        reserve.getCharity().getName(),
+                        reserve.getCharity().getState(),
+                        reserve.getCharity().getImages().get(0),
+                        reserve.getCharity().getDate()))
+                .toList();
+
+        PaginationResponseCharity paginationResponseCharity = new PaginationResponseCharity();
+        paginationResponseCharity.setReserveResponseCharities(responseCharities);
+        paginationResponseCharity.setCurrentPage(pagedCharity.getNumber() + 1);
+        paginationResponseCharity.setPageSize(pagedCharity.getSize());
+
+        return paginationResponseCharity;
+
+    }
 }
