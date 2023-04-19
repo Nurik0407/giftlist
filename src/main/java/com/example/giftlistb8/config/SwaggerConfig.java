@@ -19,7 +19,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components()
                         .addSecuritySchemes(API_KEY, apiKeySecuritySchema()))
-                .info(new Info().title("Gadgetarium"))
+                .info(new Info().title("Gift List"))
                 .security(Collections.singletonList(new SecurityRequirement().addList(API_KEY)));
     }
 
