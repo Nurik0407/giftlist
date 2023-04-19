@@ -10,7 +10,6 @@ values (2,33,'Kyrgyzstan','2004-12-12','https://www.facebook.com/profile.php?id=
        (10,34,'Kyrgyzstan','2002-10-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234595',43,'http://t.me/adilet_524','http://wa.me/996508206602');
 
 
-
 insert into users (id, email, first_name, is_blocked,last_name,password,role,user_info_id)
 values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','nurislam1234','USER',2),
        (3,'nursultan@gmail.com','Nursuldan',false,'Odesov','nursultan1234','USER',3),
@@ -23,8 +22,6 @@ values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','nurislam1234
        (10,'a.asangazieva@gmail.com','Aijamal',false,'Asangazieva','asangazieva1234','USER',10);
 
 
-
--- INSERT INTO charities (id, category, condition, description, sub_category, title, user_id)
 INSERT INTO charities (id,category, description, name, state, sub_category,user_id)
 VALUES
     (1, 'Category 1', 'Description 1', 'Name 1', 'state 1', 'Sub-Category 1', 2),
@@ -58,6 +55,7 @@ VALUES
     (6, 'image16.jpg'),
     (7, 'image17.jpg');
 
+
 INSERT INTO holidays (id, date, image, name, user_id)
 VALUES
     (1, '2023-01-01', 'image1.jpg', 'New Year', 10),
@@ -71,7 +69,6 @@ VALUES
     (9, '2023-10-31', 'image9.jpg', 'Halloween', 9);
 
 
--- INSERT INTO wishes (id, date_of_holiday, image, link_of_gift, title, holiday_id, user_id)
 INSERT INTO wishes (id, date_of_holiday, description, image, link_gift, name, status, holiday_id, user_id)
 VALUES
     (1, '2023-01-01', 'Description 1','image1.jpg', 'https://www.amazon.com/giftcard', 'Amazon Gift Card',true, 1, 10),
@@ -83,6 +80,7 @@ VALUES
     (7, '2023-07-04', 'Description 7','image7.jpg', 'https://www.apple.com/giftcard', 'Apple Gift Card',true, 7, 7),
     (8, '2023-09-01', 'Description 8','image8.jpg', 'https://www.starbucks.com/giftcard', 'Starbucks Gift Card',false, 8, 8),
     (9, '2023-10-31', 'Description 9','image9.jpg', 'https://www.netflix.com/giftcard', 'Netflix Gift Card',true, 9, 9);
+
 
 INSERT INTO mailings (id, created_at, description, image, title)
 VALUES
@@ -96,6 +94,7 @@ VALUES
     (8, '2023-04-12 16:00:00', 'Описание рассылки 8', 'image8.jpg', 'Заголовок рассылки 8'),
     (9, '2023-04-13 17:00:00', 'Описание рассылки 9', 'image9.jpg', 'Заголовок рассылки 9');
 
+
 INSERT INTO users_friends(user_id, friends_id)
 VALUES
     (10, 2),
@@ -108,35 +107,26 @@ VALUES
     (3, 5),
     (3, 6);
 
+
 INSERT INTO users_requests_for_friends(user_id, requests_for_friends_id)
 VALUES
     (10, 6),
     (10, 7),
     (10, 8);
 
+
 INSERT INTO reserves (id, is_anonymous, charity_id, user_id, wish_id)
 VALUES
---     (1, false, 1, 1, 1),
---     (2, false, 2, 2, 2),
---     (3, false, 3, 3, 3),
---     (4, true, 1, 4, 4),
---     (5, true, 2, 5, 5),
---     (6, true, 3, 6, 6),
 (1, false, 9, 7, 7),
 (2, false, 2, 8, 8),
 (3, false, 3, 9, 9);
+
 
 INSERT INTO complaints (id, complaint, seen, user_id)
 VALUES
     (1, 'Complaint 10', false, 2),
     (2, 'Complaint 2', true, 3);
---     (3, 'Complaint 3', false, 3, 3, 3),
---     (4, 'Complaint 4', true, 4, 4, 4),
---     (5, 'Complaint 5', false, 5, 5, 5),
---     (6, 'Complaint 6', true, 6, 6, 6),
---     (7, 'Complaint 7', false, 7, 7, 7),
---     (8, 'Complaint 8', true, 8, 8, 8),
---     (9, 'Complaint 9', false, 9, 9, 9);
+
 
 INSERT INTO wishes_complaints(wish_id, complaints_id)
 values (1,2);
@@ -147,20 +137,8 @@ VALUES
     (1,2);
 
 
-
 INSERT INTO notifications(id, created_at, message, seen, type, charity_id, from_whom_user_id, reserve_id, wish_id)
 VALUES
     (3, '2023-04-14', 'У вас новое уведомление', false, 2, 2, 2, 2, 2),
     (4, '2023-04-14 12:48:27', 'Вы получили новое сообщение', false, 2, null, 3, 2, 3),
     (5, '2023-04-14 12:49:27', 'Вы получили новый запрос на добавление в друзья', false, 3, null, 4, 2, 4);
-
--- INSERT INTO notifications(id, created_at, message, seen, type, charity_id, from_whom_user_id, reserve_id, wish_id)
--- VALUES
---     (1, '2023-04-14 12:47:27', 'У вас новое уведомление', false, 'type1', 1, 10, 100, 1000),
---     (2, '2023-04-14 12:48:27', 'Вы получили новое сообщение', false, 'type2', 2, 20, 200, 2000),
---     (3, '2023-04-14 12:49:27', 'Вы получили новый запрос на добавление в друзья', false, 'type3', 3, 30, 300, 3000);
-
-
--- INSERT INTO notifications(id, created_at, message, seen, type, charity_id, from_whom_user_id, reserve_id, wish_id)
--- values
---     (1, '2022-04-05', 'Notification message 1', false, 3, 1, 2, 1, 1);
