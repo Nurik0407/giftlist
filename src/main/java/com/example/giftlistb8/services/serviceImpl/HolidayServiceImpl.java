@@ -10,9 +10,7 @@ import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.HolidayRepository;
 import com.example.giftlistb8.services.HolidayService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
