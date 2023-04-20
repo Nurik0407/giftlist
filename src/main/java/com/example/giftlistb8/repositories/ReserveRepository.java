@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
@@ -18,25 +19,31 @@ import java.util.Optional;
 
 public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     @Query("SELECT NEW com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
-            "r.id,CONCAT(u.firstName, ' ', u.lastName), ui.image,h.name,h.date, w.name, w.image )" +
-            "FROM Reserve r " +
-            "JOIN r.user u " +
-            "JOIN u.userInfo ui " +
-            "JOIN r.wish w " +
-            "JOIN w.holiday h")
+            "r.id,CONCAT(r.user.firstName, ' ', r.user.lastName)," +
+            " r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
+            "FROM Reserve r ")
     List<ReserveResponseWish> getAllReversesWish();
+
     @Query("SELECT NEW  com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(" +
-            " r.id,CONCAT(u.firstName, ' ', u.lastName),ui.image,c.name,SUBSTRING_INDEX(c.images, ',', 1),c.date )" +
-            "FROM Reserve r " +
-            "JOIN r.user u " +
-            "JOIN u.userInfo ui " +
-            "JOIN Charity c")
+            " r.id,CONCAT(r.user.firstName,' ', r.user.lastName),r.user.userInfo.image,r.charity.name,SUBSTRING_INDEX(r.charity.images, ',', 1),r.charity.state,r.charity.date)" +
+            "FROM Reserve r ")
     List<ReserveResponseCharity> getAllReversesCharity();
 
     @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.wish = :wish")
     Optional<Reserve> findByUserAndWish(@Param("user") User user, @Param("wish") Wish wish);
 
     @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.charity = :charity")
-    Optional<Reserve> findByUserAndCharity(@Param("user") User user,@Param("charity") Charity charity);
-    Page<ReserveResponseWish> findAllReserveWish(Pageable pageable);
+    Optional<Reserve> findByUserAndCharity(@Param("user") User user, @Param("charity") Charity charity);
+
+//    @Query("SELECT NEW com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
+//            "r.id,CONCAT(r.user.firstName, ' ', r.user.lastName)," +
+//            " r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
+//            "FROM Reserve r ")
+//    Page<ReserveResponseWish> findAllWishBy(Pageable pageable);
+//
+//
+//    @Query("SELECT NEW  com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(" +
+//            " r.id,CONCAT(r.user.firstName,' ', r.user.lastName),r.user.userInfo.image,r.charity.name,SUBSTRING_INDEX(r.charity.images, ',', 1),r.charity.state,r.charity.date)" +
+//            "FROM Reserve r ")
+//    Page<ReserveResponseCharity> getAll(Pageable pageable);
 }

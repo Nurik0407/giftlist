@@ -1,4 +1,5 @@
 package com.example.giftlistb8.services.serviceImpl;
+
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestCharity;
@@ -17,11 +18,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class ReserveServiceImpl implements ReserveService {
     private final ReserveRepository reserveRepository;
     private final WishRepository wishRepository;
@@ -37,7 +40,6 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    @Transactional
     public SimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(reserveRequest.wishId()).orElseThrow(
@@ -61,7 +63,6 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    @Transactional
     public SimpleResponse addGiftToWish(Long wishId) {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
@@ -127,49 +128,53 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public PaginationResponseWish getWishReservePagination(int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Reserve> pagedWishes = reserveRepository.findAll(pageable);
-        List<ReserveResponseWish> responseWishes = pagedWishes.getContent().stream()
-                .map(reserve -> new ReserveResponseWish(
-                        reserve.getId(),
-                        reserve.getUser().getFirstName() + " " + reserve.getUser().getLastName(),
-                        reserve.getUser().getUserInfo().getImage(),
-                        reserve.getWish().getHoliday().getName(),
-                        reserve.getWish().getHoliday().getDate(),
-                        reserve.getWish().getName(),
-                        reserve.getWish().getImage()))
-                .collect(Collectors.toList());
+//        Pageable pageable = PageRequest.of(page - 1, size);
+//        Page<ReserveResponseWish> pagedWishes = reserveRepository.findAllWishBy(pageable);
+////        List<ReserveResponseWish> responseWishes = pagedWishes.getContent().stream()
+////                .map(reserve -> new ReserveResponseWish(
+////                        reserve.id(),
+////                        reserve.fullName(),
+////                        reserve.photo(),
+////                        reserve.holidayName(),
+////                        reserve.date(),
+////                        reserve.giftName(),
+////                        reserve.image()))
+////                .collect(Collectors.toList());
+//        return PaginationResponseWish.builder()
+//                .reserveResponseWishes(pagedWishes.getContent())
+//                .pageSize(pagedWishes.getNumber() + 1)
+//                .currentPage(pagedWishes.getTotalPages())
+//                .build();
+        return null;
 
-        PaginationResponseWish paginationResponseWish = new PaginationResponseWish();
-        paginationResponseWish.setReserveResponseWishes(responseWishes);
-        paginationResponseWish.setCurrentPage(pagedWishes.getNumber() + 1);
-        paginationResponseWish.setPageSize(pagedWishes.getSize());
-
-        return paginationResponseWish;
 
     }
+
 
     @Override
     public PaginationResponseCharity getCharityReservePagination(int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Reserve> pagedCharity = reserveRepository.findAll(pageable);
-        List<ReserveResponseCharity> responseCharities = pagedCharity.getContent().stream()
-                .map(reserve -> new ReserveResponseCharity(
-                        reserve.getId(),
-                        reserve.getUser().getFirstName() + " " + reserve.getUser().getLastName(),
-                        reserve.getUser().getUserInfo().getImage(),
-                        reserve.getCharity().getName(),
-                        reserve.getCharity().getState(),
-                        reserve.getCharity().getImages().get(0),
-                        reserve.getCharity().getDate()))
-                .toList();
-
-        PaginationResponseCharity paginationResponseCharity = new PaginationResponseCharity();
-        paginationResponseCharity.setReserveResponseCharities(responseCharities);
-        paginationResponseCharity.setCurrentPage(pagedCharity.getNumber() + 1);
-        paginationResponseCharity.setPageSize(pagedCharity.getSize());
-
-        return paginationResponseCharity;
+//        Pageable pageable = PageRequest.of(page - 1, size);
+//       Page<ReserveResponseCharity> pagedCharity = reserveRepository.getAll(pageable);
+////        List<ReserveResponseCharity> responseCharities = pagedCharity.getContent().stream()
+////                .map(reserve -> new ReserveResponseCharity(
+////                        reserve.id(),
+////                        reserve.fullName(),
+////                        reserve.photo(),
+////                        reserve.charityName(),
+////                        reserve.state(),
+////                        reserve.image(),
+////                        reserve.date()))
+////                .toList();
+//        // List<ReserveResponseCharity> content = pagedCharity.getContent();
+//        return PaginationResponseCharity.builder()
+//                .reserveResponseCharities(pagedCharity.getContent())
+//                .currentPage(pagedCharity.getTotalPages())
+//                .pageSize(pagedCharity.getNumber() + 1)
+//                .build();
+        return null;
 
     }
 }
+
+
+

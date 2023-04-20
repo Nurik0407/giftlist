@@ -9,8 +9,8 @@ public record ReserveResponseCharity(
         String fullName,
         String photo,
         String charityName,
-        String state,
         String image,
+        String state,
         LocalDate date
 
 ) {
