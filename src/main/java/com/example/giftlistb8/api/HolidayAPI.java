@@ -15,27 +15,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HolidayAPI {
     private final HolidayService service;
+
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
-    public List<HolidayResponse> findAllHolidays(){
+    public List<HolidayResponse> findAllHolidays() {
         return service.findAll();
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("/save")
-    public SimpleResponse saveHoliday(@RequestBody HolidayRequest request){
+    @PostMapping
+    public SimpleResponse saveHoliday(@RequestBody HolidayRequest request) {
         return service.save(request);
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @PutMapping("/{holidayId}/update")
-    public SimpleResponse updateHoliday(@PathVariable Long holidayId,@RequestBody HolidayRequest request){
+    @PutMapping
+    public SimpleResponse updateHoliday(@RequestParam Long holidayId, @RequestBody HolidayRequest request) {
         return service.update(holidayId, request);
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @DeleteMapping("/{holidayId}/delete")
-    public SimpleResponse deleteHoliday(@PathVariable Long holidayId){
+    @DeleteMapping
+    public SimpleResponse deleteHoliday(@RequestParam Long holidayId) {
         return service.delete(holidayId);
     }
 }

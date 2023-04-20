@@ -20,8 +20,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
-@Slf4j
 public class HolidayServiceImpl implements HolidayService {
     private final HolidayRepository repository;
     private final JwtService jwtService;
