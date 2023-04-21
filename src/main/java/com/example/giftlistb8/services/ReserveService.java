@@ -10,9 +10,9 @@ public interface ReserveService {
     SimpleResponse wishReserve(ReserveRequestWish reserveRequest);
     ReserveGetAllResponse getAllReserves();
     SimpleResponse addGiftToWish(Long wishId);
-    SimpleResponse deleteWish(Long wishId);
     SimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity);
-    SimpleResponse deleteCharity(Long charityId);
+    SimpleResponse deleteCharity(Long userId,Long charityId);
+    SimpleResponse deleteWish(Long userId,Long wishId);
     PaginationResponseWish getWishReservePagination(int page, int size);
     PaginationResponseCharity getCharityReservePagination(int page, int size);
 }

@@ -84,11 +84,12 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    public User getUserInToken(){
+
+    public User getUserInToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
         log.info("Token has been taken!");
-        return userRepository.findByEmail(login).orElseThrow(()-> {
+        return userRepository.findByEmail(login).orElseThrow(() -> {
             log.error("User not found!");
             throw new NotFoundException("User not found!");
         });

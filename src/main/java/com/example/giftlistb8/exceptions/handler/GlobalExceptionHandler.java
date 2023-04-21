@@ -63,4 +63,13 @@ public class GlobalExceptionHandler {
                 e.getMessage()
         );
     }
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse handlerForbiddenException(ForbiddenException e) {
+        return new ExceptionResponse(
+                HttpStatus. FORBIDDEN,
+                e.getClass().getSimpleName(),
+                e.getMessage()
+        );
+    }
 }

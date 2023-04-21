@@ -7,12 +7,15 @@ import com.example.giftlistb8.dto.reserve.response.PaginationResponseCharity;
 import com.example.giftlistb8.dto.reserve.response.ReserveGetAllResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.services.ReserveService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/reserves")
+@Tag(name = "Reserves", description = "API endpoints for managing reserves")
 public class ReserveApi {
     private final ReserveService reserveService;
 
@@ -20,12 +23,20 @@ public class ReserveApi {
     public ReserveApi(ReserveService reserveService) {
         this.reserveService = reserveService;
     }
+    @Operation(
+            summary = "This method for reserve the wish",
+            description = "Reserve a wish as anonymous or non anonymous user with the given wish ID."
+    )
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/wish")
     public SimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
         return reserveService.wishReserve(reserveRequest);
     }
+    @Operation(
+            summary = "This method for reserve the gift from charity",
+            description = "Reserve a wish as anonymous or non anonymous user with the given wish ID."
+    )
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/charity")
@@ -33,11 +44,15 @@ public class ReserveApi {
         return reserveService.charityReserve(reserveRequestCharity);
     }
 
+    @Operation(summary = "Get all reserves",
+            description = "Get all reserves including reserved wishes and reserved charities.")
+
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     public ReserveGetAllResponse getAllReserves() {
         return reserveService.getAllReserves();
     }
+    @Operation(summary = "The method added gift to own wishList", description = "Add a reserved gift to a wish")
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/{wishId}")
@@ -45,23 +60,32 @@ public class ReserveApi {
         return reserveService.addGiftToWish(wishId);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
-    @DeleteMapping("/{wishId}")
-    public SimpleResponse deleteWish(@PathVariable Long wishId) {
-        return reserveService.deleteWish(wishId);
-    }
+    @Operation(summary = "Delete wish method",description = "Cancel wish from reserve")
 
     @PreAuthorize("hasAuthority('USER')")
-    @DeleteMapping("/{charityId}")
-    public SimpleResponse deleteCharity(@PathVariable Long charityId) {
-        return reserveService.deleteCharity(charityId);
+    @DeleteMapping("/{wishId}/{userId}")
+    public SimpleResponse deleteWish(@PathVariable Long userId, @PathVariable Long wishId) {
+        return reserveService.deleteWish(userId, wishId);
     }
+
+    @Operation(summary = "Delete the gift",description = "Cancel gift from reserve")
+
+    @PreAuthorize("hasAuthority('USER')")
+    @DeleteMapping("/{charityId}/{userId}")
+    public SimpleResponse deleteCharity(@PathVariable Long userId, @PathVariable Long charityId) {
+        return reserveService.deleteCharity(userId, charityId);
+    }
+
+    @Operation(summary = "Get wish reserve pagination",
+            description = "Returns a paginated list of wish reserves.")
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/pagination-wish")
     public PaginationResponseWish getWishPagination(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return reserveService.getWishReservePagination(page, size);
     }
+    @Operation(summary = "Get gift reserve pagination",
+            description = "Returns a paginated list of gift reserves.")
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/pagination-charity")

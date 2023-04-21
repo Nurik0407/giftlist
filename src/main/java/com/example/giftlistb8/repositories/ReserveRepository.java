@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+
 
 
 import java.util.List;
@@ -35,15 +35,10 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.charity = :charity")
     Optional<Reserve> findByUserAndCharity(@Param("user") User user, @Param("charity") Charity charity);
 
-//    @Query("SELECT NEW com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
-//            "r.id,CONCAT(r.user.firstName, ' ', r.user.lastName)," +
-//            " r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
-//            "FROM Reserve r ")
-//    Page<ReserveResponseWish> findAllWishBy(Pageable pageable);
-//
-//
-//    @Query("SELECT NEW  com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(" +
-//            " r.id,CONCAT(r.user.firstName,' ', r.user.lastName),r.user.userInfo.image,r.charity.name,SUBSTRING_INDEX(r.charity.images, ',', 1),r.charity.state,r.charity.date)" +
-//            "FROM Reserve r ")
-//    Page<ReserveResponseCharity> getAll(Pageable pageable);
+    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
+            "r.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name,r.wish.image) from Reserve r")
+    Page<ReserveResponseWish> getAll(Pageable pageable);
+
+    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(r.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image,r.charity.name,substring_index(r.charity.images,',',1),r.charity.state,r.charity.date) from Reserve r")
+    Page<ReserveResponseCharity> getAllCharity(Pageable pageable);
 }
