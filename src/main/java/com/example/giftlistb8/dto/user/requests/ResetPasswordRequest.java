@@ -1,4 +1,4 @@
-package com.example.giftlistb8.dto.auth.user.requests;
+package com.example.giftlistb8.dto.user.requests;
 
 import com.example.giftlistb8.annotation.PasswordMatches;
 import jakarta.validation.constraints.Pattern;

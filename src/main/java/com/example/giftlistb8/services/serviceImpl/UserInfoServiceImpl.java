@@ -1,6 +1,6 @@
 package com.example.giftlistb8.services.serviceImpl;
 
-import com.example.giftlistb8.dto.auth.SimpleResponse;
+import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.entities.UserInfo;
 import com.example.giftlistb8.repositories.UserInfoRepository;
@@ -30,7 +30,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public SimpleResponse updateResetPasswordToken(String email) {
-        SimpleResponse responseMessage = new SimpleResponse();
         String token = UUID.randomUUID().toString();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found!"));
@@ -58,30 +57,33 @@ public class UserInfoServiceImpl implements UserInfoService {
             mailSenderService.sendEmail(email, subject, htmlContent);
 
         } catch (NotFoundException ex) {
-            responseMessage.setStatus(HttpStatus.OK.toString());
-            responseMessage.setMessage("Please check your email inbox for password reset instructions.");
-            return responseMessage;
+            return SimpleResponse.builder().
+                    status(HttpStatus.OK).
+                    message("Please check your email inbox for password reset instructions.")
+                    .build();
         }
-        responseMessage.setStatus(HttpStatus.OK.toString());
-        responseMessage.setMessage("Please check your email inbox for password reset instructions.");
-        return responseMessage;
+        return SimpleResponse.builder().
+                status(HttpStatus.OK).
+                message("Please check your email inbox for password reset instructions.")
+                .build();
     }
 
     @Override
     public SimpleResponse getByResetPasswordToken(String token, String firstPassword, String secondPassword) {
-        SimpleResponse responseMessage = new SimpleResponse();
         UserInfo userInfo = userInfoRepository.findByResetPasswordToken(token);
         if (userInfo == null) {
-            responseMessage.setStatus(HttpStatus.BAD_REQUEST.toString());
-            responseMessage.setMessage("You've encountered some errors while trying to reset your password.");
-            return responseMessage;
+            return SimpleResponse.builder().
+                    status(HttpStatus.OK).
+                    message("You've encountered some errors while trying to reset your password.")
+                    .build();
         } else {
             User user = userInfo.getUser();
             updatePassword(user, firstPassword);
         }
-        responseMessage.setStatus(HttpStatus.OK.toString());
-        responseMessage.setMessage("You've successfully reset your password.");
-        return responseMessage;
+        return SimpleResponse.builder().
+                status(HttpStatus.OK).
+                message("You've successfully reset your password.")
+                .build();
     }
 
 
