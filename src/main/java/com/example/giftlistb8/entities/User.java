@@ -92,4 +92,8 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void deleteHoliday(Holiday holiday) {
+        holidays.remove(holiday);
+    }
 }
