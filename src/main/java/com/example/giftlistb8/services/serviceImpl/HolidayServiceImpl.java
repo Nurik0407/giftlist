@@ -40,7 +40,7 @@ public class HolidayServiceImpl implements HolidayService {
         repository.save(holiday);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
-                .message(String.format("Holiday with name %s successfully saved.", holiday.getName()))
+                .message(String.format("Holiday with name %s successfully saved.", "holiday.getName()"))
                 .build();
     }
 

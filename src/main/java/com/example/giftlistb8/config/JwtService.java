@@ -7,10 +7,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.IOException;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -27,7 +30,8 @@ import java.util.function.Function;
 public class JwtService {
     private final UserRepository userRepository;
 
-    private static final String SECRET_KEY = "79244226452948404D635166546A576E5A7234753777217A25432A462D4A614E";
+    @Value("${secret_key}")
+    private static final String SECRET_KEY = "";
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -81,13 +85,18 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public User getUserInToken(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String login = authentication.getName();
-        log.info("Token has been taken!");
-        return userRepository.findByEmail(login).orElseThrow(()-> {
-            log.error("User not found!");
-            throw new NotFoundException("User not found!");
-        });
+    public User getUserInToken() {
+        try {
+            SecurityContext securityContext = SecurityContextHolder.getContext();
+            Authentication authentication = securityContext.getAuthentication();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            log.info(userDetails.getUsername());
+            return userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> {
+                log.error("User not found!");
+                throw new NotFoundException("User not found!");
+            });
+        } catch (IOException e) {
+            throw new IOException("Method invalid!");
+        }
     }
 }
