@@ -27,21 +27,19 @@ public class WishServiceImpl implements WishService {
     private final JwtService jwtService;
     @Override
     public List<WishResponse> findAll() {
-//        return wishRepository.findAll();
-        return null;
+        return wishRepository.findAllWishes();
     }
 
     @Override
     public WishResponse getById(Long id) {
-//        Wish wish = wishRepository.findById(id)
-//                .orElseThrow(() -> new NoSuchElementException(
-//                        String.format("Restaurant with id: %s not found!", id)));
-//        wishRepository.save(wish);
-//
-//        return wishRepository.findWishById(id)
-//                .orElseThrow(() -> new NoSuchElementException(
-//                        String.format("Restaurant with id: %s not found!", id)));
-        return null;
+        Wish wish = wishRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(
+                        String.format("Restaurant with id: %s not found!", id)));
+        wishRepository.save(wish);
+
+        return wishRepository.findWishById(id)
+                .orElseThrow(() -> new NoSuchElementException(
+                        String.format("Restaurant with id: %s not found!", id)));
     }
 
     @Override

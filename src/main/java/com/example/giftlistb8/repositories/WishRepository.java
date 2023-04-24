@@ -11,13 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface WishRepository extends JpaRepository<Wish,Long> {
-//    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w where w.id=:id")
-//    Optional<WishResponse> findWishById(Long id);
+    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w where w.id=:id")
+    Optional<WishResponse> findWishById(Long id);
 
-//    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w")
-//    List<WishResponse> findAllWishes();
-
-//    List<Wish> findAll();
-//@Query("SELECT new com.example.giftlistb8.dto.wish.responses.WishAllResponse(w.name,w.linkGift,w.image,w.description,w.dateOfHoliday,w.status) FROM Wish w")
-//List<WishResponse> findAllWishResponses();
+    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w")
+    List<WishResponse> findAllWishes();
 }
