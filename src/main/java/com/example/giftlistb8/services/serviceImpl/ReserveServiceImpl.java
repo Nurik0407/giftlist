@@ -14,6 +14,7 @@ import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.services.ReserveService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,21 +25,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ReserveServiceImpl implements ReserveService {
     private final ReserveRepository reserveRepository;
     private final WishRepository wishRepository;
     private final JwtService jwtService;
     private final CharityRepository charityRepository;
-
-
-
-    @Autowired
-    public ReserveServiceImpl(ReserveRepository reserveRepository, WishRepository wishRepository, JwtService jwtService, CharityRepository charityRepository) {
-        this.reserveRepository = reserveRepository;
-        this.wishRepository = wishRepository;
-        this.jwtService = jwtService;
-        this.charityRepository = charityRepository;
-    }
 
     @Override
     public SimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
@@ -55,10 +47,7 @@ public class ReserveServiceImpl implements ReserveService {
                 .message(String.format("Gift with id %s successfully reserved", reserveRequest.wishId()))
                 .build();
     }
-    @Operation(
-            summary = "Reserve a charity as anonymous or non anonymous",
-            description = "Reserve a charity as anonymous or non anonymous user with the given wish ID."
-    )
+
     @Override
     public SimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity) {
         User user = jwtService.getUserInToken();
