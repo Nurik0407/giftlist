@@ -23,9 +23,8 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
     @SequenceGenerator(name = "user_id_gen",
-            sequenceName = "user_id_seq",allocationSize = 1,initialValue = 11)
+            sequenceName = "user_id_seq", allocationSize = 1, initialValue = 11)
     private Long id;
-    private String image;
     private String firstName;
     private String lastName;
     private String email;
@@ -61,6 +60,14 @@ public class User implements UserDetails {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<User> friends;
 
+    public void addFriend(User friend) {
+        friends.add(friend);
+    }
+
+    public void addRequest(User friend) {
+        requestsForFriends.add(friend);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -72,7 +79,9 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {return password;}
+    public String getPassword() {
+        return password;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
