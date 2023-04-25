@@ -2,13 +2,10 @@ package com.example.giftlistb8.dto.profile.request;
 
 import com.example.giftlistb8.enums.ClothingSize;
 import com.example.giftlistb8.enums.ShoeSize;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
+
 @Builder
 public record ProfileRequest(
         String image,

@@ -2,8 +2,6 @@ package com.example.giftlistb8.dto.profile.request;
 
 import com.example.giftlistb8.enums.ClothingSize;
 import com.example.giftlistb8.enums.ShoeSize;
-import jakarta.validation.constraints.Past;
-
 import java.time.LocalDate;
 
 public record UpdateProfileRequest(
