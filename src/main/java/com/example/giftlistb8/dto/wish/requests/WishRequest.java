@@ -10,6 +10,7 @@ public record WishRequest(
     String linkGift,
     LocalDate dateOfHoliday,
     String image,
-    String descriptions
+    String descriptions,
+    Long holidayId
 ){
 }

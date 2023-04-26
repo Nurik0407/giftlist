@@ -89,9 +89,10 @@ public class JwtService {
         try {
             SecurityContext securityContext = SecurityContextHolder.getContext();
             Authentication authentication = securityContext.getAuthentication();
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            log.info(userDetails.getUsername());
-            return userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> {
+//            UserDetails user = (UserDetails) authentication.getPrincipal();
+            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            log.info(user.getUsername());
+            return userRepository.findByEmail(user.getUsername()).orElseThrow(() -> {
                 log.error("User not found!");
                 throw new NotFoundException("User not found!");
             });

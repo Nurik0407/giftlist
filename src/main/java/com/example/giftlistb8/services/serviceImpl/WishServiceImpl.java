@@ -4,9 +4,11 @@ import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.config.SimpleResponse;
 import com.example.giftlistb8.dto.wish.requests.WishRequest;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
+import com.example.giftlistb8.entities.Holiday;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.entities.Wish;
 import com.example.giftlistb8.exceptions.NotFoundException;
+import com.example.giftlistb8.repositories.HolidayRepository;
 import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.services.WishService;
 import jakarta.transaction.Transactional;
@@ -23,6 +25,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Slf4j
 public class WishServiceImpl implements WishService {
+    private final HolidayRepository holidayRepository;
     private final WishRepository wishRepository;
     private final JwtService jwtService;
     @Override
@@ -45,11 +48,14 @@ public class WishServiceImpl implements WishService {
     @Override
     public SimpleResponse save(WishRequest request) {
         User user = jwtService.getUserInToken();
+        Holiday holiday = holidayRepository.findById(request.holidayId()).orElseThrow(() -> new NotFoundException("Holiday not found!"));
         Wish wish = Wish.builder()
                 .name(request.name())
                 .linkGift(request.linkGift())
                 .dateOfHoliday(request.dateOfHoliday())
                 .image(request.image())
+                .holiday(holiday)
+                .user(user)
                 .description(request.descriptions())
                 .build();
         wish.setUser(user);
