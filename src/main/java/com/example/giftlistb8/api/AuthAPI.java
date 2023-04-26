@@ -18,12 +18,12 @@ public class AuthAPI {
 
     private final AuthService authService;
 
-    @PostMapping("/signup")
+    @PostMapping("/sign-up")
     public AuthRegisterResponse register(@RequestBody @Valid AuthRegisterRequest request) {
         return authService.register(request);
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/sign-in")
     public AuthRegisterResponse authenticate(@RequestBody @Valid AuthAuthenticateRequest request) {
         return authService.authenticate(request);
     }
