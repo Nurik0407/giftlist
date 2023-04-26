@@ -1,4 +1,5 @@
 package com.example.giftlistb8.api;
+
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.user.requests.ResetPasswordRequest;
 import com.example.giftlistb8.services.UserInfoService;
