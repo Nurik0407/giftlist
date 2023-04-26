@@ -23,7 +23,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
     @SequenceGenerator(name = "user_id_gen",
-            sequenceName = "user_id_seq",allocationSize = 1,initialValue = 11)
+            sequenceName = "user_id_seq", allocationSize = 1, initialValue = 11)
     private Long id;
     private String firstName;
     private String lastName;
@@ -71,7 +71,9 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {return password;}
+    public String getPassword() {
+        return password;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -95,5 +97,9 @@ public class User implements UserDetails {
 
     public void deleteHoliday(Holiday holiday) {
         holidays.remove(holiday);
+    }
+
+    public void deleteCharity(Charity charity) {
+        charities.remove(charity);
     }
 }
