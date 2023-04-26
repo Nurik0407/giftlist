@@ -28,8 +28,7 @@ public class Charity {
     private String subCategory;
     private String description;
 
-    @ElementCollection
-    private List<String> images;
+    private String images;
 
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private User user;
