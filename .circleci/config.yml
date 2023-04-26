@@ -1,0 +1,104 @@
+version: 2.1
+
+parameters:
+  docker-container:
+    type: string
+    default: "giftlist"
+
+jobs:
+  install-docker-if-not-exists:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - run:
+          name: Install SSH And Configure
+          command: |
+            echo $SSH_PRIVATE_KEY | base64 --decode > ./privateKey.pem
+            chmod 400 privateKey.pem
+      - run:
+          name: Install Docker If Not Exists
+          command: |
+            ssh -o "StrictHostKeyChecking=no" -i ./privateKey.pem ubuntu@$HOST '
+            if [[ ! $(sudo docker -v) ]]; then
+               sudo snap install docker
+            fi'
+  build-image:
+    docker:
+      - image: docker:20.10.9
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t << pipeline.parameters.docker-container >>:latest .
+      - run:
+          name: Compress Docker Image
+          command: |
+            docker save << pipeline.parameters.docker-container >>:latest | gzip > << pipeline.parameters.docker-container >>.tar.gz
+      - run:
+          name: Update Docker-compose.yml
+          command: |
+            sed -i 's@#image@<< pipeline.parameters.docker-container >>:latest@g' docker-compose.yml
+      - run: ls -lh
+      - persist_to_workspace:
+          root: .
+          paths:
+            - << pipeline.parameters.docker-container >>.tar.gz
+            - docker-compose.yml
+  transfer-and-run:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install SSH And Configure
+          command: |
+            echo $SSH_PRIVATE_KEY | base64 --decode > ./privateKey.pem
+            chmod 400 privateKey.pem
+      - run:
+          name: Stop Remote Docker-Compose
+          command: |
+            ssh -o "StrictHostKeyChecking=no" -i ./privateKey.pem ubuntu@$HOST '
+            if [[ -e ./docker-compose.yml ]]; then
+                if [[ $(sudo docker-compose -f ./docker-compose.yml ps -q) ]]; then
+                    sudo docker-compose down --rmi="all"
+                fi
+                sudo rm docker-compose.yml
+            fi'
+      - run:
+          name: Transfer Files
+          command: |
+            scp -o "StrictHostKeyChecking=no" -i ./privateKey.pem ./<< pipeline.parameters.docker-container >>.tar.gz ./docker-compose.yml ubuntu@$HOST:~/
+      - run:
+          name: Decompress Docker Image | Run Compose
+          command: |
+            ssh -o "StrictHostKeyChecking=no" -i ./privateKey.pem ubuntu@$HOST '
+            sudo gunzip -c ./<< pipeline.parameters.docker-container >>.tar.gz | sudo docker load
+            sudo rm ./<< pipeline.parameters.docker-container >>.tar.gz
+            sudo docker-compose up -d
+            '
+
+workflows:
+  deploy:
+    jobs:
+      - install-docker-if-not-exists:
+          filters:
+            branches:
+              only:
+                - main
+      - build-image:
+          requires:
+            - install-docker-if-not-exists
+          filters:
+            branches:
+              only:
+                - main
+      - transfer-and-run:
+          requires:
+            - build-image
+          filters:
+            branches:
+              only:
+                - main
