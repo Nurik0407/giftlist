@@ -1,6 +1,6 @@
 package com.example.giftlistb8.annotation;
 
-import com.example.giftlistb8.dto.auth.user.requests.ResetPasswordRequest;
+import com.example.giftlistb8.dto.user.requests.ResetPasswordRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
