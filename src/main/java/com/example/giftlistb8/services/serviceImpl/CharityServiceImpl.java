@@ -9,14 +9,11 @@ import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
-import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.CharityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,7 +24,6 @@ import java.util.List;
 @Slf4j
 public class CharityServiceImpl implements CharityService {
     private final CharityRepository repository;
-    private final UserRepository userRepository;
     private final JdbcTemplate jdbcTemplate;
     private final JwtService jwtService;
 
@@ -54,13 +50,21 @@ public class CharityServiceImpl implements CharityService {
 
     @Override
     public List<CharitiesResponse> findAll() {
-        return repository.findAllCharity();
+        String sql = "SELECT CONCAT(u.last_name, ',', u.first_name) AS full_name, c.name, c.image, c.date_of_issue, (COUNT(r.id) > 0) AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
+                "FROM charities c " +
+                "JOIN users u ON c.user_id = u.id " +
+                "LEFT JOIN reserves r ON c.id = r.charity_id " +
+                "GROUP BY u.last_name, u.first_name, c.name, c.image, c.date_of_issue, r.is_anonymous";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new CharitiesResponse(rs.getString("full_name"),
+                rs.getString("name"), rs.getString("image"), rs.getDate("date_of_issue").toLocalDate(),
+                rs.getBoolean("is_reserved"), rs.getBoolean("is_anonymous")));
     }
 
     @Override
     public SimpleResponse update(Long id, CharityRequest request) {
         jdbcTemplate.update("update charities set name=?,state=?,description=?,category=?,sub_category=?,image=? WHERE id=?",
-                request.name(), request.state(), request.description(), request.category(), request.subCategory(),request.image(), id);
+                request.name(), request.state(), request.description(), request.category(), request.subCategory(), request.image(), id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Charity with id %s successfully updated.", id))

@@ -25,7 +25,7 @@ public class CharityAPI {
     }
 
     @GetMapping("/profile")
-    public CharityResponse profile(@RequestParam Long id){
+    public CharityResponse profile(@RequestParam Long id) {
         return service.findById(id);
     }
 
