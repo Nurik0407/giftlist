@@ -15,6 +15,6 @@ public class GiftlistB8Application {
 
 	@GetMapping
 	String introduction(){
-		return "introduction";
+		return "reset-password-template";
 	}
 }
