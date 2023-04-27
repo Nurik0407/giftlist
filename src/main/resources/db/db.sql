@@ -13,7 +13,7 @@ values (2,33,'Kyrgyzstan','2004-12-12','https://www.facebook.com/profile.php?id=
 
 insert into users (id, email, first_name, is_blocked,last_name,password,role,user_info_id)
 values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','nurislam1234','USER',2),
-       (3,'nursultan@gmail.com','Nursuldan',false,'Odesov','nursultan1234','USER',3),
+       (3,'nursultan@gmail.com','Syimyk',false,'Odesov','nursultan1234','USER',3),
        (4,'jumakadyrovadilet@gmail.com','Adilet',false,'Jumakadyrov','adilet524','USER',4),
        (5,'eldiarro2004@gmail.com','Eldiar',false,'Rasulov','aldiar1234','USER',5),
        (6,'nurmatova161196@gmail.com','',false,'','','USER',6),
