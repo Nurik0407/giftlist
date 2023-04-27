@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  backend:
+    image: '#image'
+    container_name: giftlist
+    ports:
+      - "80:2023"
+    environment:
+      SPRING_PROFILES_ACTIVE: main
+      SERVER_PORT: 2023
+      POSTGRES_DB: jdbc:postgresql://database:5432/postgres
+      POSTGRES_USER: giftlistdbuser
+      POSTGRES_PASSWORD: giftlistdb2023
+  database:
+    image: postgres:latest
+    restart: always
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: giftlistdbuser
+      POSTGRES_PASSWORD: giftlistdb2023
+    volumes:
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:

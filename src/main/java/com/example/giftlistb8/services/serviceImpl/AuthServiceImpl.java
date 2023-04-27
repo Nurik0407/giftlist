@@ -11,6 +11,7 @@ import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.AuthService;
+import jakarta.transaction.Transactional;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -33,6 +34,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
