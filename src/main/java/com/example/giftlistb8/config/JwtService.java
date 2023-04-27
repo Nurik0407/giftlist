@@ -30,12 +30,13 @@ import java.util.function.Function;
 public class JwtService {
     private final UserRepository userRepository;
 
-    @Value("${secret_key}")
+    @Value(" ${secret_key}")
     private static final String SECRET_KEY = "";
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);

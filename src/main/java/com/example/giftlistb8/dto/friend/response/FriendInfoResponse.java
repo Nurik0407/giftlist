@@ -1,13 +1,9 @@
 package com.example.giftlistb8.dto.friend.response;
 
 import com.example.giftlistb8.entities.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
-@Data
 @Builder
 public class FriendInfoResponse {
     private Long id;
@@ -22,5 +18,6 @@ public class FriendInfoResponse {
         this.fullName = fullName;
         this.countOfWishes = countOfWishes;
         this.countOfHolidays = countOfHolidays;
-    }}
+    }
+}
 

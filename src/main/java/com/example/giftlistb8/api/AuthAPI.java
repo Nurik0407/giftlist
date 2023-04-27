@@ -27,6 +27,7 @@ public class AuthAPI {
     public AuthRegisterResponse authenticate(@RequestBody @Valid AuthAuthenticateRequest request) {
         return authService.authenticate(request);
     }
+
     @PostMapping("/auth-google")
     public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
         return authService.authWithGoogle(tokenId);

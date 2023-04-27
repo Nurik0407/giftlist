@@ -1,6 +1,7 @@
 package com.example.giftlistb8.entities;
 
 import com.example.giftlistb8.enums.Role;
+import com.example.giftlistb8.exceptions.NotFoundException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -61,11 +62,19 @@ public class User implements UserDetails {
     private List<User> friends;
 
     public void addFriend(User friend) {
-        friends.add(friend);
+        if (friend != null) {
+            friends.add(friend);
+        } else {
+            throw new NotFoundException("Friend cannot be null");
+        }
     }
 
     public void addRequest(User friend) {
-        requestsForFriends.add(friend);
+        if (friend != null) {
+            requestsForFriends.add(friend);
+        } else {
+            throw new NotFoundException("Friend cannot be null");
+        }
     }
 
     @Override
