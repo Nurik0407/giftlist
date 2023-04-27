@@ -34,6 +34,7 @@ public class UserInfo {
     private String telegram;
     private String facebook;
     private String whatsApp;
+    private String resetToken;
 
     @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL)
     private User user;
