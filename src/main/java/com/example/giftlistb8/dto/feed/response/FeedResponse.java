@@ -5,12 +5,14 @@ import lombok.Builder;
 import java.time.LocalDate;
 
 @Builder
-public record FeedResponse(String image,
-                           String fullName,
-                           String holidayName,
-                           String wishName,
-                           String photo,
-                           LocalDate date,
-                           Boolean status,
-                           String friendPhoto) {
+public record FeedResponse(
+        Long userId,
+        String image,
+        String fullName,
+        String holidayName,
+        String wishName,
+        String photo,
+        LocalDate date,
+        Boolean status,
+        String friendPhoto) {
 }
