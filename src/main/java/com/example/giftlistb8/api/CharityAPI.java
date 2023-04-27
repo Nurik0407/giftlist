@@ -5,6 +5,7 @@ import com.example.giftlistb8.dto.charity.request.CharityRequest;
 import com.example.giftlistb8.dto.charity.response.CharitiesResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
 import com.example.giftlistb8.services.CharityService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +31,12 @@ public class CharityAPI {
     }
 
     @PostMapping
-    public SimpleResponse save(CharityRequest request) {
+    public SimpleResponse save(@Valid CharityRequest request) {
         return service.save(request);
     }
 
     @PutMapping
-    public SimpleResponse update(@RequestParam Long id, CharityRequest request) {
+    public SimpleResponse update(@RequestParam Long id, @Valid CharityRequest request) {
         return service.update(id, request);
     }
 

@@ -50,12 +50,10 @@ public class CharityServiceImpl implements CharityService {
 
     @Override
     public List<CharitiesResponse> findAll() {
-        String sql = "SELECT CONCAT(u.last_name, ',', u.first_name) AS full_name, c.name, c.image, c.date_of_issue, (COUNT(r.id) > 0) AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
+        String sql = "SELECT CONCAT(u.last_name, ',', u.first_name) AS full_name, c.name, c.image, c.date_of_issue, case when r.id = null then false else true end  AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
                 "FROM charities c " +
                 "JOIN users u ON c.user_id = u.id " +
-                "LEFT JOIN reserves r ON c.id = r.charity_id " +
-                "GROUP BY u.last_name, u.first_name, c.name, c.image, c.date_of_issue, r.is_anonymous";
-
+                "LEFT JOIN reserves r ON c.id = r.charity_id";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new CharitiesResponse(rs.getString("full_name"),
                 rs.getString("name"), rs.getString("image"), rs.getDate("date_of_issue").toLocalDate(),
                 rs.getBoolean("is_reserved"), rs.getBoolean("is_anonymous")));
@@ -87,6 +85,8 @@ public class CharityServiceImpl implements CharityService {
 
     @Override
     public CharityResponse findById(Long id) {
-        return repository.findCharityById(id);
+        return repository.findCharityById(id)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Charity with id %s not found.", id)));
     }
 }
