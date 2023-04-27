@@ -31,7 +31,7 @@ public class JwtService {
     private final UserRepository userRepository;
 
     @Value("${secret_key}")
-    private static final String SECRET_KEY = "";
+    private String SECRET_KEY;
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -87,11 +87,9 @@ public class JwtService {
 
     public User getUserInToken() {
         try {
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            Authentication authentication = securityContext.getAuthentication();
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            log.info(userDetails.getUsername());
-            return userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            return userRepository.findByEmail(email).orElseThrow(() -> {
                 log.error("User not found!");
                 throw new NotFoundException("User not found!");
             });
