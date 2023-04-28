@@ -1,7 +1,7 @@
 package com.example.giftlistb8.services.serviceImpl;
 
 import com.example.giftlistb8.dto.feed.response.FeedResponse;
-import com.example.giftlistb8.dto.feed.response.PaginationResponse;
+import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.services.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,6 +34,7 @@ public class FeedServiceImpl implements FeedService {
                          Join wishes w on u.id = w.user_id
                          Join user_infos ui on u.user_info_id = ui.id
                          JOIN holidays h ON u.id = h.user_id and w.holiday_id = h.id
+                         ORDER BY u.id ASC
                 """;
         String countSql = "SELECT COUNT(*) FROM (" + sql + ") as count_query";
         int count = jdbcTemplate.queryForObject(countSql, Integer.class);

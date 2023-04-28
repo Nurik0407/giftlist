@@ -1,7 +1,7 @@
 package com.example.giftlistb8.api;
 
 import com.example.giftlistb8.dto.feed.response.FeedResponse;
-import com.example.giftlistb8.dto.feed.response.PaginationResponse;
+import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.services.FeedService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

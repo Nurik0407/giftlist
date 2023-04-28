@@ -1,4 +1,4 @@
-package com.example.giftlistb8.dto.feed.response;
+package com.example.giftlistb8.dto;
 
 import lombok.Builder;
 
