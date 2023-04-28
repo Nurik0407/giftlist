@@ -86,12 +86,15 @@ public class JwtService {
     }
 
     public User getUserInToken() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        log.info("Token has been taken!");
-        return userRepository.findByEmail(email).orElseThrow(() -> {
-            log.error("User not found! "+email);
-            throw new NotFoundException("User not found!");
-        });
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            return userRepository.findByEmail(email).orElseThrow(() -> {
+                log.error("User not found!");
+                throw new NotFoundException("User not found!");
+            });
+        } catch (IOException e) {
+            throw new IOException("Method invalid!");
+        }
     }
 }
