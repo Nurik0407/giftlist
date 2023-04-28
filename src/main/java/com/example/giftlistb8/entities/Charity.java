@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.*;
@@ -27,6 +28,7 @@ public class Charity {
     private String category;
     private String subCategory;
     private String description;
+    private LocalDate dateOfIssue;
 
     private String image;
 
