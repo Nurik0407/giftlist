@@ -31,12 +31,12 @@ public class CharityAPI {
     }
 
     @PostMapping
-    public SimpleResponse save(@Valid CharityRequest request) {
+    public SimpleResponse save(@RequestBody @Valid CharityRequest request) {
         return service.save(request);
     }
 
     @PutMapping
-    public SimpleResponse update(@Valid CharityUpdateRequest request) {
+    public SimpleResponse update(@RequestBody @Valid CharityUpdateRequest request) {
         return service.update(request);
     }
 
