@@ -3,6 +3,7 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.charity.request.CharityRequest;
+import com.example.giftlistb8.dto.charity.request.CharityUpdateRequest;
 import com.example.giftlistb8.dto.charity.response.CharitiesResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
 import com.example.giftlistb8.entities.Charity;
@@ -60,12 +61,12 @@ public class CharityServiceImpl implements CharityService {
     }
 
     @Override
-    public SimpleResponse update(Long id, CharityRequest request) {
+    public SimpleResponse update(CharityUpdateRequest request) {
         jdbcTemplate.update("update charities set name=?,state=?,description=?,category=?,sub_category=?,image=? WHERE id=?",
-                request.name(), request.state(), request.description(), request.category(), request.subCategory(), request.image(), id);
+                request.name(), request.state(), request.description(), request.category(), request.subCategory(), request.image(),request.id());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
-                .message(String.format("Charity with id %s successfully updated.", id))
+                .message(String.format("Charity with id %s successfully updated.", request.id()))
                 .build();
     }
 

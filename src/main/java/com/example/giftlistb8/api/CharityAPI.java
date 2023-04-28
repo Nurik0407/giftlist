@@ -2,6 +2,7 @@ package com.example.giftlistb8.api;
 
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.charity.request.CharityRequest;
+import com.example.giftlistb8.dto.charity.request.CharityUpdateRequest;
 import com.example.giftlistb8.dto.charity.response.CharitiesResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
 import com.example.giftlistb8.services.CharityService;
@@ -15,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/charities")
 @RequiredArgsConstructor
-@PreAuthorize("permitAll()")
 public class CharityAPI {
 
     private final CharityService service;
@@ -36,8 +36,8 @@ public class CharityAPI {
     }
 
     @PutMapping
-    public SimpleResponse update(@RequestParam Long id, @Valid CharityRequest request) {
-        return service.update(id, request);
+    public SimpleResponse update(@Valid CharityUpdateRequest request) {
+        return service.update(request);
     }
 
     @DeleteMapping
