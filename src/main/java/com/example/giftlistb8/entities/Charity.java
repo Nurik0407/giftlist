@@ -31,8 +31,7 @@ public class Charity {
     private LocalDate date;
 
 
-    @ElementCollection
-    private List<String> images;
+    private String image;
 
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private User user;

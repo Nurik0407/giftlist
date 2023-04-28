@@ -13,7 +13,7 @@ values (2,33,'Kyrgyzstan','2004-12-12','https://www.facebook.com/profile.php?id=
 
 insert into users (id, email, first_name, is_blocked,last_name,password,role,user_info_id)
 values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','nurislam1234','USER',2),
-       (3,'nursultan@gmail.com','Nursuldan',false,'Odesov','nursultan1234','USER',3),
+       (3,'nursultan@gmail.com','Syimyk',false,'Odesov','nursultan1234','USER',3),
        (4,'jumakadyrovadilet@gmail.com','Adilet',false,'Jumakadyrov','adilet524','USER',4),
        (5,'eldiarro2004@gmail.com','Eldiar',false,'Rasulov','aldiar1234','USER',5),
        (6,'nurmatova161196@gmail.com','',false,'','','USER',6),
@@ -24,38 +24,18 @@ values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','nurislam1234
        (10,'adminadminov@gmail.com','Admin',false,'Admin','admin1234','ADMIN',10);
 
 
-INSERT INTO charities (id,category, description, name, state, sub_category,user_id)
+INSERT INTO charities (id,category, description,image, name, state, sub_category,user_id)
 VALUES
-    (1, 'Category 1', 'Description 1', 'Name 1', 'state 1', 'Sub-Category 1', 2),
-    (2, 'Category 2', 'Description 2', 'Name 2', 'state 2', 'Sub-Category 2', 3),
-    (3, 'Category 3', 'Description 3', 'Name 3', 'state 3', 'Sub-Category 3', 4),
-    (4, 'Category 4', 'Description 4', 'Name 4', 'state 4', 'Sub-Category 4', 5),
-    (5, 'Category 5', 'Description 5', 'Name 5', 'state 5', 'Sub-Category 5', 6),
-    (6, 'Category 6', 'Description 6', 'Name 6', 'state 6', 'Sub-Category 6', 7),
-    (7, 'Category 7', 'Description 7', 'Name 7', 'state 7', 'Sub-Category 7', 8),
-    (8, 'Category 8', 'Description 8', 'Name 8', 'state 8', 'Sub-Category 8', 9),
-    (9, 'Category 9', 'Description 9', 'Name 9', 'state 9', 'Sub-Category 9', 3);
+    (1, 'Category 1', 'Description 1', 'image1.jpg', 'Name 1', 'state 1', 'Sub-Category 1', 2),
+    (2, 'Category 2', 'Description 2', 'image6.jpg', 'Name 2', 'state 2', 'Sub-Category 2', 3),
+    (3, 'Category 3', 'Description 3', 'image9.jpg', 'Name 3', 'state 3', 'Sub-Category 3', 4),
+    (4, 'Category 4', 'Description 4', 'image10.jpg', 'Name 4', 'state 4', 'Sub-Category 4', 5),
+    (5, 'Category 5', 'Description 5', 'image15.jpg', 'Name 5', 'state 5', 'Sub-Category 5', 6),
+    (6, 'Category 6', 'Description 6', 'image16.jpg', 'Name 6', 'state 6', 'Sub-Category 6', 7),
+    (7, 'Category 7', 'Description 7', 'image17.jpg', 'Name 7', 'state 7', 'Sub-Category 7', 8),
+    (8, 'Category 8', 'Description 8','image2.jpg', 'Name 8', 'state 8', 'Sub-Category 8', 9),
+    (9, 'Category 9', 'Description 9','image3.jpg', 'Name 9', 'state 9', 'Sub-Category 9', 3);
 
-
-INSERT INTO charity_images(charity_id, images)
-VALUES
-    (1, 'image1.jpg'),
-    (1, 'image2.jpg'),
-    (1, 'image3.jpg'),
-    (2, 'image4.jpg'),
-    (2, 'image5.jpg'),
-    (2, 'image6.jpg'),
-    (3, 'image7.jpg'),
-    (3, 'image8.jpg'),
-    (3, 'image9.jpg'),
-    (4, 'image10.jpg'),
-    (4, 'image11.jpg'),
-    (4, 'image12.jpg'),
-    (5, 'image13.jpg'),
-    (5, 'image14.jpg'),
-    (5, 'image15.jpg'),
-    (6, 'image16.jpg'),
-    (7, 'image17.jpg');
 
 INSERT INTO holidays (id, date, image, name, user_id)
 VALUES
