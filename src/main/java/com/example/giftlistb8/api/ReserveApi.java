@@ -1,9 +1,8 @@
 package com.example.giftlistb8.api;
 
+import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestCharity;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestWish;
-import com.example.giftlistb8.dto.reserve.response.PaginationResponseWish;
-import com.example.giftlistb8.dto.reserve.response.PaginationResponseCharity;
 import com.example.giftlistb8.dto.reserve.response.ReserveGetAllResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.services.ReserveService;
@@ -21,15 +20,14 @@ import org.springframework.web.bind.annotation.*;
 public class ReserveApi {
     private final ReserveService reserveService;
 
-    @Operation(
-            summary = "This method for reserve the wish",
+    @Operation(summary = "This method for reserve the wish",
             description = "Reserve a wish as anonymous or non anonymous user with the given wish ID.")
     @PostMapping("/wish")
     public SimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
         return reserveService.wishReserve(reserveRequest);
     }
-    @Operation(
-            summary = "This method for reserve the gift from charity",
+
+    @Operation(summary = "This method for reserve the gift from charity",
             description = "Reserve a wish as anonymous or non anonymous user with the given wish ID.")
     @PostMapping("/charity")
     public SimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity) {
@@ -49,29 +47,17 @@ public class ReserveApi {
         return reserveService.addGiftToWish(wishId);
     }
 
-    @Operation(summary = "Delete wish method", description = "Cancel wish from reserve")
-    @DeleteMapping("/{wishId}/{userId}")
-    public SimpleResponse deleteWish(@PathVariable Long userId, @PathVariable Long wishId) {
-        return reserveService.deleteWish(userId, wishId);
-    }
-
-    @Operation(summary = "Delete the gift", description = "Cancel gift from reserve")
-    @DeleteMapping("/{charityId}/{userId}")
-    public SimpleResponse deleteCharity(@PathVariable Long userId, @PathVariable Long charityId) {
-        return reserveService.deleteCharity(userId, charityId);
-    }
-
     @Operation(summary = "Get wish reserve pagination",
             description = "Returns a paginated list of wish reserves.")
     @GetMapping("/pagination-wish")
-    public PaginationResponseWish getWishPagination(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+    public PaginationResponse getWishPagination(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return reserveService.getWishReservePagination(page, size);
     }
 
     @Operation(summary = "Get gift reserve pagination",
             description = "Returns a paginated list of gift reserves.")
     @GetMapping("/pagination-charity")
-    public PaginationResponseCharity getCharityPagination(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+    public PaginationResponse getCharityPagination(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return reserveService.getCharityReservePagination(page, size);
     }
 }
