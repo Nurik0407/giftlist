@@ -99,4 +99,8 @@ public class User implements UserDetails {
     public void deleteHoliday(Holiday holiday) {
         holidays.remove(holiday);
     }
+
+    public void deleteCharity(Charity charity) {
+        charities.remove(charity);
+    }
 }
