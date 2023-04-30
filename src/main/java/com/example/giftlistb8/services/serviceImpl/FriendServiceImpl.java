@@ -24,31 +24,34 @@ public class FriendServiceImpl implements FriendService {
     private final FriendRepository friendRepository;
     private final JwtService jwtService;
 
-    public List<FriendInfoResponse> getAllFriends() {
+    @Transactional
+    public List<FriendInfoResponse> getAllFriendsAndAllRequests(String type) {
         User user = jwtService.getUserInToken();
-        return friendRepository.getAllFriends(user.getEmail());
-    }
-
-    public List<FriendInfoResponse> getAllRequests() {
-        User user = jwtService.getUserInToken();
-        return friendRepository.getAllRequests(user.getEmail());
+        if ("requests".equals(type)) {
+            return friendRepository.getAllRequests(user.getEmail());
+        } else {
+            return friendRepository.getAllFriends(user.getEmail());
+        }
     }
 
     @Transactional
-    public SimpleResponse sendRequestToFriend(Long friendId) {
+    public SimpleResponse sendAndDelete(Long friendId) {
         User user = jwtService.getUserInToken();
         User friend = userRepository.findById(friendId).orElseThrow(() -> new NotFoundException(String.format("user with id %s not found", friendId)));
         if (user.equals(friend)) {
-            throw new BadRequestException("you can't send request to yourself");
+            throw new BadRequestException("You cannot send a request to yourself!");
         }
         if (friend.getRequestsForFriends().contains(user)) {
-            throw new BadRequestException("you have already submitted a request!");
-
-        } else if (user.getFriends().contains(friend)) {
-            throw new BadRequestException("you have already submitted a request,because you are friends!");
+            friend.getRequestsForFriends().remove(user);
+            return new SimpleResponse(HttpStatus.OK, "not friend");
         }
-        friend.addRequest(user);
-        return new SimpleResponse(HttpStatus.OK, "REQUEST TO FRIEND");
+        if (friend.getFriends().contains(user)) {
+            friend.getFriends().remove(user);
+            return new SimpleResponse(HttpStatus.OK, "not friends");
+        } else {
+            friend.getRequestsForFriends().add(user);
+            return new SimpleResponse(HttpStatus.OK, "friend request");
+        }
     }
 
     @Transactional
@@ -56,9 +59,10 @@ public class FriendServiceImpl implements FriendService {
         User user = jwtService.getUserInToken();
         User request = userRepository.findById(senderUserId).orElseThrow(() -> new NotFoundException(String.format("User with id: %s not found!", senderUserId)));
         if (user.getRequestsForFriends().contains(request)) {
-            user.addFriend((request));
+            user.getFriends().add(request);
             user.getRequestsForFriends().remove(request);
-        } else return new SimpleResponse(HttpStatus.NOT_FOUND, "Не в друзьях");
+
+        } else return new SimpleResponse(HttpStatus.NOT_FOUND, "not found request");
 
         return new SimpleResponse(HttpStatus.OK, "FRIEND");
     }
@@ -70,17 +74,6 @@ public class FriendServiceImpl implements FriendService {
         if (user.getRequestsForFriends().contains(sender)) {
             user.getRequestsForFriends().remove(sender);
         } else return new SimpleResponse(HttpStatus.NOT_FOUND, " not found request");
-
-        return new SimpleResponse(HttpStatus.OK, "NOT FRIEND");
-    }
-
-    @Transactional
-    public SimpleResponse deleteFromFriends(Long friendId) {
-        User user = jwtService.getUserInToken();
-        User friend = userRepository.findById(friendId).orElseThrow(() -> new NotFoundException(String.format("user with id: %s not found", friendId)));
-        if (user.getFriends().contains(friend)) {
-            user.getFriends().remove(friend);
-        } else return new SimpleResponse(HttpStatus.NOT_FOUND, "friend not found");
 
         return new SimpleResponse(HttpStatus.OK, "NOT FRIEND");
     }

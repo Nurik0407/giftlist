@@ -7,17 +7,13 @@ import java.util.List;
 
 public interface FriendService {
 
-    List<FriendInfoResponse> getAllFriends();
+    List<FriendInfoResponse> getAllFriendsAndAllRequests(String type);
 
-    List<FriendInfoResponse> getAllRequests();
-
-    SimpleResponse sendRequestToFriend(Long friendId);
+    SimpleResponse sendAndDelete(Long friendId);
 
     SimpleResponse acceptRequest(Long senderUserId);
 
     SimpleResponse rejectRequest(Long senderUserId);
-
-    SimpleResponse deleteFromFriends(Long friendId);
 
     SimpleResponse cancelRequestToFriend(Long friendId);
 

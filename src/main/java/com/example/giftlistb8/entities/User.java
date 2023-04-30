@@ -61,22 +61,6 @@ public class User implements UserDetails {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<User> friends;
 
-    public void addFriend(User friend) {
-        if (friend != null) {
-            friends.add(friend);
-        } else {
-            throw new NotFoundException("Friend cannot be null");
-        }
-    }
-
-    public void addRequest(User friend) {
-        if (friend != null) {
-            requestsForFriends.add(friend);
-        } else {
-            throw new NotFoundException("Friend cannot be null");
-        }
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

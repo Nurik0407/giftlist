@@ -8,12 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,23 +21,18 @@ public class FriendApi {
 
     private final FriendServiceImpl friendServiceImpl;
 
-    @Operation(summary = "Get all friends", description = "User can see get all friends list")
-    @GetMapping
-    public List<FriendInfoResponse> getAllFriends() {
-        return friendServiceImpl.getAllFriends();
+    @Operation(summary = "Get all friends, get all request", description = "User can see get all friends or get all request list")
+    @GetMapping()
+    public List<FriendInfoResponse> getAllFriendsAndAllRequests(@RequestParam(required =false) String type) {
+      return friendServiceImpl.getAllFriendsAndAllRequests(type);
     }
 
-    @Operation(summary = "Get all requests", description = "User can see get all requests")
-    @GetMapping("requests")
-    public List<FriendInfoResponse> getAllRequests() {
-        return friendServiceImpl.getAllRequests();
+    @Operation(summary = "Manage friend relationship", description = "User can manage friend relationship")
+    @PostMapping("{id}")
+    public SimpleResponse sendAndDelete(@PathVariable Long id){
+        return friendServiceImpl.sendAndDelete(id);
     }
 
-    @Operation(summary = "Send request to friend", description = "User can send request to friend")
-    @PostMapping("request/{id}")
-    public SimpleResponse requestToFriend(@PathVariable Long id) {
-        return friendServiceImpl.sendRequestToFriend(id);
-    }
 
     @Operation(summary = "Reject request to friend", description = "User can reject request to friend")
     @PostMapping("reject/{id}")
@@ -56,11 +46,6 @@ public class FriendApi {
         return friendServiceImpl.acceptRequest(id);
     }
 
-    @Operation(summary = "Delete from friend", description = "User can delete from friends")
-    @DeleteMapping("{id}")
-    public SimpleResponse deleteFromFriend(@PathVariable Long id) {
-        return friendServiceImpl.deleteFromFriends(id);
-    }
 
     @Operation(summary = "Cancel request to friend", description = "User can cancel request to friend")
     @PostMapping("cancel/{id}")
