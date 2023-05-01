@@ -49,7 +49,10 @@ public class User implements UserDetails {
     private List<Reserve> reserves;
 
     @OneToMany(mappedBy = "fromWhomUser", cascade = CascadeType.ALL)
-    private List<Notification> notifications;
+    private List<Notification> fromWhomUserNotifications;
+
+    @OneToMany(mappedBy = "toWhomUser", cascade = CascadeType.ALL)
+    private List<Notification> myNotifications;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Holiday> holidays;
