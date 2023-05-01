@@ -23,6 +23,7 @@ public class Notification {
     @SequenceGenerator(name = "notification_id_gen",
             sequenceName = "notification_id_seq",allocationSize = 1,initialValue = 4)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private Type type;
     private String message;
     private Boolean seen;
