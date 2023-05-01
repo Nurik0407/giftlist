@@ -23,13 +23,13 @@ public class FriendApi {
 
     @Operation(summary = "Get all friends, get all request", description = "User can see get all friends or get all request list")
     @GetMapping()
-    public List<FriendInfoResponse> getAllFriendsAndAllRequests(@RequestParam(required =false) String type) {
-      return friendServiceImpl.getAllFriendsAndAllRequests(type);
+    public List<FriendInfoResponse> getAllFriendsAndAllRequests(@RequestParam(required = false) String type) {
+        return friendServiceImpl.getAllFriendsAndAllRequests(type);
     }
 
     @Operation(summary = "Manage friend relationship", description = "User can manage friend relationship")
     @PostMapping("{id}")
-    public SimpleResponse sendAndDelete(@PathVariable Long id){
+    public SimpleResponse sendAndDelete(@PathVariable Long id) {
         return friendServiceImpl.sendAndDelete(id);
     }
 
@@ -46,10 +46,4 @@ public class FriendApi {
         return friendServiceImpl.acceptRequest(id);
     }
 
-
-    @Operation(summary = "Cancel request to friend", description = "User can cancel request to friend")
-    @PostMapping("cancel/{id}")
-    public SimpleResponse cancelRequestToFriend(@PathVariable Long id) {
-        return friendServiceImpl.cancelRequestToFriend(id);
-    }
 }

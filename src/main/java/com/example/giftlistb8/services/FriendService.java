@@ -15,6 +15,4 @@ public interface FriendService {
 
     SimpleResponse rejectRequest(Long senderUserId);
 
-    SimpleResponse cancelRequestToFriend(Long friendId);
-
 }
