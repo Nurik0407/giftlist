@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/feeds")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "UserAccountFeed", description = "Users profile feed which show latest reserve wishes")
 public class FeedApi {
     private final FeedService feedService;

@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/holidays")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class HolidayAPI {
     private final HolidayService service;
 
