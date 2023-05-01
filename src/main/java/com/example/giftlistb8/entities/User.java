@@ -23,7 +23,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
     @SequenceGenerator(name = "user_id_gen",
-            sequenceName = "user_id_seq",allocationSize = 1,initialValue = 11)
+            sequenceName = "user_id_seq", allocationSize = 1, initialValue = 11)
     private Long id;
     private String firstName;
     private String lastName;
@@ -49,7 +49,10 @@ public class User implements UserDetails {
     private List<Reserve> reserves;
 
     @OneToMany(mappedBy = "fromWhomUser", cascade = CascadeType.ALL)
-    private List<Notification> notifications;
+    private List<Notification> fromWhomUserNotifications;
+
+    @OneToMany(mappedBy = "toWhomUser", cascade = CascadeType.ALL)
+    private List<Notification> myNotifications;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Holiday> holidays;
@@ -71,7 +74,9 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {return password;}
+    public String getPassword() {
+        return password;
+    }
 
     @Override
     public boolean isAccountNonExpired() {

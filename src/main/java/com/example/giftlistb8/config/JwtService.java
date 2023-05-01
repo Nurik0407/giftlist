@@ -31,7 +31,7 @@ public class JwtService {
     private final UserRepository userRepository;
 
     @Value("${secret_key}")
-    private static final String SECRET_KEY = "";
+    private String SECRET_KEY;
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
