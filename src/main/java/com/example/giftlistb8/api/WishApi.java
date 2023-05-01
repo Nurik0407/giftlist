@@ -5,7 +5,6 @@ import com.example.giftlistb8.dto.wish.requests.WishRequest;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 import com.example.giftlistb8.services.WishService;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
