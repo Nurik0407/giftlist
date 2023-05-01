@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserAPI {
     private final UserInfoService userService;
 
