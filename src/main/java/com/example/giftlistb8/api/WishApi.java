@@ -31,6 +31,7 @@ public class WishAPI {
 //    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/save")
     public SimpleResponse save(@RequestBody WishRequest request){
+        System.out.println("hello");
         return service.save(request);
     }
 
