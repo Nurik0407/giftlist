@@ -33,4 +33,9 @@ public class UserAPI {
     public List<NotificationResponse> getAllNotifications(@PathVariable Long userId){
         return notificationService.getAllMyNotifications(userId);
     }
+
+    @PostMapping("/{userId}")
+    public SimpleResponse seenOrNot(@PathVariable Long userId){
+        return notificationService.seenOrNot(userId);
+    }
 }
