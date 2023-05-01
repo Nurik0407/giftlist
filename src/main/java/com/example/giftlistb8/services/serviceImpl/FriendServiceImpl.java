@@ -77,18 +77,6 @@ public class FriendServiceImpl implements FriendService {
 
         return new SimpleResponse(HttpStatus.OK, "NOT FRIEND");
     }
-
-    @Transactional
-    public SimpleResponse cancelRequestToFriend(Long friendId) {
-        User user = jwtService.getUserInToken();
-        User friend = userRepository.findById(friendId).orElseThrow(() -> new NotFoundException(String.format("user with id %s not found", friendId)));
-        if (friend.getRequestsForFriends().contains(user)) {
-            friend.getRequestsForFriends().remove(user);
-        } else return new SimpleResponse(HttpStatus.NOT_FOUND, "request not found");
-
-        return new SimpleResponse(HttpStatus.OK, "NOT FRIEND");
-    }
-
 }
 
 
