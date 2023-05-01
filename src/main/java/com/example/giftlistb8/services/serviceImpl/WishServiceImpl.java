@@ -48,20 +48,20 @@ public class WishServiceImpl implements WishService {
     @Override
     public SimpleResponse save(WishRequest request) {
         System.out.println(1);
-//        User user = jwtService.getUserInToken();
+        User user = jwtService.getUserInToken();
         System.out.println(2);
-//        Holiday holiday = holidayRepository.findById(request.holidayId()).orElseThrow(() -> new NotFoundException("Holiday not found!"));
+        Holiday holiday = holidayRepository.findById(request.holidayId()).orElseThrow(() -> new NotFoundException("Holiday not found!"));
         System.out.println(3);
         Wish wish = Wish.builder()
                 .name(request.name())
                 .linkGift(request.linkGift())
                 .dateOfHoliday(request.dateOfHoliday())
                 .image(request.image())
-//                .holiday(holiday)
-//                .user(user)
+                .holiday(holiday)
+                .user(user)
                 .description(request.descriptions())
                 .build();
-//        wish.setUser(user);
+        wish.setUser(user);
         System.out.println(4);
         wishRepository.save(wish);
         System.out.println(5);
