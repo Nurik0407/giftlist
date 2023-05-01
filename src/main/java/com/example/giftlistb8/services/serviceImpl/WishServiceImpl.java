@@ -47,11 +47,8 @@ public class WishServiceImpl implements WishService {
 
     @Override
     public SimpleResponse save(WishRequest request) {
-        System.out.println(1);
         User user = jwtService.getUserInToken();
-        System.out.println(2);
         Holiday holiday = holidayRepository.findById(request.holidayId()).orElseThrow(() -> new NotFoundException("Holiday not found!"));
-        System.out.println(3);
         Wish wish = Wish.builder()
                 .name(request.name())
                 .linkGift(request.linkGift())
@@ -62,9 +59,7 @@ public class WishServiceImpl implements WishService {
                 .description(request.descriptions())
                 .build();
         wish.setUser(user);
-        System.out.println(4);
         wishRepository.save(wish);
-        System.out.println(5);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Wish with name %s successfully saved.", wish.getName()))
