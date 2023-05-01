@@ -29,13 +29,13 @@ public class UserAPI {
         return userService.getByResetPasswordToken(token, request.getPassword(), request.getConfirmPassword());
     }
 
-    @GetMapping("/notifications/{userId}")
-    public List<NotificationResponse> getAllNotifications(@PathVariable Long userId){
-        return notificationService.getAllMyNotifications(userId);
+    @GetMapping("/notifications")
+    public List<NotificationResponse> getAllNotifications(){
+        return notificationService.getAllMyNotifications();
     }
 
-    @PostMapping("/{userId}")
-    public SimpleResponse seenOrNot(@PathVariable Long userId){
-        return notificationService.seenOrNot(userId);
+    @PostMapping()
+    public SimpleResponse seenOrNot(){
+        return notificationService.seenOrNot();
     }
 }

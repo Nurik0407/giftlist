@@ -1,5 +1,6 @@
 package com.example.giftlistb8.repositories.custom.impl;
 
+import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.notification.response.NotificationResponse;
 import com.example.giftlistb8.repositories.UserInfoRepository;
 import com.example.giftlistb8.repositories.custom.NotificationRepositoryCustom;
@@ -12,9 +13,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationImpl implements NotificationRepositoryCustom {
     private final JdbcTemplate jdbcTemplate;
+    private final JwtService jwtService;
 
     @Override
-    public List<NotificationResponse> getAll(Long userId) {
+    public List<NotificationResponse> getAll() {
+        Long userId = jwtService.getUserInToken().getId();
         String sql = """
                 select u.id as fromWhomUserId,
                 ui.image,concat(u.first_name,' ',u.last_name) as fullName,

@@ -6,7 +6,7 @@ import com.example.giftlistb8.dto.notification.response.NotificationResponse;
 import java.util.List;
 
 public interface NotificationService {
-    List<NotificationResponse> getAllMyNotifications(Long userId);
+    List<NotificationResponse> getAllMyNotifications();
 
-    SimpleResponse seenOrNot(Long userId);
+    SimpleResponse seenOrNot();
 }

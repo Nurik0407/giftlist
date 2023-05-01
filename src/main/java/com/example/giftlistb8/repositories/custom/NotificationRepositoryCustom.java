@@ -5,5 +5,5 @@ import com.example.giftlistb8.dto.notification.response.NotificationResponse;
 import java.util.List;
 
 public interface NotificationRepositoryCustom {
-    List<NotificationResponse> getAll(Long userId);
+    List<NotificationResponse> getAll();
 }
