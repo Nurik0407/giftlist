@@ -20,6 +20,7 @@ public class WishAPI {
     @GetMapping
     public List<WishResponse> findAllWishes(){
         return service.findAll();
+
     }
 
     @PreAuthorize("hasAuthority('USER')")
