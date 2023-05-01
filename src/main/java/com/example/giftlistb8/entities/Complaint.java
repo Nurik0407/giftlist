@@ -21,6 +21,7 @@ public class Complaint {
             sequenceName = "complaint_id_seq", allocationSize = 1, initialValue = 3)
     private Long id;
     private String complaint;
+    private Boolean seen;
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private User user;
 }
