@@ -13,6 +13,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationImpl implements NotificationRepositoryCustom {
     private final JdbcTemplate jdbcTemplate;
+
+    @Override
+    public List<NotificationResponse> getAll(Long userId) {
     private final JwtService jwtService;
 
     @Override
