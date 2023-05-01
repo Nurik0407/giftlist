@@ -12,29 +12,29 @@ values (2,'XXS','Kyrgyzstan','2004-12-12','https://www.facebook.com/profile.php?
 
 
 insert into users (id, email, first_name, is_blocked,last_name,password,role,user_info_id)
-values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','nurislam1234','USER',2),
-       (3,'nursultan@gmail.com','Syimyk',false,'Odesov','nursultan1234','USER',3),
-       (4,'jumakadyrovadilet@gmail.com','Adilet',false,'Jumakadyrov','adilet524','USER',4),
-       (5,'eldiarro2004@gmail.com','Eldiar',false,'Rasulov','aldiar1234','USER',5),
-       (6,'nurmatova161196@gmail.com','',false,'','','USER',6),
-       (7,'nurisa.abdykalykova03@gmail.com','Nurisa',false,'Abdykalykova','nurisa1234','USER',7),
-       (8,'programmist00707@gmail.com','Syimyk',false,'Ravshanbekov','admin1234','USER',8),
-       (9,'adinai.sharshekeeva.kk@gmail.com','Adinai',false,'Sharshekeeva','sharshekeeva1234','USER',9),
-       (1,'a.asangazieva@gmail.com','Aijamal',false,'Asangazieva','asangaziev a1234','USER',1),
-       (10,'adminadminov@gmail.com','Admin',false,'Admin','admin1234','ADMIN',10);
+values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','$2a$12$cD/vVybmpIXV9vgW4mdsJ.GWOTQ9JPIuj1AscLPaQSgsl0RLT5NQ6','USER',2),
+       (3,'nursultan@gmail.com','Syimyk',false,'Odesov','$2a$12$L.8HX7N70zwbxhgw3RE3outmnLGIgVlizD6bgkxsQuWLItdZjPsdG','USER',3),
+       (4,'jumakadyrovadilet@gmail.com','Adilet',false,'Jumakadyrov','$2a$12$exhDiK8fE1KZtgsh1TPh7OblsSmwh7/JN/LlvYA3iF4LneNryzY3u','USER',4),
+       (5,'eldiarro2004@gmail.com','Eldiar',false,'Rasulov','$2a$12$x.qXoudu3jdc8SkNg3KLMuuyUTH7Ly8Nlb/bNv/sjc9d.2cOcVX4K','USER',5),
+       (6,'nurmatova161196@gmail.com','',false,'Nuraim','$2a$12$Cisx6qiDTPkmTQ1VT5nnnukPyoKZpAIBS/7XzeobdSBIaKWUwKXrq','USER',6),
+       (7,'nurisa.abdykalykova03@gmail.com','Nurisa',false,'Abdykalykova','$2a$12$p2A8jzY9iGSu.GpG0BFLM.jMQH8r7bsczOf4JbIy0DmAzewp1OZSe','USER',7),
+       (8,'programmist00707@gmail.com','Syimyk',false,'Ravshanbekov','$2a$12$hLlrlPOZ8zmSR82irl7xPeS3fmpoHykRkMz.UEjoJYTfpzM/D0wsO','USER',8),
+       (9,'adinai.sharshekeeva.kk@gmail.com','Adinai',false,'Sharshekeeva','$2a$12$cpWhg3i4u2RUL0Sb70tC5OMUBF5PRUW1qEIJJiVM/ervhmuUagaVO','USER',9),
+       (1,'a.asangazieva@gmail.com','Aijamal',false,'Asangazieva','$2a$12$a9cpi5sb2U7bhhgh3P4kiexwI.aIRczOeY6SUdtmAQCrfgH36jSm.','USER',1),
+       (10,'adminadminov@gmail.com','Admin',false,'Admin','$2a$12$TMQHpAfvViIwqb0aQPEJzueRqZvEUzzDkeT039fuP1xTD7i8lwota','ADMIN',10);
 
 
-INSERT INTO charities (id,category, description,image, name, state, sub_category,user_id)
+INSERT INTO charities (id,category,date_of_issue,description, name, state, sub_category,user_id)
 VALUES
-    (1, 'Category 1', 'Description 1', 'image1.jpg', 'Name 1', 'state 1', 'Sub-Category 1', 2),
-    (2, 'Category 2', 'Description 2', 'image6.jpg', 'Name 2', 'state 2', 'Sub-Category 2', 3),
-    (3, 'Category 3', 'Description 3', 'image9.jpg', 'Name 3', 'state 3', 'Sub-Category 3', 4),
-    (4, 'Category 4', 'Description 4', 'image10.jpg', 'Name 4', 'state 4', 'Sub-Category 4', 5),
-    (5, 'Category 5', 'Description 5', 'image15.jpg', 'Name 5', 'state 5', 'Sub-Category 5', 6),
-    (6, 'Category 6', 'Description 6', 'image16.jpg', 'Name 6', 'state 6', 'Sub-Category 6', 7),
-    (7, 'Category 7', 'Description 7', 'image17.jpg', 'Name 7', 'state 7', 'Sub-Category 7', 8),
-    (8, 'Category 8', 'Description 8','image2.jpg', 'Name 8', 'state 8', 'Sub-Category 8', 9),
-    (9, 'Category 9', 'Description 9','image3.jpg', 'Name 9', 'state 9', 'Sub-Category 9', 3);
+    (1, 'Category 1',current_date,'Description 1', 'Name 1', 'state 1', 'Sub-Category 1', 2),
+    (2, 'Category 2',current_date,'Description 2', 'Name 2', 'state 2', 'Sub-Category 2', 3),
+    (3, 'Category 3',current_date,'Description 3', 'Name 3', 'state 3', 'Sub-Category 3', 4),
+    (4, 'Category 4',current_date,'Description 4', 'Name 4', 'state 4', 'Sub-Category 4', 5),
+    (5, 'Category 5',current_date,'Description 5', 'Name 5', 'state 5', 'Sub-Category 5', 6),
+    (6, 'Category 6',current_date,'Description 6', 'Name 6', 'state 6', 'Sub-Category 6', 7),
+    (7, 'Category 7',current_date,'Description 7', 'Name 7', 'state 7', 'Sub-Category 7', 8),
+    (8, 'Category 8',current_date,'Description 8', 'Name 8', 'state 8', 'Sub-Category 8', 9),
+    (9, 'Category 9',current_date,'Description 9', 'Name 9', 'state 9', 'Sub-Category 9', 10);
 
 
 
