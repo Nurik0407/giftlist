@@ -1,14 +1,14 @@
 insert into user_infos (id,clothing_size,country,date_of_birth,facebook,hobby,image,important,instagram,phone_number,shoe_size,telegram,whats_app)
-values (2,33,'Kyrgyzstan','2004-12-12','https://www.facebook.com/profile.php?id=100076926076401','play cs go','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234554',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (3,34,'Kyrgyzstan','2004-10-12','https://www.facebook.com/profile.php?id=100076926076401','play tennis','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996709899876',43,'http://t.me/nurkanowich','http://wa.me/996508206602'),
-       (4,37,'Kyrgyzstan','2000-12-12','https://www.facebook.com/profile.php?id=100076926076401','play cs source','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996709465733',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (5,36,'Kyrgyzstan','2004-11-11','https://www.facebook.com/profile.php?id=100076926076401','play minecraft','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996559234595',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (6,48,'Kyrgyzstan','1998-10-09','https://www.facebook.com/profile.php?id=100076926076401','play pes 2013','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996559234595',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (7,46,'Kyrgyzstan','2000-10-05','https://www.facebook.com/profile.php?id=100076926076401','play cs 1.6','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996559290595',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (8,45,'Kyrgyzstan','1997-12-03','https://www.facebook.com/profile.php?id=100076926076401','play warface','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996959234845',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (9,42,'Kyrgyzstan','1998-12-12','https://www.facebook.com/profile.php?id=100076926076401','play aviator','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234595',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (1,34,'Kyrgyzstan','2002-10-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234595',43,'http://t.me/adilet_524','http://wa.me/996508206602'),
-       (10,34,'Kyrgyzstan','2002-9-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagran.com/nurkanowich?utm_medium=copy_link','+996999234535',43,'http://t.me/adilet_324','http://wa.me/996408206602');
+values (2,'XXS','Kyrgyzstan','2004-12-12','https://www.facebook.com/profile.php?id=100076926076401','play cs go','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234554','THIRTY_FIVE','http://t.me/adilet_524','http://wa.me/996508206602'),
+       (3,'L','Kyrgyzstan','2004-10-12','https://www.facebook.com/profile.php?id=100076926076401','play tennis','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996709899876','FORTY_THREE','http://t.me/nurkanowich','http://wa.me/996508206602'),
+       (4,'S','Kyrgyzstan','2000-12-12','https://www.facebook.com/profile.php?id=100076926076401','play cs source','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996709465733','FORTY_THREE','http://t.me/adilet_524','http://wa.me/996508206602'),
+       (5,'M','Kyrgyzstan','2004-11-11','https://www.facebook.com/profile.php?id=100076926076401','play minecraft','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996559234595','FORTY_THREE','http://t.me/adilet_524','http://wa.me/996508206602'),
+       (6,'L','Kyrgyzstan','1998-10-09','https://www.facebook.com/profile.php?id=100076926076401','play pes 2013','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996559234595','FORTY_THREE','http://t.me/adilet_524','http://wa.me/996508206602'),
+       (7,'XXL','Kyrgyzstan','2000-10-05','https://www.facebook.com/profile.php?id=100076926076401','play cs 1.6','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996559290595','FORTY_THREE','http://t.me/adilet_524','http://wa.me/996508206602'),
+       (8,'XXL','Kyrgyzstan','1997-12-03','https://www.facebook.com/profile.php?id=100076926076401','play warface','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996959234845','FORTY_THREE','http://t.me/adilet_524','http://wa.me/996508206602'),
+       (9,'XL','Kyrgyzstan','1998-12-12','https://www.facebook.com/profile.php?id=100076926076401','play aviator','image','alrgiasy kyzdarga bar','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234595','FORTY_THREE','http://t.me/adilet_524','http://wa.me/996508206602'),
+       (1,'L','Kyrgyzstan','2002-10-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagram.com/nurkanowich?utm_medium=copy_link','+996999234595','FORTY_THREE','http://t.me/adilet_524','http://wa.me/996508206602'),
+       (10,'XS','Kyrgyzstan','2002-9-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagran.com/nurkanowich?utm_medium=copy_link','+996999234535','FORTY_THREE','http://t.me/adilet_324','http://wa.me/996408206602');
 
 
 insert into users (id, email, first_name, is_blocked,last_name,password,role,user_info_id)
@@ -121,6 +121,6 @@ VALUES
 
 INSERT INTO notifications(id, created_at, message, seen, type, charity_id, from_whom_user_id, reserve_id, wish_id)
 VALUES
-    (3, '2023-04-14', 'У вас новое уведомление', false, 2, 2, 2, 2, 2),
-    (4, '2023-04-14 12:48:27', 'Вы получили новое сообщение', false, 2, null, 3, 2, 3),
-    (5, '2023-04-14 12:49:27', 'Вы получили новый запрос на добавление в друзья', false, 3, null, 4, 2, 4);
+    (3, '2023-04-14', 'У вас новое уведомление', false, 'ADD_GIFT_TO_WISH_LIST', 2, 2, 2, 2),
+    (4, '2023-04-14 12:48:27', 'Вы получили новое сообщение', false, 'ADD_GIFT_TO_WISH_LIST', null, 3, 2, 3),
+    (5, '2023-04-14 12:49:27', 'Вы получили новый запрос на добавление в друзья', false, 'ADD_GIFT_TO_WISH_LIST', null, 4, 2, 4);
