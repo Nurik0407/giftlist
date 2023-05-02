@@ -41,7 +41,6 @@ VALUES
     (9, 'Category 9',current_date,'Description 9', 'Name 9', 'state 9', 'Sub-Category 9', 10);
 
 
-
 INSERT INTO holidays (id, date, image, name, user_id)
 VALUES
     (1, '2023-01-01', 'image1.jpg', 'New Year', 1),
@@ -67,7 +66,6 @@ VALUES
     (8, '2023-09-01', 'Description 8','image8.jpg', 'https://www.starbucks.com/giftcard', 'Starbucks Gift Card',false, 8, 8),
     (9, '2023-10-31', 'Description 9','image9.jpg', 'https://www.netflix.com/giftcard', 'Netflix Gift Card',true, 9, 9);
 
-
 INSERT INTO mailings (id, created_at, description, image, title)
 VALUES
     (1, '2023-04-05 09:00:00', 'Описание рассылки 1', 'image1.jpg', 'Заголовок рассылки 1'),
@@ -79,7 +77,6 @@ VALUES
     (7, '2023-04-11 15:00:00', 'Описание рассылки 7', 'image7.jpg', 'Заголовок рассылки 7'),
     (8, '2023-04-12 16:00:00', 'Описание рассылки 8', 'image8.jpg', 'Заголовок рассылки 8'),
     (9, '2023-04-13 17:00:00', 'Описание рассылки 9', 'image9.jpg', 'Заголовок рассылки 9');
-
 
 INSERT INTO users_friends(user_id, friends_id)
 VALUES
@@ -93,7 +90,6 @@ VALUES
     (3, 5),
     (3, 6);
 
-
 INSERT INTO users_requests_for_friends(user_id, requests_for_friends_id)
 VALUES
     (1, 6),
@@ -106,7 +102,6 @@ VALUES
     (1, false, 9, 7, 7),
     (2, false, 2, 8, 8),
     (3, false, 3, 9, 9);
-
 
 INSERT INTO complaints (id, complaint, seen, user_id)
 VALUES
