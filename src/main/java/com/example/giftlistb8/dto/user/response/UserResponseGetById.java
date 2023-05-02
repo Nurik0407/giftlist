@@ -23,10 +23,10 @@ import java.util.List;
 public class UserResponseGetById {
     private Long id;
     private String fullName;
-    private String email;
-    private String phoneNumber;
     private String image;
+    private String phoneNumber;
     private LocalDate dateOfBirth;
+
     private String country;
     private String hobby;
     private String important;
@@ -36,6 +36,7 @@ public class UserResponseGetById {
     private String telegram;
     private String facebook;
     private String whatsApp;
+    private String email;
     List<WishResponseUser> wishResponseUserList;
     List<HolidayResponse>holidayResponses;
     List<CharityResponseUser>charityResponseUsers;

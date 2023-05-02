@@ -30,7 +30,7 @@ public class Wish {
     private LocalDate dateOfHoliday;
     private Boolean status;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -39,6 +39,6 @@ public class Wish {
     @OneToOne(mappedBy = "wish", cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private Reserve reserve;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private Holiday holiday;
 }
