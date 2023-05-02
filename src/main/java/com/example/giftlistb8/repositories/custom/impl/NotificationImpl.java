@@ -2,7 +2,6 @@ package com.example.giftlistb8.repositories.custom.impl;
 
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.notification.response.NotificationResponse;
-import com.example.giftlistb8.repositories.UserInfoRepository;
 import com.example.giftlistb8.repositories.custom.NotificationRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,9 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationImpl implements NotificationRepositoryCustom {
     private final JdbcTemplate jdbcTemplate;
-
-    @Override
-    public List<NotificationResponse> getAll(Long userId) {
     private final JwtService jwtService;
 
     @Override

@@ -28,9 +28,13 @@ public class HolidayServiceImpl implements HolidayService {
     @Override
     public List<HolidayResponse> findAll() {
         User user = jwtService.getUserInToken();
-        String sql = "SELECT h.name, h.image, h.date FROM holidays h JOIN users u ON h.user_id = u.id WHERE u.email = ?";
+        String sql = "SELECT h.id,h.name, h.image, h.date FROM holidays h JOIN users u ON h.user_id = u.id WHERE u.email = ?";
         List<HolidayResponse> holidays = jdbcTemplate.query(sql, new Object[]{user.getEmail()}, (rs, rowNum) ->
-                new HolidayResponse(rs.getString("name"), rs.getString("image"), rs.getDate("date").toLocalDate()));
+                new HolidayResponse(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("image"),
+                        rs.getDate("date").toLocalDate()));
         return holidays;
     }
 
