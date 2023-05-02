@@ -51,19 +51,24 @@ public class CharityServiceImpl implements CharityService {
 
     @Override
     public List<CharitiesResponse> findAll() {
-        String sql = "SELECT CONCAT(u.last_name, ',', u.first_name) AS full_name, c.name, c.image, c.date_of_issue, case when r.id = null then false else true end  AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
+        String sql = "SELECT  c.id,CONCAT(u.last_name, ',', u.first_name) AS full_name, c.name, c.image, c.date_of_issue, case when r.id = null then false else true end  AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
                 "FROM charities c " +
                 "JOIN users u ON c.user_id = u.id " +
                 "LEFT JOIN reserves r ON c.id = r.charity_id";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new CharitiesResponse(rs.getString("full_name"),
-                rs.getString("name"), rs.getString("image"), rs.getDate("date_of_issue").toLocalDate(),
-                rs.getBoolean("is_reserved"), rs.getBoolean("is_anonymous")));
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new CharitiesResponse(
+                rs.getLong("id"),
+                rs.getString("full_name"),
+                rs.getString("name"),
+                rs.getString("image"),
+                rs.getDate("date_of_issue").toLocalDate(),
+                rs.getBoolean("is_reserved"),
+                rs.getBoolean("is_anonymous")));
     }
 
     @Override
     public SimpleResponse update(CharityUpdateRequest request) {
         jdbcTemplate.update("update charities set name=?,state=?,description=?,category=?,sub_category=?,image=? WHERE id=?",
-                request.name(), request.state(), request.description(), request.category(), request.subCategory(), request.image(),request.id());
+                request.name(), request.state(), request.description(), request.category(), request.subCategory(), request.image(), request.id());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Charity with id %s successfully updated.", request.id()))
