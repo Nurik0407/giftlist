@@ -1,5 +1,6 @@
 package com.example.giftlistb8.dto;
-import lombok.*;
+
+import lombok.Builder;
 
 import java.util.List;
 
@@ -7,7 +8,6 @@ import java.util.List;
 public record PaginationResponse<T>(
         List<T> elements,
         int currentPage,
-        int pageSize){
-
+        int pageSize
+) {
 }
-

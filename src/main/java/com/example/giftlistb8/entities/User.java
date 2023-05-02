@@ -2,10 +2,7 @@ package com.example.giftlistb8.entities;
 
 import com.example.giftlistb8.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,7 +46,10 @@ public class User implements UserDetails {
     private List<Reserve> reserves;
 
     @OneToMany(mappedBy = "fromWhomUser", cascade = CascadeType.ALL)
-    private List<Notification> notifications;
+    private List<Notification> fromWhomUserNotifications;
+
+    @OneToMany(mappedBy = "toWhomUser", cascade = CascadeType.ALL)
+    private List<Notification> myNotifications;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Holiday> holidays;
@@ -71,7 +71,9 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {return password;}
+    public String getPassword() {
+        return password;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -95,5 +97,9 @@ public class User implements UserDetails {
 
     public void deleteHoliday(Holiday holiday) {
         holidays.remove(holiday);
+    }
+
+    public void deleteCharity(Charity charity) {
+        charities.remove(charity);
     }
 }

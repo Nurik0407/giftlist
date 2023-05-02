@@ -28,7 +28,9 @@ public class UserInfo {
     private String country;
     private String hobby;
     private String important;
+    @Enumerated(EnumType.STRING)
     private ClothingSize clothingSize;
+    @Enumerated(EnumType.STRING)
     private ShoeSize shoeSize;
     private String instagram;
     private String telegram;

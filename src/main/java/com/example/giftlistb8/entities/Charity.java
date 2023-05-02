@@ -28,8 +28,7 @@ public class Charity {
     private String category;
     private String subCategory;
     private String description;
-    private LocalDate date;
-
+    private LocalDate dateOfIssue;
 
     private String image;
 
