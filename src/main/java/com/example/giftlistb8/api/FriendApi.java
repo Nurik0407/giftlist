@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('USER')")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Friends Api", description = "User can send request,add and delete friends")
 @RequestMapping("api/friends")
 public class FriendApi {
