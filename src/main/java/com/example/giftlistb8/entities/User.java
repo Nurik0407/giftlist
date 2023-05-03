@@ -1,6 +1,7 @@
 package com.example.giftlistb8.entities;
 
 import com.example.giftlistb8.enums.Role;
+import com.example.giftlistb8.exceptions.NotFoundException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
