@@ -84,8 +84,9 @@ public class AuthServiceImpl implements AuthService {
             log.error("Invalid email or password");
             throw new BadCredentialsException("Invalid email or password.");
         }
+        System.out.println("before token");
         String token = jwtService.generateToken(user);
-
+        System.out.println(33334);
         return AuthRegisterResponse.builder()
                 .email(user.getEmail())
                 .role(user.getRole().name())
@@ -94,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @PostConstruct
-    void init() {
+    void init() throws IOException {
         try {
             GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("giftlist-b8.json").getInputStream());
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()
