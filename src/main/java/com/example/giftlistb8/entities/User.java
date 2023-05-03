@@ -103,4 +103,7 @@ public class User implements UserDetails {
     public void deleteCharity(Charity charity) {
         charities.remove(charity);
     }
+    public void deleteWish(Wish wish){
+        wishes.remove(wish);
+    }
 }
