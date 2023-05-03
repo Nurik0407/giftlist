@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface MailingServices {
     List<MailingResponse> getAllMailingList();
-    SimpleResponse saveMailing();
+    SimpleResponse saveMailing(MailingRequest request);
     SimpleResponse deleteMailing(Long id);
 }
