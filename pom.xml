@@ -161,8 +161,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
-
-
+<!--		aws s3 file-->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.20.26</version>
+		</dependency>
 	</dependencies>
 
     <build>
