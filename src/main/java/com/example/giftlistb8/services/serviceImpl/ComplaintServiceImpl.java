@@ -62,6 +62,7 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .build();
     }
 
+
     @Override
     public SimpleResponse complaintToWish(Long id) {
         Notification notification = new Notification();
