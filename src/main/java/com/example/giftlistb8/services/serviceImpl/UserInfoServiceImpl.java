@@ -3,8 +3,8 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.entities.UserInfo;
-import com.example.giftlistb8.repositories.UserInfoRepository;
 import com.example.giftlistb8.exceptions.NotFoundException;
+import com.example.giftlistb8.repositories.UserInfoRepository;
 import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.EmailService;
 import com.example.giftlistb8.services.UserInfoService;
@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.util.UUID;
 

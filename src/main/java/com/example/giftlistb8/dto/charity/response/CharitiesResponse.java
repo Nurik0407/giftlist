@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Builder
 public record CharitiesResponse(
+        Long id,
         String fullName,
         String charityName,
         String image,

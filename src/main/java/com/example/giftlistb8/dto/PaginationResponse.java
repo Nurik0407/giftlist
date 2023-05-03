@@ -9,6 +9,5 @@ public record PaginationResponse<T>(
         List<T> elements,
         int currentPage,
         int pageSize
-
 ) {
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication API", description = "Sign in/Sign up")
+@CrossOrigin(origins = "*")
 public class AuthAPI {
 
     private final AuthService authService;
@@ -27,6 +28,7 @@ public class AuthAPI {
     public AuthRegisterResponse authenticate(@RequestBody @Valid AuthAuthenticateRequest request) {
         return authService.authenticate(request);
     }
+
     @PostMapping("/auth-google")
     public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
         return authService.authWithGoogle(tokenId);

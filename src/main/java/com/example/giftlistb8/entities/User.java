@@ -1,11 +1,9 @@
 package com.example.giftlistb8.entities;
 
 import com.example.giftlistb8.enums.Role;
+import com.example.giftlistb8.exceptions.NotFoundException;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +21,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
     @SequenceGenerator(name = "user_id_gen",
-            sequenceName = "user_id_seq", allocationSize = 1, initialValue = 11)
+            sequenceName = "user_id_seq",allocationSize = 1,initialValue = 11)
     private Long id;
     private String firstName;
     private String lastName;
@@ -49,7 +47,10 @@ public class User implements UserDetails {
     private List<Reserve> reserves;
 
     @OneToMany(mappedBy = "fromWhomUser", cascade = CascadeType.ALL)
-    private List<Notification> notifications;
+    private List<Notification> fromWhomUserNotifications;
+
+    @OneToMany(mappedBy = "toWhomUser", cascade = CascadeType.ALL)
+    private List<Notification> myNotifications;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Holiday> holidays;

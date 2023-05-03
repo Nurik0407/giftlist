@@ -8,7 +8,6 @@ import com.example.giftlistb8.dto.charity.response.CharityResponse;
 import com.example.giftlistb8.services.CharityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/charities")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class CharityAPI {
 
     private final CharityService service;

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Builder
 public record HolidayResponse(
+        Long id,
         String name,
         String image,
         LocalDate date
