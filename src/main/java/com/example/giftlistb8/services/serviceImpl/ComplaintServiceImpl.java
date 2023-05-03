@@ -35,9 +35,10 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     public SimpleResponse complaintToCharity(Long id) {
         Notification notification = new Notification();
-        Complaint complaint = new Complaint();
+        notification.setSeen(false);
         Charity charity = charityRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Not found!"));
+        Complaint complaint = new Complaint();
 
         complaint.setComplaint("Here will be the reason for the complaint");
         charity.getComplaints().add(complaint);
