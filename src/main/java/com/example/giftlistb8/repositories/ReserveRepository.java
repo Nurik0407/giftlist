@@ -20,7 +20,7 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     List<ReserveResponseWish> getAllReversesWish();
 
     @Query("SELECT NEW  com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(" +
-            " r.id,CONCAT(r.user.firstName,' ', r.user.lastName),r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.date)" +
+            " r.id,CONCAT(r.user.firstName,' ', r.user.lastName),r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue)" +
             "FROM Reserve r ")
     List<ReserveResponseCharity> getAllReversesCharity();
 
