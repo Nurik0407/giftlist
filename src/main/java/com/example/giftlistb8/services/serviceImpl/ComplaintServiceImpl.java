@@ -35,11 +35,10 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     public SimpleResponse complaintToCharity(Long id) {
         Notification notification = new Notification();
-
+        Complaint complaint = new Complaint();
         Charity charity = charityRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Not found!"));
 
-        Complaint complaint = new Complaint();
         complaint.setComplaint("Here will be the reason for the complaint");
         charity.getComplaints().add(complaint);
         complaint.setUser(jwtService.getUserInToken());
@@ -64,13 +63,13 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     public SimpleResponse complaintToWish(Long id) {
         Notification notification = new Notification();
-
+        Complaint complaint = new Complaint();
         Wish wish = wishRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Not found!"));
 
-        Complaint complaint = new Complaint();
         complaint.setComplaint("Here will be the reason for the complaint");
         wish.getComplaints().add(complaint);
+        complaint.setUser(jwtService.getUserInToken());
 
         notification.setType(COMPLAINT);
         notification.setSeen(false);

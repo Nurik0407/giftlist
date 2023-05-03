@@ -19,34 +19,40 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     public ComplaintResponse getAllComplaints() {
 
         String sql = """
-                SELECT CONCAT(u.first_name, ' ', u.last_name) AS full_name, 
-                ui.image AS user_image,
-                ch.name AS charity_name,
-                ch.date_of_issue AS charity_date_of_issue, 
-                ch.image AS charity_image,
-                c.complaint AS complaint_text,
-                ui2.image AS complaint_user_image
-                FROM charities ch
-                         JOIN users u ON ch.user_id = u.id
-                         JOIN user_infos ui ON u.user_info_id = ui.id
-                         JOIN complaints c ON u.id = c.user_id
-                         JOIN users u2 ON c.user_id = u2.id
-                         JOIN user_infos ui2 ON u2.user_info_id = ui2.id;
-                """;
-        String sql2 = """
                 SELECT CONCAT(u.first_name, ' ', u.last_name) AS full_name,
-                ui.image AS user_image,
-                w.name AS wish_name,
-                w.date_of_holiday AS wish_holiday_date,
-                w.image AS wish_image,
-                c.complaint AS complaint_text,
-                ui2.image AS complaint_user_image
-                FROM wishes w
-                         JOIN users u ON w.user_id = u.id
-                         JOIN user_infos ui ON u.user_info_id = ui.id
-                         JOIN complaints c ON u.id = c.user_id
-                         JOIN users u2 ON c.user_id = u2.id
-                         JOIN user_infos ui2 ON u2.user_info_id = ui2.id
+                       ui.image AS user_image,
+                       ch.name AS charity_name,
+                       ch.date_of_issue AS charity_date_of_issue,
+                       ch.image AS charity_image,
+                       c.complaint AS complaint_text,
+                       (SELECT ui2.image
+                            FROM user_infos ui2
+                                JOIN users u2 on ui2.id = u2.user_info_id
+                            WHERE u2.id = c.user_id
+                       ) AS complaint_user_image
+                            FROM charities ch
+                       JOIN users u ON ch.user_id = u.id
+                       JOIN user_infos ui ON u.user_info_id = ui.id
+                       JOIN charities_complaints cc on ch.id = cc.charity_id
+                       JOIN complaints c on cc.complaints_id = c.id;
+                 """;
+        String sql2 = """
+               SELECT CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+                      ui.image AS user_image,
+                      wh.name AS wish_name,
+                      wh.date_of_holiday AS wish_holiday_date,
+                      wh.image AS wish_image,
+                      c.complaint AS complaint_text,
+                      (SELECT ui2.image
+                       FROM user_infos ui2
+                                JOIN users u2 on ui2.id = u2.user_info_id
+                       WHERE u2.id = c.user_id
+                      ) AS complaint_user_image
+               FROM wishes wh
+                        JOIN users u ON wh.user_id = u.id
+                        JOIN user_infos ui ON u.user_info_id = ui.id
+                        JOIN wishes_complaints cc on wh.id = cc.wish_id
+                        JOIN complaints c on cc.complaints_id = c.id;
                 """;
         ComplaintResponse complaintResponse = new ComplaintResponse();
 
@@ -57,8 +63,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                         resultSet.getString("charity_name"),
                         resultSet.getDate("charity_date_of_issue"),
                         resultSet.getString("charity_image"),
-                        resultSet.getString("complaint_text"),
-                        resultSet.getString("complaint_user_image")
+                        resultSet.getString("complaint_user_image"),
+                        resultSet.getString("complaint_text")
                 ));
 
         complaintResponse.setCharityResponseWIthComplaints(charityResponses);
@@ -69,8 +75,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                         resultSet.getString("wish_name"),
                         resultSet.getDate("wish_holiday_date"),
                         resultSet.getString("wish_image"),
-                        resultSet.getString("complaint_text"),
-                        resultSet.getString("complaint_user_image")
+                        resultSet.getString("complaint_user_image"),
+                        resultSet.getString("complaint_text")
                 ));
         complaintResponse.setWishResponseWithComplaints(wishResponses);
 
