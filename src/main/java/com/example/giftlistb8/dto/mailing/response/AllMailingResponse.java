@@ -1,16 +1,10 @@
 package com.example.giftlistb8.dto.mailing.response;
 
-import lombok.*;
-
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
-public record MailingResponse(
-        Long id,
+public record AllMailingResponse(
         String image,
         String title,
-        String description,
         LocalDateTime createdAt
-        ) {
+) {
 }
