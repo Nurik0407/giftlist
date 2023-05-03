@@ -21,8 +21,9 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_id_gen")
     @SequenceGenerator(name = "notification_id_gen",
-            sequenceName = "notification_id_seq",allocationSize = 1,initialValue = 4)
+            sequenceName = "notification_id_seq", allocationSize = 1, initialValue = 4)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private Type type;
     private String message;
     private Boolean seen;
@@ -30,6 +31,9 @@ public class Notification {
 
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private User fromWhomUser;
+
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    private User toWhomUser;
 
     @OneToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private Wish wish;

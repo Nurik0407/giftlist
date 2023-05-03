@@ -20,7 +20,7 @@ public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_info_id_gen")
     @SequenceGenerator(name = "user_info_id_gen",
-            sequenceName = "user_info_id_seq",allocationSize = 1,initialValue = 10)
+            sequenceName = "user_info_id_seq", allocationSize = 1, initialValue = 10)
     private Long id;
     private String phoneNumber;
     private String image;
@@ -28,7 +28,9 @@ public class UserInfo {
     private String country;
     private String hobby;
     private String important;
+    @Enumerated(EnumType.STRING)
     private ClothingSize clothingSize;
+    @Enumerated(EnumType.STRING)
     private ShoeSize shoeSize;
     private String instagram;
     private String telegram;
