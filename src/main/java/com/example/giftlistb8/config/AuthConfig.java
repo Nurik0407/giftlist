@@ -24,9 +24,7 @@ public class AuthConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException(
-                        String.format("User with email %s not found", username)));
+        return username -> repository.findByEmail(username).orElseThrow(() -> new RuntimeException(String.format("User with email %s not found", username)));
     }
 
     @Bean
