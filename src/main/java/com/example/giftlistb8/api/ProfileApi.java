@@ -7,9 +7,11 @@ import com.example.giftlistb8.dto.profile.request.ProfileUpdateRequest;
 import com.example.giftlistb8.dto.profile.response.ProfileResponse;
 import com.example.giftlistb8.dto.profile.response.ProfileResponseGetById;
 import com.example.giftlistb8.services.ProfileService;
+import com.example.giftlistb8.validations.ValidPhone;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.PermitAll;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class ProfileApi {
     @PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "User save method", description = " This method for saving all user information.")
     @PostMapping
-    public SimpleResponse saveUserProfile(@RequestBody ProfileRequest profileRequest) {
+    public SimpleResponse saveUserProfile(@RequestBody @Valid ProfileRequest profileRequest) {
         return profileService.saveUser(profileRequest);
     }
 
@@ -45,14 +47,14 @@ public class ProfileApi {
     @PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "Change user password", description = "This method changed old password for ne w password")
     @PostMapping("/password")
-    public SimpleResponse changePassword(@RequestBody ChangePasswordUser changePasswordUser) {
+    public SimpleResponse changePassword(@RequestBody @Valid ChangePasswordUser changePasswordUser) {
         return profileService.changeUserPassword(changePasswordUser);
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "Update user information", description = "The method update user profile")
     @PutMapping
-    public SimpleResponse updateUser(@RequestBody ProfileUpdateRequest profileUpdateRequest) {
+    public SimpleResponse updateUser(@RequestBody @Valid ProfileUpdateRequest profileUpdateRequest) {
         return profileService.updateUserProfile(profileUpdateRequest);
     }
 }

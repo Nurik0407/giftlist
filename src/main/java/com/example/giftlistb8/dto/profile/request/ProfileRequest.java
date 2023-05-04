@@ -3,6 +3,7 @@ package com.example.giftlistb8.dto.profile.request;
 import com.example.giftlistb8.enums.ClothingSize;
 import com.example.giftlistb8.enums.ShoeSize;
 import com.example.giftlistb8.validations.ValidName;
+import com.example.giftlistb8.validations.ValidPhone;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import org.hibernate.validator.constraints.URL;
@@ -16,11 +17,11 @@ public record ProfileRequest(
         String image,
 
         @NotBlank(message = "The first name must not be empty.")
-        @ValidName(message = "The first name contains invalid characters.")
+        @ValidName(message = "The first name must contain between 2 and 30 characters,start with capital letter.")
         String firstName,
 
         @NotBlank(message = "The last name must not be empty.")
-        @ValidName(message = "The last name contains invalid characters.")
+        @ValidName(message = "The last name must contain between 2 and 30 characters,start with capital letter.")
         String lastName,
 
         @NotBlank(message = "The country must not be empty.")
@@ -34,8 +35,7 @@ public record ProfileRequest(
         @Email(message = "The email is not valid.")
         String email,
 
-        @NotBlank(message = "The phone number must not be empty.")
-        @Pattern(regexp = "\\d{10}", message = "The phone number must contain 10 digits.")
+        @ValidPhone
         String phoneNumber,
 
         @NotNull(message = "The clothing size must not be empty.")
