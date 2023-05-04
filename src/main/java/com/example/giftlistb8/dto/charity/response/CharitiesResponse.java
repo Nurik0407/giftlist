@@ -6,11 +6,14 @@ import java.time.LocalDate;
 
 @Builder
 public record CharitiesResponse(
-        Long id,
+        Long userId,
         String fullName,
+        String userImage,
+        Long id,
         String charityName,
         String image,
         LocalDate dateAdded,
+        String state,
         boolean isReserved,
         boolean isAnonymous
 ) {}
