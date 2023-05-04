@@ -41,7 +41,7 @@ public class S3Service {
         String fileUrl = getPresignedUrl(bucketName, key);
         return S3Response.builder()
                 .status(HttpStatus.OK)
-                .description("File successfully found.")
+                .message("File successfully upload.")
                 .url(fileUrl)
                 .build();
     }
@@ -52,7 +52,7 @@ public class S3Service {
         String fileUrl = awsUrl + getPresignedUrl(bucketName, key);
         return S3Response.builder()
                 .status(HttpStatus.NO_CONTENT)
-                .description("File with key [%s] successfully deleted.".formatted(key))
+                .message("File with key [%s] successfully deleted.".formatted(key))
                 .url(fileUrl)
                 .build();
     }

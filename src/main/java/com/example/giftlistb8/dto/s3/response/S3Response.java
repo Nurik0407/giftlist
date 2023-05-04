@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 @Builder
 public record S3Response (
         String url,
-        String description,
+        String message,
         HttpStatus status
 ){}
