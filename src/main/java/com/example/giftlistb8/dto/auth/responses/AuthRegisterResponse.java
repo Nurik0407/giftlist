@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record AuthRegisterResponse(
         String token,
+        Long id,
         String email,
         String role
 ) { }
