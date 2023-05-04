@@ -21,7 +21,7 @@ public class S3API {
 
     @Operation(summary = "Upload a file to S3 bucket",
             description = "Uploads a file to the specified S3 bucket.")
-    @PostMapping("/upload")
+    @PostMapping
     public S3Response uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             return s3Service.uploadFile(file.getOriginalFilename(), file);
@@ -32,8 +32,8 @@ public class S3API {
 
     @Operation(summary = "Delete a file from S3 bucket",
             description = "Deletes a file from the specified S3 bucket.")
-    @DeleteMapping("/delete/{key}")
-    public S3Response deleteFile(@PathVariable String key) {
-        return s3Service.deleteFile(key);
+    @DeleteMapping
+    public S3Response deleteFile(@RequestParam("fileLink") String fileLink) {
+        return s3Service.deleteFile(fileLink);
     }
 }

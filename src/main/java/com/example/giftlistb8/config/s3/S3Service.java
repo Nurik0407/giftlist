@@ -47,7 +47,8 @@ public class S3Service {
     }
 
 
-    public S3Response deleteFile(String key) {
+    public S3Response deleteFile(String fileLink) {
+        String key = fileLink.substring(bucketName.length());
         amazonS3.deleteObject(bucketName, key);
         String fileUrl = awsUrl + getPresignedUrl(bucketName, key);
         return S3Response.builder()
