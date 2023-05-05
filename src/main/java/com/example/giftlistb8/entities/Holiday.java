@@ -27,7 +27,7 @@ public class Holiday {
     private LocalDate date;
     private String image;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "holiday", cascade = CascadeType.ALL)

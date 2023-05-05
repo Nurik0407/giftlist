@@ -51,16 +51,20 @@ public class CharityServiceImpl implements CharityService {
 
     @Override
     public List<CharitiesResponse> findAll() {
-        String sql = "SELECT  c.id,CONCAT(u.last_name, ',', u.first_name) AS full_name, c.name, c.image, c.date_of_issue, case when r.id = null then false else true end  AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
+        String sql = "SELECT u.id as user_id,CONCAT(u.last_name, ',', u.first_name) AS full_name,ui.image,c.id,c.name, c.image, c.date_of_issue,c.state,case when r.id = null then false else true end  AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
                 "FROM charities c " +
                 "JOIN users u ON c.user_id = u.id " +
+                "LEFT JOIN user_infos ui ON u.user_info_id = ui.id " +
                 "LEFT JOIN reserves r ON c.id = r.charity_id";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new CharitiesResponse(
-                rs.getLong("id"),
+                rs.getLong("user_id"),
                 rs.getString("full_name"),
+                rs.getString("image"),
+                rs.getLong("id"),
                 rs.getString("name"),
                 rs.getString("image"),
                 rs.getDate("date_of_issue").toLocalDate(),
+                rs.getString("state"),
                 rs.getBoolean("is_reserved"),
                 rs.getBoolean("is_anonymous")));
     }

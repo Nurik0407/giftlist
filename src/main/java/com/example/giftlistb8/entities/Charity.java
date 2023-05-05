@@ -32,7 +32,7 @@ public class Charity {
 
     private String image;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
