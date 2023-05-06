@@ -2,7 +2,10 @@ package com.example.giftlistb8.services.serviceImpl;
 
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.mailing.request.MailingRequest;
+import com.example.giftlistb8.dto.mailing.response.AllMailingResponse;
+import com.example.giftlistb8.dto.mailing.response.MailingResponse;
 import com.example.giftlistb8.entities.Mailing;
+import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.MailingRepository;
 import com.example.giftlistb8.services.MailingServices;
 import jakarta.mail.MessagingException;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MailingServiceImpl implements MailingServices {
@@ -58,6 +62,27 @@ public class MailingServiceImpl implements MailingServices {
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message("mailing successfully sent and saved to database ")
+                .build();
+    }
+
+    @Override
+    public List<AllMailingResponse> getAllMailingList() {
+        return repository.getAllMailingList();
+    }
+
+    @Override
+    public Optional<MailingResponse> getByIdMailingList(Long id) {
+        return repository.getMailingById(id);
+    }
+
+    @Override
+    public SimpleResponse delete(Long id) {
+        Mailing mailing = repository.findById(id).orElseThrow(()
+                -> new NotFoundException("Not found"));
+        repository.delete(mailing);
+        return SimpleResponse.builder()
+                .message("DELETE MAILING")
+                .status(HttpStatus.OK)
                 .build();
     }
 }

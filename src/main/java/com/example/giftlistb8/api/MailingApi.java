@@ -2,6 +2,8 @@ package com.example.giftlistb8.api;
 
 
 import com.example.giftlistb8.dto.mailing.request.MailingRequest;
+import com.example.giftlistb8.dto.mailing.response.AllMailingResponse;
+import com.example.giftlistb8.dto.mailing.response.MailingResponse;
 import com.example.giftlistb8.services.serviceImpl.MailingServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
@@ -11,7 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/mailing_list")
@@ -22,10 +26,22 @@ public class MailingApi {
 
     @Autowired
     private final MailingServiceImpl mailingService;
+
     @Operation(summary = "Mailing list and save",
-    description = "mailing  sent and saved to database")
+            description = "mailing  sent and saved to database")
     @PostMapping
     public void triggerMail(@RequestBody MailingRequest request) throws MessagingException {
         mailingService.sendMailWithAttachment(request);
     }
+
+    @GetMapping
+    public List<AllMailingResponse> getAllMailingList() {
+        return mailingService.getAllMailingList();
+    }
+
+    @GetMapping
+    public Optional<MailingResponse> getByIdMailingList(@RequestParam Long id) {
+        return mailingService.getByIdMailingList(id);
+    }
+
 }
