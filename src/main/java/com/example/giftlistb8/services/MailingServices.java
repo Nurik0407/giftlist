@@ -2,12 +2,11 @@ package com.example.giftlistb8.services;
 
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.mailing.request.MailingRequest;
+import com.example.giftlistb8.dto.mailing.response.AllMailingResponse;
 import com.example.giftlistb8.dto.mailing.response.MailingResponse;
-
-import java.util.List;
+import jakarta.mail.MessagingException;
 
 public interface MailingServices {
-    List<MailingResponse> getAllMailingList();
-    SimpleResponse saveMailing(MailingRequest request);
-    SimpleResponse deleteMailing(Long id);
+
+    SimpleResponse sendMailWithAttachment(MailingRequest request) throws MessagingException;
 }

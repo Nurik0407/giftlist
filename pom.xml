@@ -162,7 +162,6 @@
 			<artifactId>spring-context</artifactId>
 		</dependency>
 
-
 	</dependencies>
 
     <build>

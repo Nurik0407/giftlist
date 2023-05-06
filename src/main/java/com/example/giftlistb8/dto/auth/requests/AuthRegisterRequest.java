@@ -18,7 +18,8 @@ public record AuthRegisterRequest(
         @Email(message = "Sorry, the email address you entered is invalid. Please check if it is correct")
         String email,
         @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$", message = "The password must contain at least one letter in , one number and be at least 8 characters long.")
-        String password
+        String password,
+        boolean subscribeMailing
 ) { }
 
 

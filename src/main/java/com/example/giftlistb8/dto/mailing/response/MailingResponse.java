@@ -5,7 +5,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Builder
-@AllArgsConstructor
 public record MailingResponse(
         Long id,
         String image,

@@ -1,8 +1,11 @@
 package com.example.giftlistb8.dto.mailing.request;
 
-public record MailingRequest(
-        String image,
-        String title,
-        String description
-) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+public class MailingRequest {
+    private String title;
+    private String text;
+    private String image;
 }

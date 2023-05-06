@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     private Boolean isBlocked;
-
+    private  boolean subscribeMailing;
     @OneToOne(cascade = CascadeType.ALL)
     private UserInfo userInfo;
 

@@ -58,16 +58,27 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ExceptionResponse handlerNotFoundException(BadCredentialsException e) {
         return new ExceptionResponse(
-                HttpStatus. UNAUTHORIZED,
+                HttpStatus.UNAUTHORIZED,
                 e.getClass().getSimpleName(),
                 e.getMessage()
         );
     }
+
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ExceptionResponse handlerForbiddenException(ForbiddenException e) {
         return new ExceptionResponse(
-                HttpStatus. FORBIDDEN,
+                HttpStatus.FORBIDDEN,
+                e.getClass().getSimpleName(),
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler(MessageSendingException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ExceptionResponse handlerForbiddenException(MessageSendingException e) {
+        return new ExceptionResponse(
+                HttpStatus.SERVICE_UNAVAILABLE,
                 e.getClass().getSimpleName(),
                 e.getMessage()
         );
