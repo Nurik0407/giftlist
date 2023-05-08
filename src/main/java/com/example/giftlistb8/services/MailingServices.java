@@ -7,14 +7,15 @@ import com.example.giftlistb8.dto.mailing.response.MailingResponse;
 import jakarta.mail.MessagingException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MailingServices {
 
     SimpleResponse sendMailWithAttachment(MailingRequest request) throws MessagingException;
 
-    List<AllMailingResponse> getAllMailingList();
+    Optional<MailingResponse> getMailingById(Long id);
 
-    MailingResponse getByIdMailingList(Long id);
+    List<AllMailingResponse> getAllMailingList();
 
     SimpleResponse delete(Long id);
 }

@@ -11,7 +11,6 @@ import com.example.giftlistb8.services.MailingServices;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,22 +22,26 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Transactional
 @Service
 public class MailingServiceImpl implements MailingServices {
-    @Autowired
-    private MailingRepository repository;
-    @Autowired
-    private JavaMailSender javaMailSender;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final MailingRepository repository;
+    private final JavaMailSender javaMailSender;
+    private final JdbcTemplate jdbcTemplate;
+
+    public MailingServiceImpl(MailingRepository repository, JavaMailSender javaMailSender, JdbcTemplate jdbcTemplate) {
+        this.repository = repository;
+        this.javaMailSender = javaMailSender;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public SimpleResponse sendMailWithAttachment(
             MailingRequest request) throws MessagingException {
         String sql = """
-                 select u.email from user_mailing u where mailing_list is true;
+                 select u.email from users u where u.subscribe_mailing is true;
                 """;
         List<String> usersemail = jdbcTemplate.queryForList(sql, String.class);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -47,7 +50,7 @@ public class MailingServiceImpl implements MailingServices {
             mimeMessageHelper.setFrom("amanbekovnurbek04@gmail.com");
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setSubject(request.getTitle());
-            mimeMessageHelper.setText(request.getText());
+            mimeMessageHelper.setText(request.getDescription());
             FileSystemResource fileSystemResource =
                     new FileSystemResource(new File(request.getImage()));
             mimeMessageHelper.addAttachment(Objects.requireNonNull(fileSystemResource.getFilename()),
@@ -56,7 +59,7 @@ public class MailingServiceImpl implements MailingServices {
         }
         Mailing mailing = new Mailing();
         mailing.setTitle(request.getTitle());
-        mailing.setDescription(request.getText());
+        mailing.setDescription(request.getDescription());
         mailing.setImage(request.getImage());
         mailing.setCreatedAt(LocalDate.now());
         repository.save(mailing);
@@ -67,14 +70,30 @@ public class MailingServiceImpl implements MailingServices {
     }
 
     @Override
-    public List<AllMailingResponse> getAllMailingList() {
-        return repository.getAllMailingList();
+    public Optional<MailingResponse> getMailingById(Long id) {
+        String query = "SELECT m.id, m.image, m.title, m.description, m.created_at " +
+                "FROM mailings m WHERE m.id = ?";
+        MailingResponse mailingResponse = jdbcTemplate.queryForObject(query, new Object[]{id},
+                (rs, rowNum) -> new MailingResponse(
+                        rs.getLong("id"),
+                        rs.getString("image"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getTimestamp("created_at").toLocalDateTime()
+                ));
+        return Optional.ofNullable(mailingResponse);
     }
 
     @Override
-    public MailingResponse getByIdMailingList(Long id) {
-        return repository.getMailingById(id).orElseThrow(() -> new NotFoundException(
-                String.format("MailingList with id %s not found.", id)));
+    public List<AllMailingResponse> getAllMailingList() {
+        String query = "SELECT m.id, m.image, m.title, m.created_at " +
+                "FROM mailings m";
+        return jdbcTemplate.query(query, (rs, rowNum) -> new AllMailingResponse(
+                rs.getLong("id"),
+                rs.getString("image"),
+                rs.getString("title"),
+                rs.getTimestamp("created_at").toLocalDateTime()
+        ));
     }
 
     @Override
