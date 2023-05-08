@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('USER')")
 @Tag(name = "Reserves", description = "API endpoints for managing reserves")
+@CrossOrigin
 public class ReserveApi {
     private final ReserveService reserveService;
 
@@ -59,5 +60,18 @@ public class ReserveApi {
     @GetMapping("/pagination-charity")
     public PaginationResponse getCharityPagination(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return reserveService.getCharityReservePagination(page, size);
+    }
+
+
+    @Operation(summary = "Delete wish method", description = "Cancel wish from reserve")
+    @DeleteMapping("/{wishId}/{userId}")
+    public SimpleResponse deleteWish(@PathVariable Long userId, @PathVariable Long wishId) {
+        return reserveService.deleteWish(userId, wishId);
+    }
+
+    @Operation(summary = "Delete the gift", description = "Cancel gift from reserve")
+    @DeleteMapping("/{charityId}/{userId}")
+    public SimpleResponse deleteCharity(@PathVariable Long userId, @PathVariable Long charityId) {
+        return reserveService.deleteCharity(userId, charityId);
     }
 }
