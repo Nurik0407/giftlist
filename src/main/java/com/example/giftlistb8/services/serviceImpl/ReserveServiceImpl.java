@@ -7,6 +7,7 @@ import com.example.giftlistb8.dto.reserve.requests.ReserveRequestCharity;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestWish;
 import com.example.giftlistb8.dto.reserve.response.*;
 import com.example.giftlistb8.entities.*;
+import com.example.giftlistb8.exceptions.ForbiddenException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
 import com.example.giftlistb8.repositories.ReserveRepository;
@@ -37,8 +38,12 @@ public class ReserveServiceImpl implements ReserveService {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(reserveRequest.wishId()).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with %s id not found", reserveRequest.wishId())));
+        boolean isAnonymous = false;
+        if (reserveRequest.isAnonymous()) {
+            isAnonymous = true;
+        }
         Reserve reserve = Reserve.builder()
-                .isAnonymous(reserveRequest.isAnonymous())
+                .isAnonymous(isAnonymous)
                 .wish(wish)
                 .user(userInToken)
                 .build();
@@ -55,10 +60,14 @@ public class ReserveServiceImpl implements ReserveService {
         User user = jwtService.getUserInToken();
         Charity charity = charityRepository.findById(reserveRequestCharity.charityId()).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with %s id not found", reserveRequestCharity.charityId())));
+        boolean isAnonymous = false;
+        if (reserveRequestCharity.isAnonymous()){
+            isAnonymous = true;
+        }
         Reserve reserve = new Reserve();
         reserve.setUser(user);
         reserve.setCharity(charity);
-        reserve.setIsAnonymous(true);
+        reserve.setIsAnonymous(isAnonymous);
         reserveRepository.save(reserve);
         return SimpleResponse
                 .builder()
@@ -66,6 +75,7 @@ public class ReserveServiceImpl implements ReserveService {
                 .message(String.format("Charity with  %s  id successfully reserved", reserveRequestCharity.charityId()))
                 .build();
     }
+
 
     @Override
     public ReserveGetAllResponse getAllReserves() {
@@ -113,6 +123,42 @@ public class ReserveServiceImpl implements ReserveService {
                 .elements(Collections.singletonList(pagedCharity.getContent()))
                 .currentPage(pagedCharity.getTotalPages())
                 .pageSize(pagedCharity.getNumber() + 1)
+                .build();
+    }
+
+    @Override
+    public SimpleResponse deleteWish(Long userId, Long wishId) {
+        User user = jwtService.getUserInToken();
+        Wish wish = wishRepository.findById(wishId).orElseThrow(
+                () -> new NotFoundException(String.format("Wish with %s not found", wishId)));
+        Reserve reserve = reserveRepository.findByUserAndWish(user, wish)
+                .orElseThrow(() -> new NotFoundException(String.format("Reserve for user %s and wish %s not found",
+                        user.getId(), wish.getId())));
+        if (!reserve.getUser().equals(user)) {
+            throw new ForbiddenException("You are not authorized to delete this reserve");
+        }
+        reserveRepository.delete(reserve);
+        return SimpleResponse.builder()
+                .status(HttpStatus.OK)
+                .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), wishId))
+                .build();
+    }
+
+    @Override
+    public SimpleResponse deleteCharity(Long userId, Long charityId) {
+        User user = jwtService.getUserInToken();
+        Charity charity = charityRepository.findById(charityId).orElseThrow(
+                () -> new NotFoundException(String.format("Charity with %s id not found", charityId)));
+        Reserve reserve = reserveRepository.findByUserAndCharity(user, charity)
+                .orElseThrow(() -> new NotFoundException(String.format("Reserve for user %s and wish %s not found",
+                        user.getId(), charity.getId())));
+        if (!reserve.getUser().equals(user)) {
+            throw new ForbiddenException("You are not authorized to delete this reserve");
+        }
+        reserveRepository.delete(reserve);
+        return SimpleResponse.builder()
+                .status(HttpStatus.OK)
+                .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), charityId))
                 .build();
     }
 }

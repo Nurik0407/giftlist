@@ -29,18 +29,18 @@ public class Notification {
     private Boolean seen;
     private LocalDate createdAt;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User fromWhomUser;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User toWhomUser;
 
-    @OneToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @OneToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH}, fetch = FetchType.LAZY)
     private Wish wish;
 
-    @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH})
+    @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH}, fetch = FetchType.LAZY)
     private Charity charity;
 
-    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private Reserve reserve;
 }

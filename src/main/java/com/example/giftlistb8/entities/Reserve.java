@@ -22,12 +22,12 @@ public class Reserve {
     private Long id;
     private Boolean isAnonymous;
 
-    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private Charity charity;
 
-    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private Wish wish;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User user;
 }

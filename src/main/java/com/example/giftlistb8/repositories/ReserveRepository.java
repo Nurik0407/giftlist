@@ -2,14 +2,19 @@ package com.example.giftlistb8.repositories;
 
 import com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity;
 import com.example.giftlistb8.dto.reserve.response.ReserveResponseWish;
+import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.Reserve;
+import com.example.giftlistb8.entities.User;
+import com.example.giftlistb8.entities.Wish;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ReserveRepository extends JpaRepository<Reserve, Long> {
@@ -31,4 +36,10 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
 
     @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(r.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue) from Reserve r")
     Page<ReserveResponseCharity> getAllCharity(Pageable pageable);
+
+    @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.wish = :wish")
+    Optional<Reserve> findByUserAndWish(@Param("user") User user, @Param("wish") Wish wish);
+
+    @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.charity = :charity")
+    Optional<Reserve> findByUserAndCharity(@Param("user") User user, @Param("charity") Charity charity);
 }

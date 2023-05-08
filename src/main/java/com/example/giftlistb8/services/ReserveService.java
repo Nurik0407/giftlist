@@ -18,4 +18,7 @@ public interface ReserveService {
     PaginationResponse getWishReservePagination(int page, int size);
 
     PaginationResponse getCharityReservePagination(int page, int size);
+
+    SimpleResponse deleteCharity(Long userId,Long charityId);
+    SimpleResponse deleteWish(Long userId,Long wishId);
 }

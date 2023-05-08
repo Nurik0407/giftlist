@@ -23,6 +23,6 @@ public class Complaint {
     private String complaint;
     private Boolean seen;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User user;
 }

@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -33,13 +35,13 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Charity> charities;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Complaint> complaints;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Wish> wishes;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -51,13 +53,13 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "toWhomUser", cascade = CascadeType.ALL)
     private List<Notification> myNotifications;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Holiday> holidays;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private List<User> requestsForFriends;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<User> friends;
 
     @Override
@@ -101,5 +103,8 @@ public class User implements UserDetails {
 
     public void deleteCharity(Charity charity) {
         charities.remove(charity);
+    }
+    public void deleteWish(Wish wish){
+        wishes.remove(wish);
     }
 }
