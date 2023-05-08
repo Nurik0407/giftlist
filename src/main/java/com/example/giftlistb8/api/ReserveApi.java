@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('USER')")
 @Tag(name = "Reserves", description = "API endpoints for managing reserves")
+@CrossOrigin
 public class ReserveApi {
     private final ReserveService reserveService;
 
