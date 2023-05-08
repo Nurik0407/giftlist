@@ -15,6 +15,7 @@ import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.services.ReserveService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import java.util.Collections;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ReserveServiceImpl implements ReserveService {
     private final ReserveRepository reserveRepository;
     private final WishRepository wishRepository;

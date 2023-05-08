@@ -8,7 +8,6 @@ import lombok.Builder;
 
 @Builder
 public record CharityUpdateRequest(
-        @NotBlank(message = "The id must not be empty.")
         @NotNull(message = "The id must not be empty.")
         Long id,
         @Size(min = 2, max = 30, message = "The name must contain between 2 and 30 characters.")
