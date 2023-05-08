@@ -7,9 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record CharityUpdateRequest(
-        @NotBlank(message = "The id must not be empty.")
-        @NotNull(message = "The id must not be empty.")
+public record CharityUpdateRequest(@NotNull(message = "The id must not be empty.")
         Long id,
         @Size(min = 2, max = 30, message = "The name must contain between 2 and 30 characters.")
         @Pattern(regexp = "^[а-яА-ЯёЁa-zA-Z]+(([',. -][а-яА-ЯёЁa-zA-Z ])?[а-яА-ЯёЁa-zA-Z]*)*$", message = "The name must contain only letters.")
