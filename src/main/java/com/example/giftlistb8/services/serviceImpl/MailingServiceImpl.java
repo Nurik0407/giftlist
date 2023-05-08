@@ -11,6 +11,8 @@ import com.example.giftlistb8.services.MailingServices;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,16 +28,11 @@ import java.util.Optional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class MailingServiceImpl implements MailingServices {
     private final MailingRepository repository;
     private final JavaMailSender javaMailSender;
     private final JdbcTemplate jdbcTemplate;
-
-    public MailingServiceImpl(MailingRepository repository, JavaMailSender javaMailSender, JdbcTemplate jdbcTemplate) {
-        this.repository = repository;
-        this.javaMailSender = javaMailSender;
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public SimpleResponse sendMailWithAttachment(
