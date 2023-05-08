@@ -10,6 +10,7 @@ import com.example.giftlistb8.repositories.MailingRepository;
 import com.example.giftlistb8.services.MailingServices;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
+@Transactional
 @Service
 public class MailingServiceImpl implements MailingServices {
     @Autowired
@@ -49,7 +50,7 @@ public class MailingServiceImpl implements MailingServices {
             mimeMessageHelper.setText(request.getText());
             FileSystemResource fileSystemResource =
                     new FileSystemResource(new File(request.getImage()));
-            mimeMessageHelper.addAttachment(fileSystemResource.getFilename(),
+            mimeMessageHelper.addAttachment(Objects.requireNonNull(fileSystemResource.getFilename()),
                     fileSystemResource);
             javaMailSender.send(mimeMessage);
         }
@@ -71,8 +72,9 @@ public class MailingServiceImpl implements MailingServices {
     }
 
     @Override
-    public Optional<MailingResponse> getByIdMailingList(Long id) {
-        return repository.getMailingById(id);
+    public MailingResponse getByIdMailingList(Long id) {
+        return repository.getMailingById(id).orElseThrow(() -> new NotFoundException(
+                String.format("MailingList with id %s not found.", id)));
     }
 
     @Override

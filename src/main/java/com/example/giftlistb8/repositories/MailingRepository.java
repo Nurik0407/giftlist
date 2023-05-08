@@ -21,7 +21,6 @@ public interface MailingRepository extends JpaRepository<Mailing, Long> {
     Optional<MailingResponse> getMailingById(Long id);
 
     @Query("SELECT NEW com.example.giftlistb8.dto.mailing.response.AllMailingResponse(" +
-            "m.id," +
             "m.image," +
             "m.title," +
             "m.createdAt) from Mailing m ")

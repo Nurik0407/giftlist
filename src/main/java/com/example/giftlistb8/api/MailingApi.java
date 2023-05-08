@@ -1,6 +1,6 @@
 package com.example.giftlistb8.api;
 
-
+import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.mailing.request.MailingRequest;
 import com.example.giftlistb8.dto.mailing.response.AllMailingResponse;
 import com.example.giftlistb8.dto.mailing.response.MailingResponse;
@@ -12,15 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/mailing_list")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('USER')")
+@PreAuthorize("hasAuthority('ADMIN')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class MailingApi {
 
@@ -30,18 +28,27 @@ public class MailingApi {
     @Operation(summary = "Mailing list and save",
             description = "mailing  sent and saved to database")
     @PostMapping
-    public void triggerMail(@RequestBody MailingRequest request) throws MessagingException {
+    public void sendEmail(@RequestBody MailingRequest request) throws MessagingException {
         mailingService.sendMailWithAttachment(request);
     }
 
+    @Operation(summary = "All mailing list")
     @GetMapping
     public List<AllMailingResponse> getAllMailingList() {
         return mailingService.getAllMailingList();
     }
 
-    @GetMapping
-    public Optional<MailingResponse> getByIdMailingList(@RequestParam Long id) {
+    @Operation(summary = "get by id  mailing list")
+    @GetMapping("/{id}")
+    public MailingResponse getByIdMailingList(@PathVariable Long id) {
         return mailingService.getByIdMailingList(id);
     }
 
+    @Operation(summary = "Delete mailing list",
+            description = "Admin can delete mailing list")
+    @DeleteMapping("/{id}")
+    public SimpleResponse delete(@PathVariable Long id) {
+        return mailingService.delete(id);
+    }
 }
+

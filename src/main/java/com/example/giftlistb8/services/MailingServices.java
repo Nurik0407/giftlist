@@ -7,7 +7,6 @@ import com.example.giftlistb8.dto.mailing.response.MailingResponse;
 import jakarta.mail.MessagingException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MailingServices {
 
@@ -15,7 +14,7 @@ public interface MailingServices {
 
     List<AllMailingResponse> getAllMailingList();
 
-    Optional<MailingResponse> getByIdMailingList(Long id);
+    MailingResponse getByIdMailingList(Long id);
 
     SimpleResponse delete(Long id);
 }
