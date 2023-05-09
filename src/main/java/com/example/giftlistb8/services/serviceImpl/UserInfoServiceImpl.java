@@ -24,6 +24,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserInfoServiceImpl implements UserInfoService {
+     String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     private final EmailService mailSenderService;
     private final UserRepository userRepository;
     private final TemplateEngine templateEngine;

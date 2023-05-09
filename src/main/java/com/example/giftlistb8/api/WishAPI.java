@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/wishes")
+@CrossOrigin
 public class WishAPI {
     private final WishService service;
 
