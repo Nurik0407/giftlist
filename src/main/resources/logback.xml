@@ -4,12 +4,8 @@
         <token>lrwBfxMBHHoJpgdTLLkuKBOSoNsLbmXM</token>
         <logzioUrl>https://listener.logz.io:8071</logzioUrl>
         <logzioType>java</logzioType>
-
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
     </appender>
-    <root level="debug">
+    <root level="error">
         <appender-ref ref="LogzioLogbackAppender"/>
     </root>
 </configuration>
