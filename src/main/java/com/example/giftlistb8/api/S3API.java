@@ -21,7 +21,7 @@ public class S3API {
 
     @Operation(summary = "Upload a file to S3 bucket",
             description = "Uploads a file to the specified S3 bucket.")
-    @PostMapping(consumes = { "multipart/form-data"})
+    @PostMapping
     public S3Response uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             return s3Service.uploadFile(file.getOriginalFilename(), file);
