@@ -1,0 +1,15 @@
+<configuration>
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+    <appender name="LogzioLogbackAppender" class="io.logz.logback.LogzioLogbackAppender">
+        <token>lrwBfxMBHHoJpgdTLLkuKBOSoNsLbmXM</token>
+        <logzioUrl>https://listener.logz.io:8071</logzioUrl>
+        <logzioType>java</logzioType>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+    <root level="debug">
+        <appender-ref ref="LogzioLogbackAppender"/>
+    </root>
+</configuration>

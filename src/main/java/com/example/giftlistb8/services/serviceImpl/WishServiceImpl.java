@@ -30,11 +30,13 @@ public class WishServiceImpl implements WishService {
     private final JwtService jwtService;
     @Override
     public List<WishResponse> findAll() {
+        log.info("Finding all wishes");
         return wishRepository.findAllWishes();
     }
 
     @Override
     public WishResponse getById(Long id) {
+        log.info("Finding wish by id: {}", id);
         Wish wish = wishRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(
                         String.format("Restaurant with id: %s not found!", id)));
@@ -60,6 +62,7 @@ public class WishServiceImpl implements WishService {
                 .build();
         wish.setUser(user);
         wishRepository.save(wish);
+        log.info("Saving wish with name: {}", request.name());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Wish with name %s successfully saved.", wish.getName()))
@@ -74,6 +77,7 @@ public class WishServiceImpl implements WishService {
         User userInToken = jwtService.getUserInToken();
         userInToken.deleteWish(wish);
         wishRepository.deleteById(id);
+        log.info("Deleting wish with id: {}", id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Wish with id %s successfully deleted.", id))
@@ -91,6 +95,7 @@ public class WishServiceImpl implements WishService {
         wish.setImage(request.image());
         wish.setDescription(request.descriptions());
         wishRepository.save(wish);
+        log.info("Updating wish with id: {}", id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Wish with name %s successfully updated.", id))

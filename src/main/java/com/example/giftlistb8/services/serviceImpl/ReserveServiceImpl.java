@@ -50,6 +50,7 @@ public class ReserveServiceImpl implements ReserveService {
                 .user(userInToken)
                 .build();
         reserveRepository.save(reserve);
+        log.info("Reserving wish with id {}", reserveRequest.wishId());
         return SimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
@@ -63,7 +64,7 @@ public class ReserveServiceImpl implements ReserveService {
         Charity charity = charityRepository.findById(reserveRequestCharity.charityId()).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with %s id not found", reserveRequestCharity.charityId())));
         boolean isAnonymous = false;
-        if (reserveRequestCharity.isAnonymous()){
+        if (reserveRequestCharity.isAnonymous()) {
             isAnonymous = true;
         }
         Reserve reserve = new Reserve();
@@ -71,6 +72,7 @@ public class ReserveServiceImpl implements ReserveService {
         reserve.setCharity(charity);
         reserve.setIsAnonymous(isAnonymous);
         reserveRepository.save(reserve);
+        log.info("Reserving charity with id {}", charity.getId());
         return SimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
@@ -81,6 +83,7 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public ReserveGetAllResponse getAllReserves() {
+        log.info("Getting all reserves.");
         return new ReserveGetAllResponse(reserveRepository.getAllReversesWish(), reserveRepository.getAllReversesCharity());
     }
 
@@ -97,6 +100,7 @@ public class ReserveServiceImpl implements ReserveService {
         newWish.setLinkGift(wish.getLinkGift());
         newWish.setUser(userInToken);
         wishRepository.save(newWish);
+        log.info("Adding gift to wish with id {} ", wishId);
         return SimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
@@ -109,6 +113,7 @@ public class ReserveServiceImpl implements ReserveService {
     public PaginationResponse getWishReservePagination(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<ReserveResponseWish> pagedWishes = reserveRepository.getAll(pageable);
+        log.info("Getting wish reserve pagination, page {} , size {}", page, size);
         return PaginationResponse.builder()
                 .elements(Collections.singletonList(pagedWishes.getContent()))
                 .pageSize(pagedWishes.getNumber() + 1)
@@ -121,6 +126,7 @@ public class ReserveServiceImpl implements ReserveService {
     public PaginationResponse getCharityReservePagination(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<ReserveResponseCharity> pagedCharity = reserveRepository.getAllCharity(pageable);
+        log.info("Getting charity reserve pagination, page {}, size {}", page, size);
         return PaginationResponse.builder()
                 .elements(Collections.singletonList(pagedCharity.getContent()))
                 .currentPage(pagedCharity.getTotalPages())
@@ -140,6 +146,7 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
         reserveRepository.delete(reserve);
+        log.info("Deleting wish reserve for user {}",userId);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), wishId))
@@ -158,6 +165,7 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
         reserveRepository.delete(reserve);
+        log.info("Deleting charity reserve for user {}",userId);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), charityId))
