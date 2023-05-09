@@ -1,11 +1,11 @@
 <configuration>
-    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+    <shutdownHook class="ch.qos.logback.core.hook.DefaultShutdownHook"/>
     <appender name="LogzioLogbackAppender" class="io.logz.logback.LogzioLogbackAppender">
         <token>lrwBfxMBHHoJpgdTLLkuKBOSoNsLbmXM</token>
         <logzioUrl>https://listener.logz.io:8071</logzioUrl>
         <logzioType>java</logzioType>
     </appender>
-    <root level="error">
+    <root level="info">
         <appender-ref ref="LogzioLogbackAppender"/>
     </root>
 </configuration>
