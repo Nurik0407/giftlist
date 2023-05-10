@@ -13,7 +13,7 @@ public record AuthRegisterRequest(
         String lastName,
         @Email(message = "Sorry, the email address you entered is invalid. Please check if it is correct")
         String email,
-        @ValidPassword
+        @ValidPassword(message = "Password must contain at least 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character.")
         String password,
         boolean subscribeMailing
 ) {
