@@ -14,7 +14,7 @@ values (2,'XXS','Kyrgyzstan','2004-12-12','https://www.facebook.com/profile.php?
        (10,'XS','Kyrgyzstan','2002-9-12','https://www.facebook.com/profile.php?id=100076926076401','play need for speed','alrgiasy kyzdarga bar','image','https://instagran.com/nurkanowich?utm_medium=copy_link','+996999234535','FORTY_THREE','http://t.me/adilet_324','http://wa.me/996408206602');
 
 
-insert into users (id, email, first_name, is_blocked,last_name,password,role,subsubscribe_mailing,user_info_id)
+insert into users (id, email, first_name, is_blocked,last_name,password,role,subscribe_mailing,user_info_id)
 values (2,'nurislamnurkanov@gmail.com','Nurislam',false,'Nurkanov','$2a$12$cD/vVybmpIXV9vgW4mdsJ.GWOTQ9JPIuj1AscLPaQSgsl0RLT5NQ6','USER',true,2),
        (3,'nursultan@gmail.com','Syimyk',false,'Odesov','$2a$12$L.8HX7N70zwbxhgw3RE3outmnLGIgVlizD6bgkxsQuWLItdZjPsdG','USER',true,3),
        (4,'jumakadyrovadilet@gmail.com','Adilet',false,'Jumakadyrov','$2a$12$exhDiK8fE1KZtgsh1TPh7OblsSmwh7/JN/LlvYA3iF4LneNryzY3u','USER',true,4),

@@ -34,10 +34,17 @@ public class ReserveServiceImpl implements ReserveService {
     private final CharityRepository charityRepository;
 
     @Override
-    public SimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
+    public ReserveSimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(reserveRequest.wishId()).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with %s id not found", reserveRequest.wishId())));
+        if (reserveRepository.wishReserved(wish.getId())) {
+            return ReserveSimpleResponse.builder()
+                    .status(HttpStatus.CONFLICT)
+                    .message("Wish with id %s already reserved.".formatted(wish.getId()))
+                    .isReserved(true)
+                    .build();
+        }
         boolean isAnonymous = false;
         if (reserveRequest.isAnonymous()) {
             isAnonymous = true;
@@ -48,7 +55,7 @@ public class ReserveServiceImpl implements ReserveService {
                 .user(userInToken)
                 .build();
         reserveRepository.save(reserve);
-        return SimpleResponse
+        return ReserveSimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Gift with id %s successfully reserved", reserveRequest.wishId()))
@@ -56,12 +63,19 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public SimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity) {
+    public ReserveSimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity) {
         User user = jwtService.getUserInToken();
         Charity charity = charityRepository.findById(reserveRequestCharity.charityId()).orElseThrow(
-                () -> new NotFoundException(String.format("Charity with %s id not found", reserveRequestCharity.charityId())));
+                () -> new NotFoundException(String.format("Charity with id %s not found", reserveRequestCharity.charityId())));
+        if (reserveRepository.charityReserved(charity.getId())) {
+            return ReserveSimpleResponse.builder()
+                    .status(HttpStatus.CONFLICT)
+                    .message("Charity with id %s already reserved".formatted(charity.getId()))
+                    .isReserved(true)
+                    .build();
+        }
         boolean isAnonymous = false;
-        if (reserveRequestCharity.isAnonymous()){
+        if (reserveRequestCharity.isAnonymous()) {
             isAnonymous = true;
         }
         Reserve reserve = new Reserve();
@@ -69,7 +83,7 @@ public class ReserveServiceImpl implements ReserveService {
         reserve.setCharity(charity);
         reserve.setIsAnonymous(isAnonymous);
         reserveRepository.save(reserve);
-        return SimpleResponse
+        return ReserveSimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Charity with  %s  id successfully reserved", reserveRequestCharity.charityId()))
@@ -87,18 +101,25 @@ public class ReserveServiceImpl implements ReserveService {
     public SimpleResponse addGiftToWish(Long wishId) {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
-                () -> new NotFoundException(String.format("Wish with %s id not found", wishId)));
+                () -> new NotFoundException(String.format("Wish with id %s not found", wishId)));
+        if (reserveRepository.wishExistInReserve(userInToken.getId(),wishId)) {
+            return SimpleResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message("Wish with id %s is not reserved by you".formatted(wish))
+                    .build();
+        }
         Wish newWish = new Wish();
         newWish.setName(wish.getName());
         newWish.setImage(wish.getImage());
         newWish.setDescription(wish.getDescription());
         newWish.setLinkGift(wish.getLinkGift());
+        newWish.setStatus(false);
         newWish.setUser(userInToken);
         wishRepository.save(newWish);
         return SimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
-                .message(String.format("Gift with %s id successfully added to wish from reserves", wishId))
+                .message(String.format("Gift with id %s successfully added to wish from reserves", wishId))
                 .build();
     }
 
@@ -127,7 +148,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public SimpleResponse deleteWish(Long userId, Long wishId) {
+    public SimpleResponse deleteWish(Long wishId) {
         User user = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with %s not found", wishId)));
@@ -145,7 +166,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public SimpleResponse deleteCharity(Long userId, Long charityId) {
+    public SimpleResponse deleteCharity(Long charityId) {
         User user = jwtService.getUserInToken();
         Charity charity = charityRepository.findById(charityId).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with %s id not found", charityId)));
