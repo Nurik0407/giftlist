@@ -14,8 +14,10 @@ public record AuthRegisterRequest(
         @Email(message = "Sorry, the email address you entered is invalid. Please check if it is correct")
         String email,
         @ValidPassword
-        String password
-) { }
+        String password,
+        boolean subscribeMailing
+) {
+}
 
 
 

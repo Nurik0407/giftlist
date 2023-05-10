@@ -26,6 +26,7 @@ public class UserAPI {
     private final UserService service;
     private final NotificationService notificationService;
 
+
     @PostMapping("/forgot_password")
     public SimpleResponse processForgotPassword(@RequestParam String email) {
         return userService.updateResetPasswordToken(email);
