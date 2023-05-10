@@ -11,5 +11,5 @@ public record MailingResponse(
         String title,
         String description,
         LocalDateTime createdAt
-        ) {
+) {
 }

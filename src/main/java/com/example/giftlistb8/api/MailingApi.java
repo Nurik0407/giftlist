@@ -8,13 +8,11 @@ import com.example.giftlistb8.services.MailingServices;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -32,20 +30,17 @@ public class MailingApi {
         return mailingService.sendMailWithAttachment(request);
     }
 
-
     @Operation(summary = "All mailing list")
     @GetMapping
     public List<AllMailingResponse> getAllMailingList() {
         return mailingService.getAllMailingList();
     }
 
-
     @Operation(summary = "get by id  mailing list")
     @GetMapping("/{id}")
     public Optional<MailingResponse> getByIdMailingList(@PathVariable Long id) {
         return mailingService.getMailingById(id);
     }
-
 
     @Operation(summary = "Delete mailing list",
             description = "Admin can delete mailing list")
