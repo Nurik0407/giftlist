@@ -44,7 +44,7 @@ public class ReserveApi {
     }
 
     @Operation(summary = "The method added gift to own wishList", description = "Add a reserved gift to a wish")
-    @PostMapping()
+    @PostMapping
     public SimpleResponse addGiftToWish(@RequestParam(required = false) Long wishId) {
         return reserveService.addGiftToWish(wishId);
     }
