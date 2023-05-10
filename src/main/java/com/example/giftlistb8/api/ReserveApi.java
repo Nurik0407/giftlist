@@ -5,6 +5,7 @@ import com.example.giftlistb8.dto.reserve.requests.ReserveRequestCharity;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestWish;
 import com.example.giftlistb8.dto.reserve.response.ReserveGetAllResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
+import com.example.giftlistb8.dto.reserve.response.ReserveSimpleResponse;
 import com.example.giftlistb8.services.ReserveService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,21 +18,21 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('USER')")
 @Tag(name = "Reserves", description = "API endpoints for managing reserves")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class ReserveApi {
     private final ReserveService reserveService;
 
     @Operation(summary = "This method for reserve the wish",
             description = "Reserve a wish as anonymous or non anonymous user with the given wish ID.")
     @PostMapping("/wish")
-    public SimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
+    public ReserveSimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
         return reserveService.wishReserve(reserveRequest);
     }
 
     @Operation(summary = "This method for reserve the gift from charity",
             description = "Reserve a wish as anonymous or non anonymous user with the given wish ID.")
     @PostMapping("/charity")
-    public SimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity) {
+    public ReserveSimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity) {
         return reserveService.charityReserve(reserveRequestCharity);
     }
 

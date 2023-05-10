@@ -98,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @PostConstruct
-    void init() throws IOException {
+    void init(){
         try {
             GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("giftlist-b8.json").getInputStream());
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()
@@ -135,5 +135,4 @@ public class AuthServiceImpl implements AuthService {
                 .token(token)
                 .build();
     }
-
 }
