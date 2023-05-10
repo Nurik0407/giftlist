@@ -1,5 +1,6 @@
 package com.example.giftlistb8.entities;
 
+import com.example.giftlistb8.dto.mailing.request.MailingRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mailings")
@@ -24,4 +26,5 @@ public class Mailing {
     private String description;
     private String image;
     private LocalDate createdAt;
+
 }

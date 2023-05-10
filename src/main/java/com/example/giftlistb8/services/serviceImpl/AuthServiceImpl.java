@@ -56,6 +56,7 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(userRequest.password()))
                 .isBlocked(false)
                 .role(Role.USER)
+                .subscribeMailing(userRequest.subscribeMailing())
                 .build();
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
