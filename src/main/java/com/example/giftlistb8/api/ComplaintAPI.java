@@ -26,7 +26,8 @@ public class ComplaintAPI {
     }
 
     @GetMapping("/all")
-    public ComplaintResponse getAllComplaints(){
-       return complaintService.getAll();
+    public ComplaintResponse getAllComplaints() {
+        return complaintService.getAll();
     }
+
 }
