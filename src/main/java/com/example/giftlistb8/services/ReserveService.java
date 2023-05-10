@@ -20,6 +20,6 @@ public interface ReserveService {
 
     PaginationResponse getCharityReservePagination(int page, int size);
 
-    SimpleResponse deleteCharity(Long userId,Long charityId);
-    SimpleResponse deleteWish(Long userId,Long wishId);
+    SimpleResponse deleteCharity(Long charityId);
+    SimpleResponse deleteWish(Long wishId);
 }

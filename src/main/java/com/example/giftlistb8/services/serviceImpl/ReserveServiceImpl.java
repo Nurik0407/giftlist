@@ -101,7 +101,7 @@ public class ReserveServiceImpl implements ReserveService {
     public SimpleResponse addGiftToWish(Long wishId) {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
-                () -> new NotFoundException(String.format("Wish with %s id not found", wishId)));
+                () -> new NotFoundException(String.format("Wish with id %s not found", wishId)));
         if (reserveRepository.wishExistInReserve(userInToken.getId(),wishId)) {
             return SimpleResponse.builder()
                     .status(HttpStatus.BAD_REQUEST)
@@ -113,12 +113,13 @@ public class ReserveServiceImpl implements ReserveService {
         newWish.setImage(wish.getImage());
         newWish.setDescription(wish.getDescription());
         newWish.setLinkGift(wish.getLinkGift());
+        newWish.setStatus(false);
         newWish.setUser(userInToken);
         wishRepository.save(newWish);
         return SimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
-                .message(String.format("Gift with %s id successfully added to wish from reserves", wishId))
+                .message(String.format("Gift with id %s successfully added to wish from reserves", wishId))
                 .build();
     }
 
@@ -147,7 +148,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public SimpleResponse deleteWish(Long userId, Long wishId) {
+    public SimpleResponse deleteWish(Long wishId) {
         User user = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with %s not found", wishId)));
@@ -165,7 +166,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public SimpleResponse deleteCharity(Long userId, Long charityId) {
+    public SimpleResponse deleteCharity(Long charityId) {
         User user = jwtService.getUserInToken();
         Charity charity = charityRepository.findById(charityId).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with %s id not found", charityId)));
