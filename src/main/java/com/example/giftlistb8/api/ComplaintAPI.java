@@ -29,5 +29,4 @@ public class ComplaintAPI {
     public ComplaintResponse getAllComplaints() {
         return complaintService.getAll();
     }
-
 }

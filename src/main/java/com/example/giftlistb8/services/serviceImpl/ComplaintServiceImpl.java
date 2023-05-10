@@ -36,6 +36,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     public SimpleResponse complaintToCharity(Long id) {
         Notification notification = new Notification();
         Complaint complaint = new Complaint();
+
         Charity charity = charityRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Not found!"));
 

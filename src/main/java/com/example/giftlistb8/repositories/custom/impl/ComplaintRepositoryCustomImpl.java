@@ -36,6 +36,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                        JOIN charities_complaints cc on ch.id = cc.charity_id
                        JOIN complaints c on cc.complaints_id = c.id;
                  """;
+
         String sql2 = """
                SELECT CONCAT(u.first_name, ' ', u.last_name) AS full_name,
                       ui.image AS user_image,
@@ -54,6 +55,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                         JOIN wishes_complaints cc on wh.id = cc.wish_id
                         JOIN complaints c on cc.complaints_id = c.id;
                 """;
+
 
         ComplaintResponse complaintResponse = new ComplaintResponse();
 
