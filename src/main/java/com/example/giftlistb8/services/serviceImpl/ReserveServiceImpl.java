@@ -148,7 +148,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public SimpleResponse deleteWish(Long userId, Long wishId) {
+    public SimpleResponse deleteWish(Long wishId) {
         User user = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with %s not found", wishId)));
@@ -166,7 +166,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public SimpleResponse deleteCharity(Long userId, Long charityId) {
+    public SimpleResponse deleteCharity(Long charityId) {
         User user = jwtService.getUserInToken();
         Charity charity = charityRepository.findById(charityId).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with %s id not found", charityId)));
