@@ -53,7 +53,6 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                         JOIN user_infos ui ON u.user_info_id = ui.id
                         JOIN wishes_complaints cc on wh.id = cc.wish_id
                         JOIN complaints c on cc.complaints_id = c.id;
-          
                 """;
 
         ComplaintResponse complaintResponse = new ComplaintResponse();
