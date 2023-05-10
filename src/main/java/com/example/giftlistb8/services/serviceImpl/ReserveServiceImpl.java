@@ -113,6 +113,7 @@ public class ReserveServiceImpl implements ReserveService {
         newWish.setImage(wish.getImage());
         newWish.setDescription(wish.getDescription());
         newWish.setLinkGift(wish.getLinkGift());
+        newWish.setStatus(false);
         newWish.setUser(userInToken);
         wishRepository.save(newWish);
         return SimpleResponse
