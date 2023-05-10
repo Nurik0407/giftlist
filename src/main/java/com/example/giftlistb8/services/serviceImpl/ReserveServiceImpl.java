@@ -101,7 +101,7 @@ public class ReserveServiceImpl implements ReserveService {
     public SimpleResponse addGiftToWish(Long wishId) {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
-                () -> new NotFoundException(String.format("Wish with %s id not found", wishId)));
+                () -> new NotFoundException(String.format("Wish with id %s not found", wishId)));
         if (reserveRepository.wishExistInReserve(userInToken.getId(),wishId)) {
             return SimpleResponse.builder()
                     .status(HttpStatus.BAD_REQUEST)
@@ -118,7 +118,7 @@ public class ReserveServiceImpl implements ReserveService {
         return SimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
-                .message(String.format("Gift with %s id successfully added to wish from reserves", wishId))
+                .message(String.format("Gift with id %s successfully added to wish from reserves", wishId))
                 .build();
     }
 
