@@ -43,13 +43,13 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.charity = :charity")
     Optional<Reserve> findByUserAndCharity(@Param("user") User user, @Param("charity") Charity charity);
 
-    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN FALSE ELSE TRUE END " +
+    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN TRUE ELSE FALSE END " +
            "FROM Wish w " +
            "LEFT JOIN w.reserve r " +
            "WHERE w.id = :wishId")
     boolean wishReserved(Long wishId);
 
-    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN FALSE ELSE TRUE END " +
+    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN TRUE ELSE FALSE END " +
            "FROM Charity c " +
            "LEFT JOIN c.reserve r " +
            "WHERE c.id = :charityId")
