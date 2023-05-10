@@ -37,6 +37,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         Notification notification = new Notification();
         Complaint complaint = new Complaint();
 
+
         Charity charity = charityRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Not found!"));
 
