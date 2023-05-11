@@ -10,7 +10,6 @@ import com.example.giftlistb8.services.NotificationService;
 import com.example.giftlistb8.services.UserInfoService;
 import com.example.giftlistb8.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,14 +26,12 @@ public class UserAPI {
     private final UserService service;
     private final NotificationService notificationService;
 
-    @PermitAll
-    @PostMapping("/forgot_password")
+    @PostMapping("/forgot-password")
     public SimpleResponse processForgotPassword(@RequestParam String email) {
         return userService.updateResetPasswordToken(email);
     }
 
-    @PermitAll
-    @PostMapping("/reset_password")
+    @PostMapping("/reset-password")
     public SimpleResponse processResetPassword(@RequestParam String token, @RequestBody @Valid ResetPasswordRequest request) {
         return userService.getByResetPasswordToken(token, request.getPassword(), request.getConfirmPassword());
     }
