@@ -1,7 +1,6 @@
 package com.example.giftlistb8.entities;
 
 import com.example.giftlistb8.enums.Role;
-import com.example.giftlistb8.exceptions.NotFoundException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +22,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
     @SequenceGenerator(name = "user_id_gen",
-            sequenceName = "user_id_seq",allocationSize = 1,initialValue = 11)
+            sequenceName = "user_id_seq", allocationSize = 1, initialValue = 11)
     private Long id;
     private String firstName;
     private String lastName;
@@ -32,7 +31,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     private Boolean isBlocked;
-
+    private boolean subscribeMailing;
     @OneToOne(cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
