@@ -167,7 +167,7 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
         reserveRepository.delete(reserve);
-        log.info("Deleting wish reserve for user {}",userId);
+        log.info("Deleting wish reserve for user {}",user.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), wishId))
@@ -186,7 +186,7 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
         reserveRepository.delete(reserve);
-        log.info("Deleting charity reserve for user {}",userId);
+        log.info("Deleting charity reserve for user {}",user.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), charityId))
