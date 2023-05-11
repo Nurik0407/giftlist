@@ -22,7 +22,7 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class UserInfoServiceImpl implements UserInfoService {
-     String name;
+    String name;
 
     public String getName() {
         return name;
@@ -53,13 +53,13 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setResetToken(token);
         userInfoRepository.save(userInfo);
         try {
-            String resetPasswordLink = "http://localhost:4040/api/user/reset_password?token=" + token;
+            String resetPasswordLink = "http://ec2-3-120-31-83.eu-central-1.compute.amazonaws.com/api/user/reset_password?token=" + token;
             String subject = "Password Reset Request";
             Context context = new Context();
             context.setVariable("title", "Password Reset");
             context.setVariable("message", "Hello " + user.getFirstName() + "" +
-                    " Click the link below to reset your password:");
-            context.setVariable("token", resetPasswordLink);
+                                           " Click the link below to reset your password:");
+            context.setVariable("link", resetPasswordLink);
             context.setVariable("tokenTitle", "Reset Password");
 
             String htmlContent = templateEngine.process("reset-password-template.html", context);
