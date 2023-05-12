@@ -37,12 +37,10 @@ import java.io.IOException;
 @Transactional
 @Slf4j
 public class AuthServiceImpl implements AuthService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
 
     @Override
     public AuthRegisterResponse register(AuthRegisterRequest userRequest) {
@@ -61,6 +59,8 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
 
+        log.info("User registered successfully with email {}", userRequest.email());
+
         return AuthRegisterResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -69,12 +69,12 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-
     @Override
     public AuthRegisterResponse authenticate(AuthAuthenticateRequest userRegisterRequest) {
         User user = userRepository.findByEmail(userRegisterRequest.email())
                 .orElseThrow(() ->
                         new BadRequestException("Invalid email or password."));
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -83,12 +83,14 @@ public class AuthServiceImpl implements AuthService {
                     )
             );
         } catch (AuthenticationException e) {
-            log.error("Invalid email or password");
+            log.error("Invalid email or password for email {}", userRegisterRequest.email());
             throw new BadCredentialsException("Invalid email or password.");
         }
-        System.out.println("before token");
+
+        log.info("User authenticated successfully with email {}", userRegisterRequest.email());
+
         String token = jwtService.generateToken(user);
-        System.out.println(33334);
+
         return AuthRegisterResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -104,16 +106,17 @@ public class AuthServiceImpl implements AuthService {
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                     .setCredentials(googleCredentials)
                     .build();
-            log.info("Successfully works the init method");
+            log.info("Firebase initialized successfully");
             FirebaseApp firebaseApp = FirebaseApp.initializeApp(firebaseOptions);
         } catch (IOException e) {
-            log.error("IOException");
+            log.error("IOException occurred while initializing Firebase");
         }
     }
 
     @Override
     public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
         FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
+
         if (!userRepository.existsByEmail(firebaseToken.getEmail())) {
             User newUser = new User();
             String[] name = firebaseToken.getName().split(" ");
@@ -124,12 +127,16 @@ public class AuthServiceImpl implements AuthService {
             newUser.setRole(Role.USER);
             userRepository.save(newUser);
         }
+
         User user = userRepository.findByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
-            log.error(String.format("User with this %s email not found!", firebaseToken.getEmail()));
+            log.error("User not found for email {}", firebaseToken.getEmail());
             throw new NotFoundException(String.format("User with this %s email not found!!", firebaseToken.getEmail()));
         });
+
+        log.info("User authenticated successfully with Google for email {}", firebaseToken.getEmail());
+
         String token = jwtService.generateToken(user);
-        log.info("Successfully works the authorization with google method");
+
         return AuthRegisterResponse.builder()
                 .email(firebaseToken.getEmail())
                 .token(token)

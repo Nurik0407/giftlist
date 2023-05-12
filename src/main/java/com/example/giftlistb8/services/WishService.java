@@ -1,6 +1,6 @@
 package com.example.giftlistb8.services;
 
-import com.example.giftlistb8.config.SimpleResponse;
+import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.wish.requests.WishRequest;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 

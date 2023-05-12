@@ -26,13 +26,12 @@ public class UserAPI {
     private final UserService service;
     private final NotificationService notificationService;
 
-
-    @PostMapping("/forgot_password")
+    @PostMapping("/forgot-password")
     public SimpleResponse processForgotPassword(@RequestParam String email) {
         return userService.updateResetPasswordToken(email);
     }
 
-    @PostMapping("/reset_password")
+    @PostMapping("/reset-password")
     public SimpleResponse processResetPassword(@RequestParam String token, @RequestBody @Valid ResetPasswordRequest request) {
         return userService.getByResetPasswordToken(token, request.getPassword(), request.getConfirmPassword());
     }
@@ -46,6 +45,7 @@ public class UserAPI {
     public SimpleResponse seenOrNot() {
         return notificationService.seenOrNot();
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Get all users", description = "Returns a paginated list of all users.")
     @GetMapping
@@ -53,6 +53,7 @@ public class UserAPI {
                                                          @RequestParam(defaultValue = "6") int size) {
         return service.getAllUsers(page, size);
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Get user by id", description = "Returns a single user  and user's holiday,wishes,charities.")
     @GetMapping("/{userId}")
@@ -66,6 +67,7 @@ public class UserAPI {
     private SimpleResponse deleteById(@PathVariable Long userId) {
         return service.deleteById(userId);
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Block user", description = "User block or un block method")
     @PutMapping("/{userId}/block")
