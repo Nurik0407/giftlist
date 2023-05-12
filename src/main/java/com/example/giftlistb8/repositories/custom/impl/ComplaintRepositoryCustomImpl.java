@@ -2,6 +2,7 @@ package com.example.giftlistb8.repositories.custom.impl;
 
 import com.example.giftlistb8.dto.charity.response.CharityResponseWIthComplaint;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
+import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 import com.example.giftlistb8.dto.wish.response.WishResponseWithComplaint;
 import com.example.giftlistb8.repositories.custom.ComplaintRepositoryCustom;
 import lombok.RequiredArgsConstructor;
@@ -84,5 +85,11 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
         complaintResponse.setWishResponseWithComplaints(wishResponses);
 
         return complaintResponse;
+    }
+
+    @Override
+    public WishResponseProfile getById(Long id) {
+
+        return null;
     }
 }

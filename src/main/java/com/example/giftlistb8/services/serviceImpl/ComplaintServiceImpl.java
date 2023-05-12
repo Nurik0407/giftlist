@@ -2,6 +2,7 @@ package com.example.giftlistb8.services.serviceImpl;
 
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
+import com.example.giftlistb8.dto.charity.response.CharityResponse;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.Complaint;
@@ -89,6 +90,11 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .message("Complaint to Charity added to database!")
                 .status(HttpStatus.OK)
                 .build();
+    }
+
+    @Override
+    public CharityResponse findById(Long id) {
+        return null;
     }
 
     @Override
