@@ -12,6 +12,7 @@ import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.HolidayRepository;
 import com.example.giftlistb8.services.HolidayService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HolidayServiceImpl implements HolidayService {
     private final HolidayRepository repository;
     private final JwtService jwtService;
@@ -35,6 +37,7 @@ public class HolidayServiceImpl implements HolidayService {
                         rs.getString("name"),
                         rs.getString("image"),
                         rs.getDate("date").toLocalDate()));
+        log.info("Find all holidays for user: " + user.getEmail());
         return holidays;
     }
 
@@ -48,6 +51,7 @@ public class HolidayServiceImpl implements HolidayService {
                 .build();
         holiday.setUser(user);
         repository.save(holiday);
+        log.info("Holiday with name {} successfully saved.", holiday.getName());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Holiday with name %s successfully saved.", holiday.getName()))
@@ -57,7 +61,8 @@ public class HolidayServiceImpl implements HolidayService {
     @Override
     public SimpleResponse update(Long id, HolidayRequest request) {
         String sql = "UPDATE holidays SET name=?,image=?,date=? WHERE id=?";
-        jdbcTemplate.update(sql,request.name(),request.image(),request.dateOfHoliday(),id);
+        jdbcTemplate.update(sql, request.name(), request.image(), request.dateOfHoliday(), id);
+        log.info("Holiday with id {} successfully updated.", id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Holiday with name %s successfully updated.", id))
@@ -66,16 +71,17 @@ public class HolidayServiceImpl implements HolidayService {
 
     @Override
     public SimpleResponse delete(Long id) {
-        Holiday holiday = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Holiday with id %s not found.", id)));
+        Holiday holiday = repository.findById(id).orElseThrow(() -> {
+            log.error("Holiday with id {} not found.", id);
+            return new NotFoundException(String.format("Holiday with id %s not found.", id));});
         User userInToken = jwtService.getUserInToken();
         if (!userInToken.getHolidays().contains(holiday)) {
             throw new BadRequestException(
-                    String.format("The holiday with id %s cannot be deleted as it does not belong to the current user.",id));
+                    String.format("The holiday with id %s cannot be deleted as it does not belong to the current user.", id));
         }
-            userInToken.deleteHoliday(holiday);
-            repository.deleteById(id);
+        userInToken.deleteHoliday(holiday);
+        repository.deleteById(id);
+        log.info("Holiday with id {} successfully deleted.", id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Holiday with id %s successfully deleted.", id))

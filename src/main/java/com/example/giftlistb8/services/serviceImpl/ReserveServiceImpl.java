@@ -15,6 +15,7 @@ import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.services.ReserveService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import java.util.Collections;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ReserveServiceImpl implements ReserveService {
     private final ReserveRepository reserveRepository;
     private final WishRepository wishRepository;
@@ -55,6 +57,7 @@ public class ReserveServiceImpl implements ReserveService {
                 .user(userInToken)
                 .build();
         reserveRepository.save(reserve);
+        log.info("Reserving wish with id {}", reserveRequest.wishId());
         return ReserveSimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
@@ -83,6 +86,7 @@ public class ReserveServiceImpl implements ReserveService {
         reserve.setCharity(charity);
         reserve.setIsAnonymous(isAnonymous);
         reserveRepository.save(reserve);
+        log.info("Reserving charity with id {}", charity.getId());
         return ReserveSimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
@@ -93,6 +97,7 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public ReserveGetAllResponse getAllReserves() {
+        log.info("Getting all reserves.");
         return new ReserveGetAllResponse(reserveRepository.getAllReversesWish(), reserveRepository.getAllReversesCharity());
     }
 
@@ -116,6 +121,7 @@ public class ReserveServiceImpl implements ReserveService {
         newWish.setStatus(false);
         newWish.setUser(userInToken);
         wishRepository.save(newWish);
+        log.info("Adding gift to wish with id {} ", wishId);
         return SimpleResponse
                 .builder()
                 .status(HttpStatus.OK)
@@ -128,6 +134,7 @@ public class ReserveServiceImpl implements ReserveService {
     public PaginationResponse getWishReservePagination(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<ReserveResponseWish> pagedWishes = reserveRepository.getAll(pageable);
+        log.info("Getting wish reserve pagination, page {} , size {}", page, size);
         return PaginationResponse.builder()
                 .elements(Collections.singletonList(pagedWishes.getContent()))
                 .pageSize(pagedWishes.getNumber() + 1)
@@ -140,6 +147,7 @@ public class ReserveServiceImpl implements ReserveService {
     public PaginationResponse getCharityReservePagination(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<ReserveResponseCharity> pagedCharity = reserveRepository.getAllCharity(pageable);
+        log.info("Getting charity reserve pagination, page {}, size {}", page, size);
         return PaginationResponse.builder()
                 .elements(Collections.singletonList(pagedCharity.getContent()))
                 .currentPage(pagedCharity.getTotalPages())
@@ -159,6 +167,7 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
         reserveRepository.delete(reserve);
+        log.info("Deleting wish reserve for user {}",user.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), wishId))
@@ -177,6 +186,7 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
         reserveRepository.delete(reserve);
+        log.info("Deleting charity reserve for user {}",user.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), charityId))

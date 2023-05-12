@@ -43,6 +43,7 @@ public class CharityServiceImpl implements CharityService {
                 .user(userInToken)
                 .build();
         repository.save(charity);
+        log.info("Charity with name {} successfully saved by user {}", charity.getName(), userInToken.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Charity with name %s successfully saved.", charity.getName()))
@@ -56,7 +57,7 @@ public class CharityServiceImpl implements CharityService {
                 "JOIN users u ON c.user_id = u.id " +
                 "LEFT JOIN user_infos ui ON u.user_info_id = ui.id " +
                 "LEFT JOIN reserves r ON c.id = r.charity_id";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new CharitiesResponse(
+        List<CharitiesResponse> charitiesResponses = jdbcTemplate.query(sql, (rs, rowNum) -> new CharitiesResponse(
                 rs.getLong("user_id"),
                 rs.getString("full_name"),
                 rs.getString("image"),
@@ -67,12 +68,15 @@ public class CharityServiceImpl implements CharityService {
                 rs.getString("state"),
                 rs.getBoolean("is_reserved"),
                 rs.getBoolean("is_anonymous")));
+        log.debug("Found {} charities.", charitiesResponses.size());
+        return charitiesResponses;
     }
 
     @Override
     public SimpleResponse update(CharityUpdateRequest request) {
         jdbcTemplate.update("update charities set name=?,state=?,description=?,category=?,sub_category=?,image=? WHERE id=?",
                 request.name(), request.state(), request.description(), request.category(), request.subCategory(), request.image(), request.id());
+        log.info("Charity with id {} successfully updated.", request.id());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Charity with id %s successfully updated.", request.id()))
@@ -87,6 +91,7 @@ public class CharityServiceImpl implements CharityService {
                         String.format("Charity with id %s not found.", id)));
         userInToken.deleteCharity(charity);
         repository.deleteById(id);
+        log.info("Charity with id {} successfully deleted",id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Charity with id %s successfully deleted.", id))
@@ -95,8 +100,11 @@ public class CharityServiceImpl implements CharityService {
 
     @Override
     public CharityResponse findById(Long id) {
-        return repository.findCharityById(id)
+        log.debug("Searching for charity with id {}...", id);
+        CharityResponse charityResponse = repository.findCharityById(id)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Charity with id %s not found.", id)));
+        log.debug("Found charity with id {}: {}", id, charityResponse);
+        return charityResponse;
     }
 }
