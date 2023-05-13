@@ -12,29 +12,27 @@ import java.time.LocalDate;
 
 @Builder
 public record ProfileUpdateRequest(
-        @NotBlank(message = "The id must not be empty.")
+
         @NotNull(message = "The id must not be empty.")
         Long id,
-        @NotBlank(message = "The image must not be empty.")
+
         @NotNull(message = "The image must not be empty.")
         String image,
 
-        @NotBlank(message = "The first name must not be empty.")
         @ValidName(message = "The first name must contain between 2 and 30 characters,start with capital letter.")
         String firstName,
 
-        @NotBlank(message = "The last name must not be empty.")
+
         @ValidName(message = "The last name must contain between 2 and 30 characters,start with capital letter.")
         String lastName,
 
-        @NotBlank(message = "The country must not be empty.")
         @NotNull(message = "The country must not be empty.")
         String country,
 
         @Past(message = "The date of birth must be in the past.")
         LocalDate dateOfBirth,
 
-        @NotBlank(message = "The email must not be empty.")
+        @NotNull(message = "The email must not be empty.")
         @Email(message = "The email is not valid.")
         String email,
 
