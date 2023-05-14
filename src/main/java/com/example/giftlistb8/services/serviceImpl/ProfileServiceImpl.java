@@ -68,9 +68,31 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public SimpleResponse updateUserProfile(ProfileUpdateRequest profileRequest) {
-        UserInfo userInfo = UserInfo.builder().image(profileRequest.image()).country(profileRequest.country()).dateOfBirth(profileRequest.dateOfBirth()).phoneNumber(profileRequest.phoneNumber()).clothingSize(profileRequest.clothingSize()).shoeSize(profileRequest.shoeSize()).hobby(profileRequest.hobby()).important(profileRequest.important()).facebook(profileRequest.faceBook()).whatsApp(profileRequest.whatsApp()).instagram(profileRequest.instagram()).telegram(profileRequest.instagram()).build();
+        User user = jwtService.getUserInToken();
+        if (user == null) {
+            return SimpleResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(String.format("User with %s id not found", profileRequest.id()))
+                    .build();
+        }
+        UserInfo userInfo = user.getUserInfo();
+        userInfo.setImage(profileRequest.image());
+        userInfo.setCountry(profileRequest.country());
+        userInfo.setDateOfBirth(profileRequest.dateOfBirth());
+        userInfo.setPhoneNumber(profileRequest.phoneNumber());
+        userInfo.setClothingSize(profileRequest.clothingSize());
+        userInfo.setShoeSize(profileRequest.shoeSize());
+        userInfo.setHobby(profileRequest.hobby());
+        userInfo.setImportant(profileRequest.important());
+        userInfo.setFacebook(profileRequest.faceBook());
+        userInfo.setWhatsApp(profileRequest.whatsApp());
+        userInfo.setInstagram(profileRequest.instagram());
+        userInfo.setTelegram(profileRequest.telegram());
 
-        User user = User.builder().userInfo(userInfo).firstName(profileRequest.firstName()).lastName(profileRequest.lastName()).email(profileRequest.email()).build();
+        user.setFirstName(profileRequest.firstName());
+        user.setLastName(profileRequest.lastName());
+        user.setEmail(profileRequest.email());
+
         userRepository.save(user);
         return SimpleResponse.builder().status(HttpStatus.OK).message(String.format("User with %s id successfully update", profileRequest.id())).build();
     }
