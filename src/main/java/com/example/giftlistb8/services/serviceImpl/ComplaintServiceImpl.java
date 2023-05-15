@@ -2,8 +2,9 @@ package com.example.giftlistb8.services.serviceImpl;
 
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
-import com.example.giftlistb8.dto.charity.response.CharityResponse;
+import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
+import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.Complaint;
 import com.example.giftlistb8.entities.Notification;
@@ -93,8 +94,13 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
-    public CharityResponse findById(Long id) {
-        return null;
+    public WishResponseProfile wishFindById(Long id) {
+        return complaintRepositoryCustom.wishGetById(id);
+    }
+
+    @Override
+    public CharityResponseProfile charityFindById(Long id) {
+        return complaintRepositoryCustom.charityGetById(id);
     }
 
     @Override

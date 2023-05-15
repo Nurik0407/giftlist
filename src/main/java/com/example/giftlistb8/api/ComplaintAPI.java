@@ -1,8 +1,9 @@
 package com.example.giftlistb8.api;
 
 import com.example.giftlistb8.dto.SimpleResponse;
-import com.example.giftlistb8.dto.charity.response.CharityResponse;
+import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
+import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 import com.example.giftlistb8.services.ComplaintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,12 @@ public class ComplaintAPI {
     }
 
     @GetMapping("/wish-profile")
-    public CharityResponse profile(@RequestParam Long id) {
-        return complaintService.findById(id);
+    public WishResponseProfile wishProfile(@RequestParam Long id) {
+        return complaintService.wishFindById(id);
+    }
+
+    @GetMapping("/charity-profile")
+    public CharityResponseProfile charityProfile(@RequestParam Long id) {
+        return complaintService.charityFindById(id);
     }
 }

@@ -1,8 +1,9 @@
 package com.example.giftlistb8.services;
 
 import com.example.giftlistb8.dto.SimpleResponse;
-import com.example.giftlistb8.dto.charity.response.CharityResponse;
+import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
+import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 
 public interface ComplaintService {
 
@@ -11,5 +12,7 @@ public interface ComplaintService {
 
     ComplaintResponse getAll();
 
-    CharityResponse findById(Long id);
+    WishResponseProfile wishFindById(Long id);
+
+    CharityResponseProfile charityFindById(Long id);
 }
