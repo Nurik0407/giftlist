@@ -31,8 +31,6 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
-                .requestMatchers("/api/user/forgot-password").permitAll()
-                .requestMatchers("/api/user/reset-password").permitAll()
                 .anyRequest()
                 .permitAll()
                 .and()

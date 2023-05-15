@@ -41,7 +41,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final UserInfoRepository userInfoRepository;
 
     @Override
-    public SimpleResponse updateResetPasswordToken(String email) {
+    public SimpleResponse updateResetPasswordToken(String email, String link) {
         log.info("Updating reset password token for email: {}", email);
         String token = UUID.randomUUID().toString();
         User user = userRepository.findByEmail(email)
@@ -56,7 +56,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setResetToken(token);
         userInfoRepository.save(userInfo);
         try {
-            String resetPasswordLink = "http://ec2-3-120-31-83.eu-central-1.compute.amazonaws.com/api/user/reset_password?token=" + token;
+            String resetPasswordLink = link + "?token=" + token;
             String subject = "Password Reset Request";
             Context context = new Context();
             context.setVariable("title", "Password Reset");
@@ -65,7 +65,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             context.setVariable("link", resetPasswordLink);
             context.setVariable("tokenTitle", "Reset Password");
 
-            String htmlContent = templateEngine.process("reset-password-template.html", context);
+            String htmlContent = templateEngine.process("reset-password-template.html",context);
 
             mailSenderService.sendEmail(email, subject, htmlContent);
             log.info("Password reset email sent to: {}", email);

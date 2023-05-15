@@ -17,5 +17,6 @@ public record CharityResponse(
         LocalDate dateAdded,
         String image,
         boolean isReserved,
-        boolean isAnonymous
+        boolean isAnonymous,
+        String bookAgentImage
 ) {}
