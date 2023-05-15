@@ -15,7 +15,7 @@ public interface FriendRepository extends JpaRepository<User, Long> {
             "f.userInfo.image, " +
             "CONCAT(f.firstName, ' ', f.lastName), " +
             "cast(size(f.holidays) as int) , " +
-            "cast(size(f.wishes) as int)) from User u join u.friends f WHERE u.email = ?1")
+            "cast(SUM(CASE WHEN w.isBlocked=false THEN 1 ELSE 0 END) as int))  from User u join u.friends f join u.wishes w WHERE u.email = ?1")
     List<FriendInfoResponse> getAllFriends(String email);
 
     @Query("select new com.example.giftlistb8.dto.friend.response.FriendInfoResponse( " +
@@ -23,7 +23,7 @@ public interface FriendRepository extends JpaRepository<User, Long> {
             "f.userInfo.image, " +
             "concat(f.firstName,' ',f.lastName), " +
             "cast(size(f.holidays) as int) , " +
-            "cast(size(f.wishes) as int)) from User u join u.requestsForFriends f where u.email =?1")
+            "cast(SUM(CASE WHEN w.isBlocked=false THEN 1 ELSE 0 END) as int)) from User u join u.requestsForFriends f join u.wishes w where u.email =?1")
     List<FriendInfoResponse> getAllRequests(String email);
 
 }

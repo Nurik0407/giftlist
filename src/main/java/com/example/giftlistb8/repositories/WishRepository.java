@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WishRepository extends JpaRepository<Wish,Long> {
-    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w where w.id=:id")
+    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w where w.id=:id and w.isBlocked=false ")
     Optional<WishResponse> findWishById(Long id);
 
-    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w")
+    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w where  w.isBlocked=false")
     List<WishResponse> findAllWishes();
 }

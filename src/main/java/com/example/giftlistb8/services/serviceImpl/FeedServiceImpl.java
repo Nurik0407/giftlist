@@ -38,6 +38,7 @@ public class FeedServiceImpl implements FeedService {
                          Join wishes w on u.id = w.user_id
                          Join user_infos ui on u.user_info_id = ui.id
                          JOIN holidays h ON u.id = h.user_id and w.holiday_id = h.id
+                         where w.is_blocked=false
                          ORDER BY u.id DESC 
                 """;
         String countSql = "SELECT COUNT(*) FROM (" + sql + ") as count_query";
@@ -72,7 +73,7 @@ public class FeedServiceImpl implements FeedService {
                 FROM users u
                          Join wishes w on u.id = w.user_id
                          Join user_infos ui on u.user_info_id = ui.id
-                         JOIN holidays h ON u.id = h.user_id and w.holiday_id = h.id where w.id=?;
+                         JOIN holidays h ON u.id = h.user_id and w.holiday_id = h.id where w.id=? and w.is_blocked=false;
                 """;
 
         Object[] args = {wishId};
