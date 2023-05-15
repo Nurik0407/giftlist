@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface CharityRepository extends JpaRepository<Charity, Long> {
-    @Query("SELECT NEW com.example.giftlistb8.dto.charity.response.CharityResponse(c.id,CONCAT(u.lastName, ',', u.firstName), ui.phoneNumber, c.name, c.description, c.category, c.subCategory, c.state, c.dateOfIssue, c.image, case when r.id = null then false else true end , COALESCE(r.isAnonymous, false),COALESCE(rui.image,null)) " +
+    @Query("SELECT NEW com.example.giftlistb8.dto.charity.response.CharityResponse(c.id,CONCAT(u.lastName, ',', u.firstName), ui.phoneNumber, c.name, c.description, c.category, c.subCategory, c.state, c.dateOfIssue, c.image, case when r.id is null then false else true end , COALESCE(r.isAnonymous, false),COALESCE(rui.image,null)) " +
            "FROM Charity c " +
            "LEFT JOIN c.reserve r " +
            "LEFT JOIN r.user ru " +
