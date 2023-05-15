@@ -29,6 +29,7 @@ public class Wish {
     private String description;
     private LocalDate dateOfHoliday;
     private Boolean status;
+    private boolean isBlocked;
 
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User user;

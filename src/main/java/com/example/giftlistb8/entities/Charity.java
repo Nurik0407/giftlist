@@ -31,6 +31,7 @@ public class Charity {
     private LocalDate dateOfIssue;
 
     private String image;
+    private boolean isBlocked;
 
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
     private User user;

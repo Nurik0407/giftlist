@@ -15,10 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Types;
+
 import java.util.List;
 
 @Repository
@@ -31,7 +30,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                 SELECT u.id as userId, 
                  ui.image as user_image,
                   concat(u.first_name, ' ', u.last_name) as full_name,
-                       (SELECT COUNT(*) FROM wishes w WHERE w.user_id = u.id) as total_wishes
+                       (SELECT COUNT(*) FROM wishes w WHERE w.user_id = u.id and w.is_blocked=false) as total_wishes
                 FROM users u
                          JOIN user_infos ui on u.user_info_id = ui.id
                 """;
@@ -102,7 +101,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                 h.date as date_of_holiday, 
                 w.status as wishStatus
                 from wishes w
-                         join holidays h on h.id = w.holiday_id
+                         join holidays h on h.id = w.holiday_id where w.is_blocked=false
                 """;
         List<WishResponseUser> wishResponses = jdbcTemplate.query(query, (resultSet, i) -> new WishResponseUser(
                 resultSet.getLong("wishId"),
@@ -144,7 +143,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                          JOIN reserves r ON ch.id = r.charity_id
                          JOIN users u on u.id = ch.user_id
                          JOIN user_infos ui on u.user_info_id = ui.id
-                         JOIN wishes w on u.id = w.user_id
+                         JOIN wishes w on u.id = w.user_id where ch.is_blocked=false
                 """;
         List<CharityResponseUser> charityResponseUsers = jdbcTemplate.query(query2, (resultSet, i) -> new CharityResponseUser(
                 resultSet.getLong("charityId"),
