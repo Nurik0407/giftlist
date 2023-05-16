@@ -3,6 +3,7 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
+import com.example.giftlistb8.dto.complaint.request.ComplaintRequest;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 import com.example.giftlistb8.entities.Charity;
@@ -35,15 +36,15 @@ public class ComplaintServiceImpl implements ComplaintService {
     private final ComplaintRepositoryCustom complaintRepositoryCustom;
 
     @Override
-    public SimpleResponse complaintToCharity(Long id) {
+    public SimpleResponse complaintToCharity(ComplaintRequest request) {
         Notification notification = new Notification();
         Complaint complaint = new Complaint();
 
 
-        Charity charity = charityRepository.findById(id).
+        Charity charity = charityRepository.findById(request.getId()).
                 orElseThrow(() -> new NotFoundException("Not found!"));
 
-        complaint.setComplaint("Here will be the reason for the complaint");
+        complaint.setComplaint(request.getComplaintDescription());
         charity.getComplaints().add(complaint);
         complaint.setUser(jwtService.getUserInToken());
 
@@ -66,13 +67,13 @@ public class ComplaintServiceImpl implements ComplaintService {
 
 
     @Override
-    public SimpleResponse complaintToWish(Long id) {
+    public SimpleResponse complaintToWish(ComplaintRequest request) {
         Notification notification = new Notification();
         Complaint complaint = new Complaint();
-        Wish wish = wishRepository.findById(id).
+        Wish wish = wishRepository.findById(request.getId()).
                 orElseThrow(() -> new NotFoundException("Not found!"));
 
-        complaint.setComplaint("Here will be the reason for the complaint");
+        complaint.setComplaint(request.getComplaintDescription());
         wish.getComplaints().add(complaint);
         complaint.setUser(jwtService.getUserInToken());
 
@@ -89,6 +90,30 @@ public class ComplaintServiceImpl implements ComplaintService {
 
         return SimpleResponse.builder()
                 .message("Complaint to Charity added to database!")
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @Override
+    public SimpleResponse blockCharity(Long id) {
+        Charity charity = charityRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Not found!"));
+        charity.setBlocked(true);
+        charityRepository.save(charity);
+        return SimpleResponse.builder()
+                .message("Charity blocked!")
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @Override
+    public SimpleResponse blockWish(Long id) {
+        Wish wish = wishRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Not found!"));
+        wish.setBlocked(true);
+        wishRepository.save(wish);
+        return SimpleResponse.builder()
+                .message("Charity blocked!")
                 .status(HttpStatus.OK)
                 .build();
     }
