@@ -40,7 +40,6 @@ public class UserAPI {
                                                          @RequestParam(defaultValue = "6") int size) {
         return service.getAllUsers(page, size);
     }
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Get user by id", description = "Returns a single user  and user's holiday,wishes,charities.")
     @GetMapping("/{userId}")
@@ -54,7 +53,6 @@ public class UserAPI {
     private SimpleResponse deleteById(@PathVariable Long userId) {
         return service.deleteById(userId);
     }
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Block user", description = "User block or un block method")
     @PutMapping("/{userId}/block")
