@@ -101,7 +101,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         charity.setBlocked(true);
         charityRepository.save(charity);
         return SimpleResponse.builder()
-                .message("Charity blocked!")
+                .message("Charity with id " + id + " is blocked!")
                 .status(HttpStatus.OK)
                 .build();
     }
@@ -113,7 +113,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         wish.setBlocked(true);
         wishRepository.save(wish);
         return SimpleResponse.builder()
-                .message("Charity blocked!")
+                .message("Wish with id " + id + "is blocked!")
                 .status(HttpStatus.OK)
                 .build();
     }
@@ -133,4 +133,33 @@ public class ComplaintServiceImpl implements ComplaintService {
         return complaintRepositoryCustom.getAllComplaints();
     }
 
+    @Override
+    public SimpleResponse deleteCharity(Long id) {
+        Charity charity = charityRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Charity with " + id + " is not found!"));
+        charity.setUser(null);
+        Notification notification = notificationRepository.findByCharityId(id);
+        notification.setCharity(null);
+        notificationRepository.save(notification);
+        charityRepository.deleteById(id);
+        return SimpleResponse.builder()
+                .message("Wish charity id " + id + "is deleted!")
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @Override
+    public SimpleResponse deleteWish(Long id) {
+        Wish wish = wishRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Wish with this id not found!"));
+        Notification notification = notificationRepository.findByWishId(id);
+        notification.setWish(null);
+        notificationRepository.save(notification);
+
+        wishRepository.deleteById(id);
+        return SimpleResponse.builder()
+                .message("Wish with id " + id + "is deleted!")
+                .status(HttpStatus.OK)
+                .build();
+    }
 }

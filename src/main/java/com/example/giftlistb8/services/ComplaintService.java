@@ -9,6 +9,7 @@ import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 public interface ComplaintService {
 
     SimpleResponse complaintToCharity(ComplaintRequest request);
+
     SimpleResponse complaintToWish(ComplaintRequest request);
 
     ComplaintResponse getAll();
@@ -19,5 +20,9 @@ public interface ComplaintService {
 
     SimpleResponse blockCharity(Long id);
 
+    SimpleResponse deleteCharity(Long id);
+
     SimpleResponse blockWish(Long id);
+
+    SimpleResponse deleteWish(Long id);
 }

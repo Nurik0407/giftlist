@@ -7,17 +7,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/complaints")
+@RequestMapping("/api/complaint")
 @RequiredArgsConstructor
 public class ComplaintAPI {
     private final ComplaintService complaintService;
 
-    @GetMapping("/charity")
+    @PostMapping("/charity")
     public SimpleResponse complaintToCharity(@RequestBody ComplaintRequest request) {
         return complaintService.complaintToCharity(request);
     }
 
-    @GetMapping("/wish")
+    @PostMapping("/wish")
     public SimpleResponse complaintToWish(@RequestBody ComplaintRequest request) {
         return complaintService.complaintToWish(request);
     }

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -165,8 +166,13 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     return response;
                 });
 
-        wishResponseProfile.getWhoComplaintResponses().addAll(complaints);
+        List<WhoComplaintResponse> existWhoComplaintResponse = wishResponseProfile.getWhoComplaintResponses();
+        if (existWhoComplaintResponse == null) {
+            existWhoComplaintResponse = new ArrayList<>();
+            wishResponseProfile.setWhoComplaintResponses(existWhoComplaintResponse);
+        }
 
+        wishResponseProfile.getWhoComplaintResponses().addAll(complaints);
         return wishResponseProfile;
     }
 
@@ -239,6 +245,11 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     return response;
                 });
 
+        List<WhoComplaintResponse> whoComplaintResponses = charityResponseProfile.getWhoComplaintResponses();
+        if (whoComplaintResponses == null) {
+            whoComplaintResponses = new ArrayList<>();
+            charityResponseProfile.setWhoComplaintResponses(whoComplaintResponses);
+        }
         charityResponseProfile.getWhoComplaintResponses().addAll(complaintResponses);
         return charityResponseProfile;
     }
