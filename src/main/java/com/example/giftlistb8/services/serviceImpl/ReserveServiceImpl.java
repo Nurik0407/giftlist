@@ -98,7 +98,8 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public ReserveGetAllResponse getAllReserves() {
         log.info("Getting all reserves.");
-        return new ReserveGetAllResponse(reserveRepository.getAllReversesWish(), reserveRepository.getAllReversesCharity());
+        User user = jwtService.getUserInToken();
+        return new ReserveGetAllResponse(reserveRepository.getAllReversesWish(user.getId()), reserveRepository.getAllReversesCharity(user.getId()));
     }
 
     @Transactional
