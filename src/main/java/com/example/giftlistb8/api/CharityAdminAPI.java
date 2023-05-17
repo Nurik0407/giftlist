@@ -42,4 +42,5 @@ public class CharityAdminAPI {
     public SimpleResponse delete(@RequestParam Long id) {
         return service.delete(id);
     }
+
 }
