@@ -48,9 +48,9 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .orElseThrow(() -> new NotFoundException("User not found!"));
         if (user.getUserInfo() == null) {
             UserInfo userInfo = new UserInfo();
-            user.setUserInfo(userInfo);
             userInfo.setResetToken(token);
-            userInfoRepository.save(userInfo);
+            user.setUserInfo(userInfo);
+            userRepository.save(user);
         }
         UserInfo userInfo = user.getUserInfo();
         userInfo.setResetToken(token);
