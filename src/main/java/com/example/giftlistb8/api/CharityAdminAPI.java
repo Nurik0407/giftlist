@@ -19,7 +19,7 @@ public class CharityAdminAPI {
     private final CharityAdminService service;
 
     @GetMapping
-    public List<CharitiesResponse> findALl(){
+    public List<CharitiesResponse> findAll() {
         return service.findAll();
     }
 
@@ -37,9 +37,9 @@ public class CharityAdminAPI {
     public CharityResponse profile(@RequestParam Long id) {
         return service.findById(id);
     }
+
     @DeleteMapping
-    public SimpleResponse delete(@RequestParam Long id){
+    public SimpleResponse delete(@RequestParam Long id) {
         return service.delete(id);
     }
-
 }
