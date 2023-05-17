@@ -56,7 +56,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setResetToken(token);
         userInfoRepository.save(userInfo);
         try {
-            String resetPasswordLink = link + "?token=" + token;
+            String resetPasswordLink = link + "/" + token;
             String subject = "Password Reset Request";
             Context context = new Context();
             context.setVariable("title", "Password Reset");
