@@ -21,13 +21,13 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     @Query("SELECT NEW com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
             "r.id,CONCAT(r.user.firstName, ' ', r.user.lastName)," +
             " r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
-            "FROM Reserve r where r.wish.isBlocked = false")
-    List<ReserveResponseWish> getAllReversesWish();
+            "FROM Reserve r JOIN r.user u where u.id = :id and r.wish.isBlocked = false")
+    List<ReserveResponseWish> getAllReversesWish(Long id);
 
     @Query("SELECT NEW  com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(" +
             " r.id,CONCAT(r.user.firstName,' ', r.user.lastName),r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue)" +
-            "FROM Reserve r where r.charity.isBlocked=false")
-    List<ReserveResponseCharity> getAllReversesCharity();
+            "FROM Reserve r JOIN r.user u where u.id = :id and r.charity.isBlocked = false")
+    List<ReserveResponseCharity> getAllReversesCharity(Long id);
 
 
     @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
