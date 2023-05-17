@@ -13,38 +13,38 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/wishes")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class WishAPI {
+
     private final WishService service;
 
     @PreAuthorize("hasAuthority('USER')")
-@GetMapping
-public List<WishResponse> findAllWishes(){
+    @GetMapping
+    public List<WishResponse> findAllWishes(){
     return service.findAll();
 }
 
-        @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{id}")
     public WishResponse getById(@PathVariable Long id){
         return service.getById(id);
     }
 
-        @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("/save")
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping
     public SimpleResponse save(@RequestBody WishRequest request){
         return service.save(request);
     }
 
-        @PreAuthorize("hasAuthority('USER')")
-    @DeleteMapping("/{id}/delete")
-    public SimpleResponse delete(@PathVariable Long id){
+    @PreAuthorize("hasAuthority('USER')")
+    @DeleteMapping
+    public SimpleResponse delete(@RequestParam Long id){
         return service.delete(id);
     }
 
-        @PreAuthorize("hasAuthority('USER')")
-    @PutMapping("/{id}/update")
-    public SimpleResponse update(@PathVariable Long id,@RequestBody WishRequest request){
+    @PreAuthorize("hasAuthority('USER')")
+    @PutMapping
+    public SimpleResponse update(@RequestParam Long id,@RequestBody WishRequest request){
         return service.update(id, request);
     }
-
 }
