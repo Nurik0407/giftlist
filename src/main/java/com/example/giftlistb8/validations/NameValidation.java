@@ -17,6 +17,12 @@ public class NameValidation implements ConstraintValidator<ValidName, String> {
         if (name.matches(".*[a-z].*")) {
             isValid = true;
         }
+        if (name.matches(".*[А-Я].*")) {
+            isValid = true;
+        }
+        if (name.matches(".*[а-я].*")) {
+            isValid = true;
+        }
         return isValid;
     }
 }
