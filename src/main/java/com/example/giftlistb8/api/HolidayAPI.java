@@ -4,6 +4,7 @@ import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.holiday.request.HolidayRequest;
 import com.example.giftlistb8.dto.holiday.response.HolidayResponse;
 import com.example.giftlistb8.services.HolidayService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +26,13 @@ public class HolidayAPI {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping
-    public SimpleResponse saveHoliday(@RequestBody HolidayRequest request) {
+    public SimpleResponse saveHoliday(@RequestBody @Valid HolidayRequest request) {
         return service.save(request);
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping
-    public SimpleResponse updateHoliday(@RequestParam Long holidayId, @RequestBody HolidayRequest request) {
+    public SimpleResponse updateHoliday(@RequestParam Long holidayId, @RequestBody @Valid HolidayRequest request) {
         return service.update(holidayId, request);
     }
 
