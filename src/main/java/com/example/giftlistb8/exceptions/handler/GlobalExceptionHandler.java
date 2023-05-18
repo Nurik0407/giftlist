@@ -2,12 +2,15 @@ package com.example.giftlistb8.exceptions.handler;
 
 import com.example.giftlistb8.exceptions.*;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -47,10 +50,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handlerNotFoundException(MethodArgumentNotValidException e) {
+        List<String> errorMessages = e.getBindingResult().getFieldErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
+
         return new ExceptionResponse(
                 HttpStatus.BAD_REQUEST,
                 e.getClass().getSimpleName(),
-                e.getMessage()
+                errorMessages.toString()
         );
     }
 
