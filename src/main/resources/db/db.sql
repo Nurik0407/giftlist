@@ -145,10 +145,7 @@ VALUES (1, current_date, 'I wish for a new laptop',
         'https://example.com/spa', 'Alex Turner', false,false, 2, 7),
        (9, current_date, 'I wish for a new camera',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'https://example.com/camera', 'Olivia Thompson', false,false, 3, 8),
-       (10, current_date, 'I wish for a gourmet cooking set',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'https://example.com/cooking', 'Daniel Anderson', false, true,1, 10);
+        'https://example.com/camera', 'Olivia Thompson', false,false, 3, 8);
 
 
 INSERT INTO mailings (id, created_at, description, image, title)
