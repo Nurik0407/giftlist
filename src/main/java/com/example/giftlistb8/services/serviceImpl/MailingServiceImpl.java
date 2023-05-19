@@ -12,18 +12,14 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Transactional
@@ -40,18 +36,15 @@ public class MailingServiceImpl implements MailingServices {
         String sql = """
                  select u.email from users u where u.subscribe_mailing is true;
                 """;
-        List<String> usersemail = jdbcTemplate.queryForList(sql, String.class);
+        List<String> usersEmail = jdbcTemplate.queryForList(sql, String.class);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        for (String email : usersemail) {
+        for (String email : usersEmail) {
             mimeMessageHelper.setFrom("amanbekovnurbek04@gmail.com");
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setSubject(request.getTitle());
-            mimeMessageHelper.setText(request.getDescription());
-            FileSystemResource fileSystemResource =
-                    new FileSystemResource(new File(request.getImage()));
-            mimeMessageHelper.addAttachment(Objects.requireNonNull(fileSystemResource.getFilename()),
-                    fileSystemResource);
+            String htmlMessage = "<html><body>"+request.getDescription()+"<br><br><img src=" + request.getImage() + "></body></html>";
+            mimeMessageHelper.setText(htmlMessage, true);
             javaMailSender.send(mimeMessage);
         }
         Mailing mailing = new Mailing();
@@ -76,7 +69,7 @@ public class MailingServiceImpl implements MailingServices {
                         rs.getString("image"),
                         rs.getString("title"),
                         rs.getString("description"),
-                        rs.getTimestamp("created_at").toLocalDateTime()
+                        rs.getDate("created_at").toLocalDate()
                 ));
         return Optional.ofNullable(mailingResponse);
     }
@@ -89,7 +82,7 @@ public class MailingServiceImpl implements MailingServices {
                 rs.getLong("id"),
                 rs.getString("image"),
                 rs.getString("title"),
-                rs.getTimestamp("created_at").toLocalDateTime()
+                rs.getDate("created_at").toLocalDate()
         ));
     }
 

@@ -125,6 +125,7 @@ public class AuthServiceImpl implements AuthService {
             newUser.setEmail(firebaseToken.getEmail());
             newUser.setPassword(firebaseToken.getEmail());
             newUser.setRole(Role.USER);
+            newUser.setSubscribeMailing(true);
             userRepository.save(newUser);
         }
 
