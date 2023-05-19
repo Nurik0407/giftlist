@@ -8,6 +8,10 @@ import lombok.Builder;
 
 @Builder
 public record CharityUpdateRequest(
+<<<<<<< HEAD
+=======
+        @NotBlank(message = "The id must not be empty.")
+>>>>>>> c0b37da (first commit from rebase)
         @NotNull(message = "The id must not be empty.")
         Long id,
         @ValidName(message = "Name must contain at least 2 characters and have both upper and lower case letters")
