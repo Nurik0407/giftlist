@@ -31,7 +31,8 @@ public class WishServiceImpl implements WishService {
     @Override
     public List<WishResponse> findAll() {
         log.info("Finding all wishes");
-        return wishRepository.findAllWishes();
+        User user = jwtService.getUserInToken();
+        return wishRepository.findAllWishes(user.getId());
     }
 
     @Override
