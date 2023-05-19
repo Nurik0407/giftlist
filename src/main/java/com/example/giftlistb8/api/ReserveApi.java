@@ -65,14 +65,14 @@ public class ReserveApi {
 
 
     @Operation(summary = "Delete wish method", description = "Cancel wish from reserve")
-    @DeleteMapping("/{wishId}")
-    public SimpleResponse deleteWish(@PathVariable Long wishId) {
+    @DeleteMapping("/wish")
+    public SimpleResponse deleteWish(@RequestParam Long wishId) {
         return reserveService.deleteWish(wishId);
     }
 
     @Operation(summary = "Delete the gift", description = "Cancel gift from reserve")
-    @DeleteMapping("/{charityId}")
-    public SimpleResponse deleteCharity(@PathVariable Long charityId) {
+    @DeleteMapping("/charity")
+    public SimpleResponse deleteCharity(@RequestParam Long charityId) {
         return reserveService.deleteCharity(charityId);
     }
 }
