@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,7 +35,8 @@ public class Charity {
     private String image;
     private boolean isBlocked;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
