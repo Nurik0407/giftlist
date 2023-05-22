@@ -40,12 +40,8 @@ public class ComplaintServiceImpl implements ComplaintService {
         Notification notification = new Notification();
         Complaint complaint = new Complaint();
 
-<<<<<<< HEAD
 
         Charity charity = charityRepository.findById(request.getId()).
-=======
-        Charity charity = charityRepository.findById(id).
->>>>>>> d8ea085 (5-commit with Git rebase)
                 orElseThrow(() -> new NotFoundException("Not found!"));
 
         complaint.setComplaint(request.getComplaintDescription());
