@@ -1,5 +1,6 @@
 package com.example.giftlistb8.repositories.custom.impl;
 
+<<<<<<< HEAD
 import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
 import com.example.giftlistb8.dto.charity.response.CharityResponseWIthComplaint;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
@@ -7,12 +8,20 @@ import com.example.giftlistb8.dto.user.response.WhoComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 import com.example.giftlistb8.dto.wish.response.WishResponseWithComplaint;
 import com.example.giftlistb8.exceptions.NotFoundException;
+=======
+import com.example.giftlistb8.dto.charity.response.CharityResponseWIthComplaint;
+import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
+import com.example.giftlistb8.dto.wish.response.WishResponseWithComplaint;
+>>>>>>> c920e91 (last commit added complaint to charities and wishes create notification for every wish and charity)
 import com.example.giftlistb8.repositories.custom.ComplaintRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+>>>>>>> c920e91 (last commit added complaint to charities and wishes create notification for every wish and charity)
 import java.util.List;
 
 @Repository
@@ -41,6 +50,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                        JOIN charities_complaints cc on ch.id = cc.charity_id
                        JOIN complaints c on cc.complaints_id = c.id;
                  """;
+<<<<<<< HEAD
 
         String sql2 = """
                 SELECT CONCAT(u.first_name, ' ', u.last_name) AS full_name,
@@ -62,6 +72,26 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                  """;
 
 
+=======
+        String sql2 = """
+               SELECT CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+                      ui.image AS user_image,
+                      wh.name AS wish_name,
+                      wh.date_of_holiday AS wish_holiday_date,
+                      wh.image AS wish_image,
+                      c.complaint AS complaint_text,
+                      (SELECT ui2.image
+                       FROM user_infos ui2
+                                JOIN users u2 on ui2.id = u2.user_info_id
+                       WHERE u2.id = c.user_id
+                      ) AS complaint_user_image
+               FROM wishes wh
+                        JOIN users u ON wh.user_id = u.id
+                        JOIN user_infos ui ON u.user_info_id = ui.id
+                        JOIN wishes_complaints cc on wh.id = cc.wish_id
+                        JOIN complaints c on cc.complaints_id = c.id;
+                """;
+>>>>>>> c920e91 (last commit added complaint to charities and wishes create notification for every wish and charity)
         ComplaintResponse complaintResponse = new ComplaintResponse();
 
         List<CharityResponseWIthComplaint> charityResponses = jdbcTemplate.query(sql, (resultSet, i) ->
@@ -90,6 +120,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
 
         return complaintResponse;
     }
+<<<<<<< HEAD
 
     @Override
     public WishResponseProfile wishGetById(Long id) {
@@ -254,3 +285,6 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
         return charityResponseProfile;
     }
 }
+=======
+}
+>>>>>>> c920e91 (last commit added complaint to charities and wishes create notification for every wish and charity)
