@@ -10,6 +10,7 @@ import com.example.giftlistb8.entities.*;
 import com.example.giftlistb8.exceptions.ForbiddenException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
+import com.example.giftlistb8.repositories.HolidayRepository;
 import com.example.giftlistb8.repositories.ReserveRepository;
 import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.services.ReserveService;
@@ -34,6 +35,7 @@ public class ReserveServiceImpl implements ReserveService {
     private final WishRepository wishRepository;
     private final JwtService jwtService;
     private final CharityRepository charityRepository;
+    private final HolidayRepository holidayRepository;
 
     @Override
     public ReserveSimpleResponse wishReserve(ReserveRequestWish reserveRequest) {
@@ -104,11 +106,19 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Transactional
     @Override
-    public SimpleResponse addGiftToWish(Long wishId) {
+    public SimpleResponse addGiftToWish(Long wishId, Long holidayId) {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with id %s not found", wishId)));
 
+        Holiday holiday = holidayRepository.findById(holidayId)
+                .orElseThrow(() -> new NotFoundException("Holiday with id [%s] not found".formatted(holidayId)));
+        if (!userInToken.getHolidays().contains(holiday)) {
+            return SimpleResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message("Holiday [%s] does not exist in your holidays".formatted(holidayId))
+                    .build();
+        }
         Wish newWish = new Wish();
         newWish.setName(wish.getName());
         newWish.setImage(wish.getImage());
@@ -116,6 +126,7 @@ public class ReserveServiceImpl implements ReserveService {
         newWish.setLinkGift(wish.getLinkGift());
         newWish.setStatus(false);
         newWish.setUser(userInToken);
+        newWish.setHoliday(holiday);
         wishRepository.save(newWish);
         log.info("Adding gift to wish with id {} ", wishId);
         return SimpleResponse
