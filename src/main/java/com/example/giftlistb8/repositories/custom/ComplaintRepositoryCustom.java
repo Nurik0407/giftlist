@@ -6,6 +6,7 @@ import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 
 public interface ComplaintRepositoryCustom {
     ComplaintResponse getAllComplaints();
+
     WishResponseProfile wishGetById(Long id);
 
     CharityResponseProfile charityGetById(Long id);
