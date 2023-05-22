@@ -73,14 +73,14 @@ public class UserAPI {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Read more wish", description = "See more details wish")
-    @GetMapping("/read-more")
+    @GetMapping("/read-more-wish")
     public WishResponseProfile wishProfile(@RequestParam Long id) {
         return complaintService.wishFindById(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Read more charity", description = "See more details charity")
-    @GetMapping("/read-more")
+    @GetMapping("/read-more-charity")
     public CharityResponseProfile charityProfile(@RequestParam Long id) {
         return complaintService.charityFindById(id);
     }
@@ -89,7 +89,7 @@ public class UserAPI {
     @Operation(summary = "Delete charity", description = "Delete method charity")
     @DeleteMapping("/delete-charity")
     public SimpleResponse deleteCharity(@RequestParam Long id) {
-        return charityService.delete(id);
+        return complaintService.deleteCharity(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -103,7 +103,7 @@ public class UserAPI {
     @Operation(summary = "Delete wish", description = "Delete method wish")
     @DeleteMapping("/delete-wish")
     public SimpleResponse deleteWish(@RequestParam Long id) {
-        return wishService.delete(id);
+        return complaintService.deleteWish(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

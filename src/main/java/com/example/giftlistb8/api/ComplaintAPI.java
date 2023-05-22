@@ -28,6 +28,7 @@ public class ComplaintAPI {
     public SimpleResponse complaintToWish(@RequestBody ComplaintRequest request) {
         return complaintService.complaintToWish(request);
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "All complaints", description = "Get all complaint method")
     @GetMapping("/complaints")
@@ -59,7 +60,7 @@ public class ComplaintAPI {
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Block charity", description = "Block method charity")
     @GetMapping("block-charity")
-    public SimpleResponse blockCharity(@RequestParam Long id){
+    public SimpleResponse blockCharity(@RequestParam Long id) {
         return complaintService.blockCharity(id);
     }
 
@@ -73,7 +74,7 @@ public class ComplaintAPI {
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Block wish", description = "Block method wish")
     @GetMapping("block-wish")
-    public SimpleResponse blockWish(@RequestParam Long id){
+    public SimpleResponse blockWish(@RequestParam Long id) {
         return complaintService.blockWish(id);
     }
 }
