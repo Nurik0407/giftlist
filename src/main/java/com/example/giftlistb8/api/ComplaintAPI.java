@@ -76,5 +76,4 @@ public class ComplaintAPI {
     public SimpleResponse blockWish(@RequestParam Long id){
         return complaintService.blockWish(id);
     }
-
 }
