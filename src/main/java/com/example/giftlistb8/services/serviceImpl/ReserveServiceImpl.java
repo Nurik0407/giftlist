@@ -108,12 +108,7 @@ public class ReserveServiceImpl implements ReserveService {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(wishId).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with id %s not found", wishId)));
-        if (reserveRepository.wishExistInReserve(userInToken.getId(),wishId)) {
-            return SimpleResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .message("Wish with id %s is not reserved by you".formatted(wish))
-                    .build();
-        }
+
         Wish newWish = new Wish();
         newWish.setName(wish.getName());
         newWish.setImage(wish.getImage());
@@ -168,7 +163,7 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
         reserveRepository.delete(reserve);
-        log.info("Deleting wish reserve for user {}",user.getId());
+        log.info("Deleting wish reserve for user {}", user.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), wishId))
@@ -187,7 +182,7 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
         reserveRepository.delete(reserve);
-        log.info("Deleting charity reserve for user {}",user.getId());
+        log.info("Deleting charity reserve for user {}", user.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Reserve for user %s and wish %s has been deleted", user.getUsername(), charityId))
