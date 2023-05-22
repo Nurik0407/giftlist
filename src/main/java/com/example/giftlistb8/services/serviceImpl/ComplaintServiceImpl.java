@@ -2,10 +2,14 @@ package com.example.giftlistb8.services.serviceImpl;
 
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
+<<<<<<< HEAD
 import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
 import com.example.giftlistb8.dto.complaint.request.ComplaintRequest;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
+=======
+import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
+>>>>>>> f60edac (last commit added complaint to charities and wishes create notification for every wish and charity)
 import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.Complaint;
 import com.example.giftlistb8.entities.Notification;
@@ -36,6 +40,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     private final ComplaintRepositoryCustom complaintRepositoryCustom;
 
     @Override
+<<<<<<< HEAD
     public SimpleResponse complaintToCharity(ComplaintRequest request) {
         Notification notification = new Notification();
         Complaint complaint = new Complaint();
@@ -45,6 +50,15 @@ public class ComplaintServiceImpl implements ComplaintService {
                 orElseThrow(() -> new NotFoundException("Not found!"));
 
         complaint.setComplaint(request.getComplaintDescription());
+=======
+    public SimpleResponse complaintToCharity(Long id) {
+        Notification notification = new Notification();
+        Complaint complaint = new Complaint();
+        Charity charity = charityRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Not found!"));
+
+        complaint.setComplaint("Here will be the reason for the complaint");
+>>>>>>> f60edac (last commit added complaint to charities and wishes create notification for every wish and charity)
         charity.getComplaints().add(complaint);
         complaint.setUser(jwtService.getUserInToken());
 
@@ -65,6 +79,7 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .build();
     }
 
+<<<<<<< HEAD
 
     @Override
     public SimpleResponse complaintToWish(ComplaintRequest request) {
@@ -74,6 +89,16 @@ public class ComplaintServiceImpl implements ComplaintService {
                 orElseThrow(() -> new NotFoundException("Not found!"));
 
         complaint.setComplaint(request.getComplaintDescription());
+=======
+    @Override
+    public SimpleResponse complaintToWish(Long id) {
+        Notification notification = new Notification();
+        Complaint complaint = new Complaint();
+        Wish wish = wishRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Not found!"));
+
+        complaint.setComplaint("Here will be the reason for the complaint");
+>>>>>>> f60edac (last commit added complaint to charities and wishes create notification for every wish and charity)
         wish.getComplaints().add(complaint);
         complaint.setUser(jwtService.getUserInToken());
 
@@ -95,6 +120,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
+<<<<<<< HEAD
     public SimpleResponse blockCharity(Long id) {
         Charity charity = charityRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Not found!"));
@@ -129,10 +155,13 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
+=======
+>>>>>>> f60edac (last commit added complaint to charities and wishes create notification for every wish and charity)
     public ComplaintResponse getAll() {
         return complaintRepositoryCustom.getAllComplaints();
     }
 
+<<<<<<< HEAD
     @Override
     public SimpleResponse deleteCharity(Long id) {
         Charity charity = charityRepository.findById(id).
@@ -163,3 +192,6 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .build();
     }
 }
+=======
+}
+>>>>>>> f60edac (last commit added complaint to charities and wishes create notification for every wish and charity)
