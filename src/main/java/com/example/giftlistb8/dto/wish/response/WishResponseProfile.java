@@ -2,19 +2,28 @@ package com.example.giftlistb8.dto.wish.response;
 
 import com.example.giftlistb8.dto.user.response.WhoComplaintResponse;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 390fdea (add some methods to complaint)
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+<<<<<<< HEAD
 =======
 import lombok.Builder;
 >>>>>>> 8e60948 (added CharityResponseProfile)
+=======
+>>>>>>> 390fdea (add some methods to complaint)
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Builder
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 390fdea (add some methods to complaint)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +42,7 @@ public class WishResponseProfile{
         private boolean isAnonymous;
         private String reserveUserImage;
         private List<WhoComplaintResponse> whoComplaintResponses;
+<<<<<<< HEAD
 =======
 public record WishResponseProfile(
         Long id,
@@ -50,4 +60,6 @@ public record WishResponseProfile(
         List<WhoComplaintResponse> whoComplaintResponses
 ) {
 >>>>>>> 8e60948 (added CharityResponseProfile)
+=======
+>>>>>>> 390fdea (add some methods to complaint)
 }

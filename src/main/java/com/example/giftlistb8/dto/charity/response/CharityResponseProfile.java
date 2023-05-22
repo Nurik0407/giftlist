@@ -1,6 +1,7 @@
 package com.example.giftlistb8.dto.charity.response;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.example.giftlistb8.dto.user.response.WhoComplaintResponse;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,11 +10,19 @@ import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.dto.user.response.WhoComplaintResponse;
 import lombok.Builder;
 >>>>>>> 8e60948 (added CharityResponseProfile)
+=======
+import com.example.giftlistb8.dto.user.response.WhoComplaintResponse;
+import lombok.Getter;
+import lombok.Setter;
+>>>>>>> 390fdea (add some methods to complaint)
 
 import java.time.LocalDate;
 import java.util.List;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 390fdea (add some methods to complaint)
 @Getter
 @Setter
 public class CharityResponseProfile {
@@ -31,6 +40,7 @@ public class CharityResponseProfile {
     private boolean isReserved;
     private boolean isAnonymous;
     private List<WhoComplaintResponse> whoComplaintResponses;
+<<<<<<< HEAD
 =======
 @Builder
 public record CharityResponseProfile(
@@ -50,4 +60,6 @@ public record CharityResponseProfile(
         List<WhoComplaintResponse> whoComplaintResponses
 ) {
 >>>>>>> 8e60948 (added CharityResponseProfile)
+=======
+>>>>>>> 390fdea (add some methods to complaint)
 }
