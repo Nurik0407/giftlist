@@ -1,5 +1,6 @@
 package com.example.giftlistb8.dto.user.response;
 
+<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +15,15 @@ public class WhoComplaintResponse{
         private String fullName;
         private String userImage;
         private String causesOfComplaint;
+=======
+import lombok.Builder;
+
+@Builder
+public record WhoComplaintResponse(
+        Long userId,
+        String fullName,
+        String userImage,
+        String causesOfComplaint
+) {
+>>>>>>> 8e60948 (added CharityResponseProfile)
 }
