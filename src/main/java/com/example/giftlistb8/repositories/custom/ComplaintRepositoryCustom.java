@@ -10,4 +10,3 @@ public interface ComplaintRepositoryCustom {
 
     CharityResponseProfile charityGetById(Long id);
 }
-
