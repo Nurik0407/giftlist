@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private Role role;
     private Boolean isBlocked;
     private boolean subscribeMailing;
+
     @OneToOne(cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
@@ -56,7 +57,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Holiday> holidays;
 
-    @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    @OneToMany(cascade = ALL)
     private List<User> requestsForFriends;
 
     @ManyToMany(cascade = CascadeType.ALL)

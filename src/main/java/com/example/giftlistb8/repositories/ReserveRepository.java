@@ -60,4 +60,6 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
             "JOIN r.wish w WHERE u.id = ?1 and w.id = ?2) " +
             "THEN FALSE ELSE TRUE END FROM User u WHERE u.id = ?1")
     boolean wishExistInReserve(Long userId, Long wishId);
+
+
 }

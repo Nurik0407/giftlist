@@ -3,11 +3,13 @@ package com.example.giftlistb8.api;
 import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.notification.response.NotificationResponse;
+import com.example.giftlistb8.dto.user.requests.UpdateBlockStatus;
 import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
 import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.services.NotificationService;
 import com.example.giftlistb8.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +59,8 @@ public class UserAPI {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Block user", description = "User block or un block method")
-    @PutMapping("/{userId}/block")
-    public SimpleResponse blockUser(@PathVariable Long userId, @RequestBody boolean blocked) {
-        return service.updateBlockedStatus(userId, blocked);
+    @PutMapping
+    public SimpleResponse blockUser(@RequestBody @Valid UpdateBlockStatus updateBlockStatus) {
+        return service.updateBlockedStatus(updateBlockStatus);
     }
 }

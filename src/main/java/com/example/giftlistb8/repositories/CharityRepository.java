@@ -5,6 +5,7 @@ import com.example.giftlistb8.entities.Charity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+
 import java.util.Optional;
 
 public interface CharityRepository extends JpaRepository<Charity, Long> {
@@ -17,4 +18,5 @@ public interface CharityRepository extends JpaRepository<Charity, Long> {
            "LEFT JOIN u.userInfo ui " +
            "WHERE c.id= ?1")
     Optional<CharityResponse> findCharityById(Long id);
+
 }
