@@ -6,7 +6,6 @@ import com.example.giftlistb8.dto.complaint.request.ComplaintRequest;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 
-
 public interface ComplaintService {
 
     SimpleResponse complaintToCharity(ComplaintRequest request);

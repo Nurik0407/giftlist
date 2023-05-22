@@ -62,6 +62,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                  """;
 
 
+
         ComplaintResponse complaintResponse = new ComplaintResponse();
 
         List<CharityResponseWIthComplaint> charityResponses = jdbcTemplate.query(sql, (resultSet, i) ->
