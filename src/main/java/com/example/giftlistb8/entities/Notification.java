@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -21,7 +23,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_id_gen")
     @SequenceGenerator(name = "notification_id_gen",
-            sequenceName = "notification_id_seq", allocationSize = 1, initialValue = 6)
+            sequenceName = "notification_id_seq", allocationSize = 1, initialValue = 10)
     private Long id;
     @Enumerated(EnumType.STRING)
     private Type type;
@@ -29,18 +31,20 @@ public class Notification {
     private Boolean seen;
     private LocalDate createdAt;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User fromWhomUser;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User toWhomUser;
 
-    @OneToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private Wish wish;
 
-    @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH})
     private Charity charity;
 
-    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private Reserve reserve;
 }
