@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
+    Notification findByWishId(Long id);
+
+    Notification findByCharityId(Long id);
 }

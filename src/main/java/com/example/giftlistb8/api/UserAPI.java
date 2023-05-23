@@ -16,14 +16,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@RequiredArgsConstructor
 public class UserAPI {
     private final UserService service;
     private final NotificationService notificationService;
-
 
     @GetMapping("/notifications")
     public List<NotificationResponse> getAllNotifications() {
