@@ -1,6 +1,7 @@
 package com.example.giftlistb8.services.serviceImpl;
 
 
+import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.user.requests.UpdateBlockStatus;
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final CustomUserRepository customUserRepository;
     private final UserRepository userRepository;
     private final UserInfoRepository userInfoRepository;
+    private final JwtService jwtService;
 
 
     @Override
@@ -39,8 +41,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseGetById getById(Long userId) {
+        Long currentUserId = jwtService.getUserInToken().getId();
+        UserResponseGetById userResponseGetById = customUserRepository.getById(userId);
+        userResponseGetById.setInFriends(userRepository.inMyFriends(currentUserId,userId));
+        userResponseGetById.setInRequests(userRepository.inMyRequests(currentUserId,userId));
         log.info("Getting user by id: {}", userId);
-        return customUserRepository.getById(userId);
+        return userResponseGetById;
     }
 
 
