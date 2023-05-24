@@ -33,10 +33,9 @@ public class UserResponseGetById {
     private String facebook;
     private String whatsApp;
     private String email;
+    boolean inFriends;
+    boolean inRequests;
     List<WishResponseUser> wishResponseUserList;
     List<HolidayResponse>holidayResponses;
     List<CharityResponseUser>charityResponseUsers;
-    boolean inFriends;
-    boolean inRequests;
-
 }

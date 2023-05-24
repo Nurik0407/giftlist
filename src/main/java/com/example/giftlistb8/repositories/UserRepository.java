@@ -28,7 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> getUserById(Long userId);
 
     @Query("SELECT COUNT(u.id) > 0 FROM User u " +
-           "JOIN u.friends f where u.id = ?2 and f.id = ?1")
+           "JOIN u.friends f where u.id = ?1 and f.id = ?2")
     boolean inMyFriends(Long currentUserId,Long userId);
     @Query("SELECT count (u.id) > 0 FROM User u " +
            "JOIN u.requestsForFriends r where u.id = ?1 and r.id = ?2")
