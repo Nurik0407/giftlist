@@ -7,9 +7,12 @@ import com.example.giftlistb8.dto.charity.request.CharityUpdateRequest;
 import com.example.giftlistb8.dto.charity.response.CharitiesResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
 import com.example.giftlistb8.entities.Charity;
+import com.example.giftlistb8.entities.Notification;
 import com.example.giftlistb8.entities.User;
+import com.example.giftlistb8.enums.Type;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
+import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.services.CharityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ public class CharityServiceImpl implements CharityService {
     private final CharityRepository repository;
     private final JdbcTemplate jdbcTemplate;
     private final JwtService jwtService;
+    private final NotificationRepository notificationRepository;
 
 
     @Override
@@ -43,6 +47,20 @@ public class CharityServiceImpl implements CharityService {
                 .user(userInToken)
                 .build();
         repository.save(charity);
+
+        List<User> friends = userInToken.getFriends();
+        List<Notification> notifications = friends.stream()
+                .map(friend -> Notification.builder()
+                        .charity(charity)
+                        .type(Type.ADD_GIFT_TO_WISH_LIST)
+                        .message(String.format("%s %s добавил новый благотворительность", userInToken.getLastName(),userInToken.getFirstName()))
+                        .seen(false)
+                        .fromWhomUser(userInToken)
+                        .toWhomUser(friend)
+                        .createdAt(LocalDate.now())
+                        .build()).toList();
+        notificationRepository.saveAll(notifications);
+
         log.info("Charity with name {} successfully saved by user {}", charity.getName(), userInToken.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)

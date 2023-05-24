@@ -30,13 +30,12 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public SimpleResponse seenOrNot() {
+    public SimpleResponse markAllAsRead() {
         List<Notification> notifications = jwtService.getUserInToken().getMyNotifications();
         log.info("Changing seen status of {} notifications.", notifications.size());
-        for (int i = 0; i < notifications.size(); i++) {
-            notifications.get(i).setSeen(true);
-            notificationRepository.save(notifications.get(i));
-        }
+        notifications.forEach(s ->
+                {s.setSeen(true);
+                notificationRepository.save(s);});
         log.info("All notifications seen status changed to true.");
         return SimpleResponse.builder().
                 status(HttpStatus.OK).

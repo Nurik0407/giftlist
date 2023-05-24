@@ -8,5 +8,5 @@ import java.util.List;
 public interface NotificationService {
     List<NotificationResponse> getAllMyNotifications();
 
-    SimpleResponse seenOrNot();
+    SimpleResponse markAllAsRead();
 }

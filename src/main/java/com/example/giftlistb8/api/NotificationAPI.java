@@ -17,14 +17,13 @@ import java.util.List;
 public class NotificationAPI {
     private final NotificationService notificationService;
 
-
     @GetMapping
     public List<NotificationResponse> getAllNotifications() {
         return notificationService.getAllMyNotifications();
     }
 
     @PostMapping
-    public SimpleResponse seenOrNot() {
-        return notificationService.seenOrNot();
+    public SimpleResponse markAllAsRead() {
+        return notificationService.markAllAsRead();
     }
 }

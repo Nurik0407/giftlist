@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -71,11 +72,13 @@ public class WishServiceImpl implements WishService {
         List<User> friends = user.getFriends();
         List<Notification> notifications = friends.stream()
                 .map(friend -> Notification.builder()
+                        .wish(wish)
                         .type(Type.ADD_GIFT_TO_WISH_LIST)
                         .message(String.format("%s %s добавил новый желаемый подарок", user.getLastName(),user.getFirstName()))
                         .seen(false)
                         .fromWhomUser(user)
                         .toWhomUser(friend)
+                        .createdAt(LocalDate.now())
                         .build()).toList();
         notificationRepository.saveAll(notifications);
 

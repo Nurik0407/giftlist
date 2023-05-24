@@ -81,15 +81,29 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public SimpleResponse acceptRequest(Long senderUserId) {
         User user = jwtService.getUserInToken();
-        User request = userRepository.findById(senderUserId).orElseThrow(() -> new NotFoundException(String.format("User with id: %s not found!", senderUserId)));
+        User request = userRepository.findById(senderUserId).orElseThrow(
+                () -> new NotFoundException(
+                        String.format("User with id: %s not found!", senderUserId)));
+
         if (user.getRequestsForFriends().contains(request)) {
             user.getFriends().add(request);
             user.getRequestsForFriends().remove(request);
+
+            Notification notification = Notification.builder()
+                    .type(Type.ACCEPTED_THE_REQUEST)
+                    .message("%s %s принял ваш запрос в друзья".formatted(user.getLastName(), user.getFirstName()))
+                    .seen(false)
+                    .toWhomUser(request)
+                    .fromWhomUser(user)
+                    .createdAt(LocalDate.now())
+                    .build();
+            notificationRepository.save(notification);
+
             log.info("acceptRequest executed. Current user ID: {}, Sender user ID: {}, Result: FRIEND", user.getId(), senderUserId);
-            return new SimpleResponse(HttpStatus.OK, "FRIEND");
+            return new SimpleResponse(HttpStatus.OK, "User with id %s is accepted as a friend".formatted(senderUserId));
         } else
             log.info("acceptRequest executed. Current user ID: {}, Sender user ID: {}, Result: not found request", user.getId(), senderUserId);
-        return new SimpleResponse(HttpStatus.NOT_FOUND, "not found request");
+        throw new NotFoundException("User with id [%s] not found in your friend requests".formatted(senderUserId));
     }
 
     @Override
@@ -99,11 +113,14 @@ public class FriendServiceImpl implements FriendService {
         if (user.getRequestsForFriends().contains(sender)) {
             user.getRequestsForFriends().remove(sender);
             log.info("User {} rejected friend request from user {}", user.getEmail(), sender.getEmail());
+            return SimpleResponse.builder()
+                    .status(HttpStatus.OK)
+                    .message("User with id [%s] is not accepted as a friend".formatted(senderUserId))
+                    .build();
         } else {
             log.warn("User {} tried to reject friend request from user {} but no such request found", user.getEmail(), sender.getEmail());
-            return new SimpleResponse(HttpStatus.NOT_FOUND, " not found request");
+            throw new NotFoundException("User with id [%s] not found in your friend requests".formatted(senderUserId));
         }
-        return new SimpleResponse(HttpStatus.OK, "not friend");
     }
 }
 
