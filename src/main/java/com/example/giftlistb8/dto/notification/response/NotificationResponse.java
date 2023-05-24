@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public record NotificationResponse(
         Long userId,
         String fullName,
+        String image,
         String type,
         String message,
         LocalDate createdAt

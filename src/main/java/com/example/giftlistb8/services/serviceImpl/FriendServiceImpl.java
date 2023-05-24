@@ -3,10 +3,13 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.friend.response.FriendInfoResponse;
+import com.example.giftlistb8.entities.Notification;
 import com.example.giftlistb8.entities.User;
+import com.example.giftlistb8.enums.Type;
 import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.FriendRepository;
+import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.FriendService;
 import jakarta.transaction.Transactional;
@@ -15,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,6 +30,7 @@ public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
     private final JwtService jwtService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public List<FriendInfoResponse> getAllFriendsAndAllRequests(String type) {
@@ -59,6 +64,15 @@ public class FriendServiceImpl implements FriendService {
             return new SimpleResponse(HttpStatus.OK, "removed from friends");
         } else {
             friend.getRequestsForFriends().add(user);
+            Notification notification = Notification.builder()
+                    .type(Type.FRIEND_REQUEST)
+                    .message("%s %s отправил(-а) вам запрос в друзья.".formatted(user.getLastName(), user.getFirstName()))
+                    .seen(false)
+                    .toWhomUser(friend)
+                    .fromWhomUser(user)
+                    .createdAt(LocalDate.now())
+                    .build();
+            notificationRepository.save(notification);
             log.info("User {} has sent friend request to {}", user.getEmail(), friend.getEmail());
             return new SimpleResponse(HttpStatus.OK, "friend request");
         }

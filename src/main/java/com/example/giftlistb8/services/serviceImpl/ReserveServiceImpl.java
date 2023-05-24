@@ -7,6 +7,8 @@ import com.example.giftlistb8.dto.reserve.requests.ReserveRequestCharity;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestWish;
 import com.example.giftlistb8.dto.reserve.response.*;
 import com.example.giftlistb8.entities.*;
+import com.example.giftlistb8.enums.Type;
+import com.example.giftlistb8.exceptions.AlreadyExistsException;
 import com.example.giftlistb8.exceptions.ForbiddenException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
@@ -43,11 +45,7 @@ public class ReserveServiceImpl implements ReserveService {
         Wish wish = wishRepository.findById(reserveRequest.wishId()).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with %s id not found", reserveRequest.wishId())));
         if (reserveRepository.wishReserved(wish.getId())) {
-            return ReserveSimpleResponse.builder()
-                    .status(HttpStatus.CONFLICT)
-                    .message("Wish with id %s already reserved.".formatted(wish.getId()))
-                    .isReserved(true)
-                    .build();
+            throw new AlreadyExistsException("Wish with id %s already reserved.".formatted(wish.getId()));
         }
         boolean isAnonymous = false;
         if (reserveRequest.isAnonymous()) {
@@ -59,6 +57,10 @@ public class ReserveServiceImpl implements ReserveService {
                 .user(userInToken)
                 .build();
         reserveRepository.save(reserve);
+        Notification.builder()
+                .type(Type.BOOKED_NOT_ANONYMOUSLY)
+                .message("%s было забронировано пользователем %s %s")
+                .build();
         log.info("Reserving wish with id {}", reserveRequest.wishId());
         return ReserveSimpleResponse
                 .builder()
@@ -73,11 +75,7 @@ public class ReserveServiceImpl implements ReserveService {
         Charity charity = charityRepository.findById(reserveRequestCharity.charityId()).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with id %s not found", reserveRequestCharity.charityId())));
         if (reserveRepository.charityReserved(charity.getId())) {
-            return ReserveSimpleResponse.builder()
-                    .status(HttpStatus.CONFLICT)
-                    .message("Charity with id %s already reserved".formatted(charity.getId()))
-                    .isReserved(true)
-                    .build();
+           throw new AlreadyExistsException("Charity with id %s already reserved.".formatted(charity.getId()));
         }
         boolean isAnonymous = false;
         if (reserveRequestCharity.isAnonymous()) {

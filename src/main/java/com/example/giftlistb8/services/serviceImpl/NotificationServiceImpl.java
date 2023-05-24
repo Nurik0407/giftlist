@@ -24,8 +24,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<NotificationResponse> getAllMyNotifications() {
+        Long id = jwtService.getUserInToken().getId();
         log.info("Get all notifications.");
-        return notificationRepositoryCustom.getAll();
+        return notificationRepositoryCustom.getAll(id);
     }
 
     @Override
