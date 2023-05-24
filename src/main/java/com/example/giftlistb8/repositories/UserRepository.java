@@ -26,4 +26,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<ProfileResponse> getByIdUserDetail(Long userId);
 
     Optional<User> getUserById(Long userId);
+
+    @Query("SELECT COUNT(u.id) > 0 FROM User u " +
+           "JOIN u.friends f where u.id = ?2 and f.id = ?1")
+    boolean inMyFriends(Long currentUserId,Long userId);
+    @Query("SELECT count (u.id) > 0 FROM User u " +
+           "JOIN u.requestsForFriends r where u.id = ?1 and r.id = ?2")
+    boolean inMyRequests(Long currentUser,Long userId);
 }
