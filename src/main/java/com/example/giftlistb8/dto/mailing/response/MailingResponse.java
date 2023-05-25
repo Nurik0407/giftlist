@@ -2,7 +2,7 @@ package com.example.giftlistb8.dto.mailing.response;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Builder
 public record MailingResponse(
@@ -10,6 +10,6 @@ public record MailingResponse(
         String image,
         String title,
         String description,
-        LocalDateTime createdAt
+        LocalDate createdAt
 ) {
 }

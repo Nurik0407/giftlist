@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/api/charity-admin")
 public class CharityAdminAPI {
     private final CharityAdminService service;
-
     @GetMapping
     public List<CharitiesResponse> findAll() {
         return service.findAll();

@@ -12,7 +12,7 @@ public interface ReserveService {
 
     ReserveGetAllResponse getAllReserves();
 
-    SimpleResponse addGiftToWish(Long wishId);
+    SimpleResponse addGiftToWish(Long wishId,Long holidayId);
 
     ReserveSimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity);
 

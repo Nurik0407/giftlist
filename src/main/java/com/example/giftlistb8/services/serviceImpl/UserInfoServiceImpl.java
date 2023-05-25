@@ -61,7 +61,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             Context context = new Context();
             context.setVariable("title", "Password Reset");
             context.setVariable("message", "Hello " + user.getFirstName() + "" +
-                                           " Click the link below to reset your password:");
+                    " Click the link below to reset your password:");
             context.setVariable("link", resetPasswordLink);
             context.setVariable("tokenTitle", "Reset Password");
 

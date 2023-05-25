@@ -10,20 +10,33 @@ import java.util.List;
 
 @Repository
 public interface FriendRepository extends JpaRepository<User, Long> {
-    @Query("SELECT new com.example.giftlistb8.dto.friend.response.FriendInfoResponse(" +
-            "f.id, " +
-            "f.userInfo.image, " +
-            "CONCAT(f.firstName, ' ', f.lastName), " +
-            "cast(size(f.holidays) as int) , " +
-            "cast(SUM(CASE WHEN w.isBlocked=false THEN 1 ELSE 0 END) as int))  from User u join u.friends f join u.wishes w WHERE u.email = ?1")
-    List<FriendInfoResponse> getAllFriends(String email);
 
-    @Query("select new com.example.giftlistb8.dto.friend.response.FriendInfoResponse( " +
-            "f.id, " +
-            "f.userInfo.image, " +
-            "concat(f.firstName,' ',f.lastName), " +
-            "cast(size(f.holidays) as int) , " +
-            "cast(SUM(CASE WHEN w.isBlocked=false THEN 1 ELSE 0 END) as int)) from User u join u.requestsForFriends f join u.wishes w where u.email =?1")
-    List<FriendInfoResponse> getAllRequests(String email);
+    @Query("SELECT NEW com.example.giftlistb8.dto.friend.response.FriendInfoResponse(" +
+           "f.id, " +
+           "ui.image, " +
+           "CONCAT(f.firstName, ' ', f.lastName), " +
+           " CAST(COUNT(w.id) AS int), " +
+           "CAST(COUNT(c.id) AS int))" +
+           "FROM User u JOIN u.friends f " +
+           "LEFT JOIN f.userInfo ui " +
+           "LEFT JOIN f.wishes w " +
+           "LEFT JOIN f.charities c " +
+           "WHERE u.id = ?1 " +
+           "GROUP BY f.id, ui.image, f.firstName, f.lastName " +
+           "ORDER BY f.id DESC")
+    List<FriendInfoResponse> getAllFriends(Long id);
+    @Query("SELECT NEW com.example.giftlistb8.dto.friend.response.FriendInfoResponse(" +
+           "f.id, " +
+           "ui.image, " +
+           "CONCAT(f.firstName, ' ', f.lastName), " +
+           "CAST(COUNT(w.id) AS int), " +
+           "CAST(COUNT(c.id) AS int)) " +
+           "FROM User u JOIN u.requestsForFriends f " +
+           "LEFT JOIN f.userInfo ui " +
+           "LEFT JOIN f.wishes w " +
+           "LEFT JOIN f.charities c " +
+           "WHERE u.id = ?1 " +
+           "GROUP BY f.id, ui.image, f.firstName, f.lastName " +
+           "ORDER BY f.id DESC")  List<FriendInfoResponse> getAllRequests(Long id);
 
 }
