@@ -6,6 +6,7 @@ import com.example.giftlistb8.dto.mailing.response.AllMailingResponse;
 import com.example.giftlistb8.dto.mailing.response.MailingResponse;
 import com.example.giftlistb8.services.MailingServices;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RequestMapping("/api/mailing_list")
 @PreAuthorize("hasAuthority('ADMIN')")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Mailing API", description = "API for managing mailings by admin")
 public class MailingApi {
 
     private final MailingServices mailingService;

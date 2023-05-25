@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/profiles")
 @RequiredArgsConstructor
-@Tag(name = "Profiles ", description = "User profile  all information.")
+@Tag(name = "Profile API", description = "User profile  all information.")
 @CrossOrigin
 public class ProfileApi {
     private final ProfileService profileService;

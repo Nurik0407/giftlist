@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/reserves")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('USER')")
-@Tag(name = "Reserves", description = "API endpoints for managing reserves")
+@Tag(name = "Reserve API", description = "API endpoints for managing reserves")
 @CrossOrigin(origins = "*")
 public class ReserveApi {
     private final ReserveService reserveService;
