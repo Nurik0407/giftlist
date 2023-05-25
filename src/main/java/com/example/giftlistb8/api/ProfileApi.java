@@ -7,7 +7,6 @@ import com.example.giftlistb8.dto.profile.request.ProfileUpdateRequest;
 import com.example.giftlistb8.dto.profile.response.ProfileResponse;
 import com.example.giftlistb8.dto.profile.response.ProfileResponseGetById;
 import com.example.giftlistb8.services.ProfileService;
-import com.example.giftlistb8.validations.ValidPhone;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.PermitAll;
