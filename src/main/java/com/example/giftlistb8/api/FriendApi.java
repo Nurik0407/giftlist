@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('USER')")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Friends Api", description = "User can send request,add and delete friends")
+@Tag(name = "Friend API", description = "User can send request,add and delete friends")
 @RequestMapping("api/friends")
 public class FriendApi {
 

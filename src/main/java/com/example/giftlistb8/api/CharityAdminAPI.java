@@ -6,6 +6,7 @@ import com.example.giftlistb8.dto.charity.request.CharityUpdateRequest;
 import com.example.giftlistb8.dto.charity.response.CharitiesResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
 import com.example.giftlistb8.services.CharityAdminService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/charity-admin")
+@Tag(name = "Admin Charity API", description = "API for managing charity organizations by admin")
+@CrossOrigin(origins = "*")
 public class CharityAdminAPI {
     private final CharityAdminService service;
     @GetMapping

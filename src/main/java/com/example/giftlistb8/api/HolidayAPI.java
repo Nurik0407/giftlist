@@ -4,6 +4,7 @@ import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.holiday.request.HolidayRequest;
 import com.example.giftlistb8.dto.holiday.response.HolidayResponse;
 import com.example.giftlistb8.services.HolidayService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/holidays")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Holiday API", description = "API for managing holidays")
 public class HolidayAPI {
     private final HolidayService service;
 

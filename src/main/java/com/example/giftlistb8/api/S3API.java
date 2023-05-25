@@ -14,7 +14,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/api/file")
 @CrossOrigin(origins = "*")
-@Tag(name = "S3", description = "API for working with files in Amazon S3 storage")
+@Tag(name = "S3 API", description = "API for working with files in Amazon S3 storage")
 public class S3API {
 
     private final S3Service s3Service;
