@@ -3,6 +3,7 @@ services:
   backend:
     image: '#image'
     container_name: giftlist
+    restart: always
     ports:
       - "80:2023"
     environment:
