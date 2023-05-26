@@ -22,17 +22,6 @@ import java.util.List;
 @Tag(name = "User API", description = "API for managing user data")
 public class UserAPI {
     private final UserService service;
-    private final NotificationService notificationService;
-
-    @GetMapping("/notifications")
-    public List<NotificationResponse> getAllNotifications() {
-        return notificationService.getAllMyNotifications();
-    }
-
-    @PostMapping
-    public SimpleResponse seenOrNot() {
-        return notificationService.seenOrNot();
-    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Get all users", description = "Returns a paginated list of all users.")
