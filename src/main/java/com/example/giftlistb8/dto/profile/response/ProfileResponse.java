@@ -1,7 +1,6 @@
 package com.example.giftlistb8.dto.profile.response;
 
 import com.example.giftlistb8.enums.ClothingSize;
-import com.example.giftlistb8.enums.ShoeSize;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ public record ProfileResponse(
         String phoneNumber,
         String important,
         ClothingSize clothingSize,
-        ShoeSize shoeSize,
+        String shoeSize,
         String faceBook,
         String instagram,
         String telegram,

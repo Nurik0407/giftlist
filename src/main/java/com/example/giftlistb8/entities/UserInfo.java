@@ -1,7 +1,6 @@
 package com.example.giftlistb8.entities;
 
 import com.example.giftlistb8.enums.ClothingSize;
-import com.example.giftlistb8.enums.ShoeSize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,8 +29,7 @@ public class UserInfo {
     private String important;
     @Enumerated(EnumType.STRING)
     private ClothingSize clothingSize;
-    @Enumerated(EnumType.STRING)
-    private ShoeSize shoeSize;
+    private String shoeSize;
     private String instagram;
     private String telegram;
     private String facebook;

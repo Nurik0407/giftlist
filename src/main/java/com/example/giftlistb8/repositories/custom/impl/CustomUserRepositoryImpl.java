@@ -8,7 +8,6 @@ import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
 import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.dto.wish.response.WishResponseUser;
 import com.example.giftlistb8.enums.ClothingSize;
-import com.example.giftlistb8.enums.ShoeSize;
 import com.example.giftlistb8.repositories.custom.CustomUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +84,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                     user.setHobby(resultSet.getString("hobby"));
                     user.setImportant(resultSet.getString("important"));
                     user.setClothingSize(ClothingSize.valueOf(resultSet.getString("clothing_size")));
-                    user.setShoeSize(ShoeSize.valueOf(resultSet.getString("shoe_size")));
+                    user.setShoeSize(resultSet.getString("shoe_size"));
                     user.setInstagram(resultSet.getString("instagram"));
                     user.setTelegram(resultSet.getString("telegram"));
                     user.setFacebook(resultSet.getString("facebook"));

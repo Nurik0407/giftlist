@@ -4,7 +4,6 @@ import com.example.giftlistb8.dto.charity.response.CharityResponseUser;
 import com.example.giftlistb8.dto.holiday.response.HolidayResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseUser;
 import com.example.giftlistb8.enums.ClothingSize;
-import com.example.giftlistb8.enums.ShoeSize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,7 @@ public class UserResponseGetById {
     private String hobby;
     private String important;
     private ClothingSize clothingSize;
-    private ShoeSize shoeSize;
+    private String shoeSize;
     private String instagram;
     private String telegram;
     private String facebook;

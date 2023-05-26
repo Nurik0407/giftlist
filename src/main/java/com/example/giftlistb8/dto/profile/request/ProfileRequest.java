@@ -1,7 +1,6 @@
 package com.example.giftlistb8.dto.profile.request;
 
 import com.example.giftlistb8.enums.ClothingSize;
-import com.example.giftlistb8.enums.ShoeSize;
 import com.example.giftlistb8.validations.ValidName;
 import com.example.giftlistb8.validations.ValidPhone;
 import jakarta.validation.constraints.*;
@@ -42,7 +41,7 @@ public record ProfileRequest(
         ClothingSize clothingSize,
 
         @NotNull(message = "The shoe size must not be empty.")
-        ShoeSize shoeSize,
+        String shoeSize,
 
         @NotNull(message = "The hobby must not be empty.")
         String hobby,
