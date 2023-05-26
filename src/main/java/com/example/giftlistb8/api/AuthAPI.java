@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication API", description = "Sign in/Sign up")
+@Tag(name = "Authentication API", description = "API for user authentication (sign in/sign up)")
 @CrossOrigin(origins = "*")
 public class AuthAPI {
 
@@ -33,10 +33,10 @@ public class AuthAPI {
         return authService.authenticate(request);
     }
 
-    @PostMapping("/auth-google")
-    public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
-        return authService.authWithGoogle(tokenId);
-    }
+//    @PostMapping("/auth-google")
+//    public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+//        return authService.authWithGoogle(tokenId);
+//    }
 
     @PostMapping("/forgot-password")
     public SimpleResponse processForgotPassword(@RequestParam String email,@RequestParam String link) {

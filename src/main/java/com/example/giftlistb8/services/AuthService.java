@@ -11,5 +11,5 @@ public interface AuthService {
 
     AuthRegisterResponse register(AuthRegisterRequest userRequest);
 
-    AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException;
+//    AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException;
 }

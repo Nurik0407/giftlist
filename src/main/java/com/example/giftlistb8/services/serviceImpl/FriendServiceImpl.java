@@ -37,11 +37,11 @@ public class FriendServiceImpl implements FriendService {
         User user = jwtService.getUserInToken();
         log.info("Getting all {} for user {}", type, user.getEmail());
         if ("requests".equals(type)) {
-            log.info("Found friend requests for user {}", user.getEmail());
-            return friendRepository.getAllRequests(user.getEmail());
+            log.info("Found friend requests for user {}", user.getId());
+            return friendRepository.getAllRequests(user.getId());
         } else {
             log.info("Found friend(s) for user {}", user.getEmail());
-            return friendRepository.getAllFriends(user.getEmail());
+            return friendRepository.getAllFriends(user.getId());
         }
     }
 
@@ -53,14 +53,14 @@ public class FriendServiceImpl implements FriendService {
         if (user.equals(friend)) {
             throw new BadRequestException("You cannot send a request to yourself!");
         }
+        if (user.getFriends().contains(friend)) {
+            user.getFriends().remove(friend);
+            log.info("User {} has deleted friend {}", user.getEmail(), friend.getEmail());
+            return new SimpleResponse(HttpStatus.OK, "removed from friends");
+        }
         if (friend.getRequestsForFriends().contains(user)) {
             friend.getRequestsForFriends().remove(user);
             log.info("User {} has declined friend request from {} ", user.getEmail(), friend.getEmail());
-            return new SimpleResponse(HttpStatus.OK, "removed from friends");
-        }
-        if (friend.getFriends().contains(user)) {
-            friend.getFriends().remove(user);
-            log.info("User {} has deleted friend {}", user.getEmail(), friend.getEmail());
             return new SimpleResponse(HttpStatus.OK, "removed from friends");
         } else {
             friend.getRequestsForFriends().add(user);

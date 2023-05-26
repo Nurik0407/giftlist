@@ -7,7 +7,6 @@ import com.example.giftlistb8.dto.profile.request.ProfileUpdateRequest;
 import com.example.giftlistb8.dto.profile.response.ProfileResponse;
 import com.example.giftlistb8.dto.profile.response.ProfileResponseGetById;
 import com.example.giftlistb8.services.ProfileService;
-import com.example.giftlistb8.validations.ValidPhone;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.PermitAll;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/profiles")
 @RequiredArgsConstructor
-@Tag(name = "Profiles ", description = "User profile  all information.")
+@Tag(name = "Profile API", description = "User profile  all information.")
 @CrossOrigin
 public class ProfileApi {
     private final ProfileService profileService;

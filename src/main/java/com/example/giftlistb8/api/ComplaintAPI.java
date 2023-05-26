@@ -7,6 +7,7 @@ import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 import com.example.giftlistb8.services.ComplaintService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/complaint")
 @RequiredArgsConstructor
+@Tag(name = "Complaint API", description = "API for handling complaints")
+@CrossOrigin(origins = "*")
 public class ComplaintAPI {
     private final ComplaintService complaintService;
 
