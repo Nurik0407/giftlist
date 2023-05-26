@@ -99,47 +99,47 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    @PostConstruct
-    void init() throws IOException {
-
-        FileInputStream serviceAccount =
-                new FileInputStream("giftlist-b8.json");
-
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build();
-
-        FirebaseApp.initializeApp(options);
-    }
-
-
-    @Override
-    public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
-        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
-        if (!userRepository.existsByEmail(firebaseToken.getEmail())) {
-            User newUser = new User();
-            String[] name = firebaseToken.getName().split(" ");
-            newUser.setFirstName(name[0]);
-            newUser.setLastName(name[1]);
-            newUser.setEmail(firebaseToken.getEmail());
-            newUser.setPassword(firebaseToken.getEmail());
-            newUser.setRole(Role.USER);
-            newUser.setSubscribeMailing(true);
-            userRepository.save(newUser);
-        }
-
-        User user = userRepository.findByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
-            log.error("User not found for email {}", firebaseToken.getEmail());
-            throw new NotFoundException(String.format("User with this %s email not found!!", firebaseToken.getEmail()));
-        });
-
-        log.info("User authenticated successfully with Google for email {}", firebaseToken.getEmail());
-
-        String token = jwtService.generateToken(user);
-
-        return AuthRegisterResponse.builder()
-                .email(firebaseToken.getEmail())
-                .token(token)
-                .build();
-    }
+//    @PostConstruct
+//    void init() throws IOException {
+//
+//        FileInputStream serviceAccount =
+//                new FileInputStream("giftlist-b8.json");
+//
+//        FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .build();
+//
+//        FirebaseApp.initializeApp(options);
+//    }
+//
+//
+//    @Override
+//    public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+//        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
+//        if (!userRepository.existsByEmail(firebaseToken.getEmail())) {
+//            User newUser = new User();
+//            String[] name = firebaseToken.getName().split(" ");
+//            newUser.setFirstName(name[0]);
+//            newUser.setLastName(name[1]);
+//            newUser.setEmail(firebaseToken.getEmail());
+//            newUser.setPassword(firebaseToken.getEmail());
+//            newUser.setRole(Role.USER);
+//            newUser.setSubscribeMailing(true);
+//            userRepository.save(newUser);
+//        }
+//
+//        User user = userRepository.findByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
+//            log.error("User not found for email {}", firebaseToken.getEmail());
+//            throw new NotFoundException(String.format("User with this %s email not found!!", firebaseToken.getEmail()));
+//        });
+//
+//        log.info("User authenticated successfully with Google for email {}", firebaseToken.getEmail());
+//
+//        String token = jwtService.generateToken(user);
+//
+//        return AuthRegisterResponse.builder()
+//                .email(firebaseToken.getEmail())
+//                .token(token)
+//                .build();
+//    }
 }

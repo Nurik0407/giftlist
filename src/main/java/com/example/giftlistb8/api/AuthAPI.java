@@ -33,10 +33,10 @@ public class AuthAPI {
         return authService.authenticate(request);
     }
 
-    @PostMapping("/auth-google")
-    public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
-        return authService.authWithGoogle(tokenId);
-    }
+//    @PostMapping("/auth-google")
+//    public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+//        return authService.authWithGoogle(tokenId);
+//    }
 
     @PostMapping("/forgot-password")
     public SimpleResponse processForgotPassword(@RequestParam String email,@RequestParam String link) {
