@@ -7,12 +7,11 @@ import com.example.giftlistb8.dto.reserve.requests.ReserveRequestCharity;
 import com.example.giftlistb8.dto.reserve.requests.ReserveRequestWish;
 import com.example.giftlistb8.dto.reserve.response.*;
 import com.example.giftlistb8.entities.*;
+import com.example.giftlistb8.enums.Type;
+import com.example.giftlistb8.exceptions.AlreadyExistsException;
 import com.example.giftlistb8.exceptions.ForbiddenException;
 import com.example.giftlistb8.exceptions.NotFoundException;
-import com.example.giftlistb8.repositories.CharityRepository;
-import com.example.giftlistb8.repositories.HolidayRepository;
-import com.example.giftlistb8.repositories.ReserveRepository;
-import com.example.giftlistb8.repositories.WishRepository;
+import com.example.giftlistb8.repositories.*;
 import com.example.giftlistb8.services.ReserveService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 
 
@@ -31,6 +31,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 @Slf4j
 public class ReserveServiceImpl implements ReserveService {
+    private final NotificationRepository notificationRepository;
     private final ReserveRepository reserveRepository;
     private final WishRepository wishRepository;
     private final JwtService jwtService;
@@ -43,22 +44,32 @@ public class ReserveServiceImpl implements ReserveService {
         Wish wish = wishRepository.findById(reserveRequest.wishId()).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with %s id not found", reserveRequest.wishId())));
         if (reserveRepository.wishReserved(wish.getId())) {
-            return ReserveSimpleResponse.builder()
-                    .status(HttpStatus.CONFLICT)
-                    .message("Wish with id %s already reserved.".formatted(wish.getId()))
-                    .isReserved(true)
-                    .build();
+            throw new AlreadyExistsException("Wish with id %s already reserved.".formatted(wish.getId()));
         }
-        boolean isAnonymous = false;
-        if (reserveRequest.isAnonymous()) {
-            isAnonymous = true;
-        }
+        boolean isAnonymous = reserveRequest.isAnonymous();
         Reserve reserve = Reserve.builder()
                 .isAnonymous(isAnonymous)
                 .wish(wish)
                 .user(userInToken)
                 .build();
         reserveRepository.save(reserve);
+
+        Notification notification = Notification.builder()
+                .reserve(reserve)
+                .seen(false)
+                .toWhomUser(wish.getUser())
+                .fromWhomUser(userInToken)
+                .createdAt(LocalDate.now())
+                .build();
+        if (isAnonymous){
+            notification.setType(Type.BOOKED_ANONYMOUSLY);
+            notification.setMessage("%s было забронировано анонимным пользователем.".formatted(wish.getName()));
+        }else {
+            notification.setType(Type.BOOKED_NOT_ANONYMOUSLY);
+            notification.setMessage("%s было забронировано пользователем %s %s".formatted(wish.getName(),userInToken.getLastName(),userInToken.getFirstName()));
+        }
+        notificationRepository.save(notification);
+
         log.info("Reserving wish with id {}", reserveRequest.wishId());
         return ReserveSimpleResponse
                 .builder()
@@ -69,25 +80,35 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public ReserveSimpleResponse charityReserve(ReserveRequestCharity reserveRequestCharity) {
-        User user = jwtService.getUserInToken();
+        User userInToken = jwtService.getUserInToken();
         Charity charity = charityRepository.findById(reserveRequestCharity.charityId()).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with id %s not found", reserveRequestCharity.charityId())));
         if (reserveRepository.charityReserved(charity.getId())) {
-            return ReserveSimpleResponse.builder()
-                    .status(HttpStatus.CONFLICT)
-                    .message("Charity with id %s already reserved".formatted(charity.getId()))
-                    .isReserved(true)
-                    .build();
+           throw new AlreadyExistsException("Charity with id %s already reserved.".formatted(charity.getId()));
         }
-        boolean isAnonymous = false;
-        if (reserveRequestCharity.isAnonymous()) {
-            isAnonymous = true;
-        }
+        boolean isAnonymous = reserveRequestCharity.isAnonymous();
         Reserve reserve = new Reserve();
-        reserve.setUser(user);
+        reserve.setUser(userInToken);
         reserve.setCharity(charity);
         reserve.setIsAnonymous(isAnonymous);
         reserveRepository.save(reserve);
+
+        Notification notification = Notification.builder()
+                .reserve(reserve)
+                .seen(false)
+                .toWhomUser(charity.getUser())
+                .fromWhomUser(userInToken)
+                .createdAt(LocalDate.now())
+                .build();
+        if (isAnonymous){
+            notification.setType(Type.BOOKED_ANONYMOUSLY);
+            notification.setMessage("%s было забронировано анонимным пользователем.".formatted(charity.getName()));
+        }else {
+            notification.setType(Type.BOOKED_NOT_ANONYMOUSLY);
+            notification.setMessage("%s было забронировано пользователем %s %s".formatted(charity.getName(),userInToken.getLastName(),userInToken.getFirstName()));
+        }
+        notificationRepository.save(notification);
+
         log.info("Reserving charity with id {}", charity.getId());
         return ReserveSimpleResponse
                 .builder()

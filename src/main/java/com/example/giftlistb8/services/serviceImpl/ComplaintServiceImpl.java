@@ -21,9 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 
-import static com.example.giftlistb8.enums.Type.COMPLAINT;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +35,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public SimpleResponse complaintToCharity(ComplaintRequest request) {
-        Notification notification = new Notification();
         Complaint complaint = new Complaint();
-
 
         Charity charity = charityRepository.findById(request.getId()).
                 orElseThrow(() -> new NotFoundException("Not found!"));
@@ -47,15 +43,6 @@ public class ComplaintServiceImpl implements ComplaintService {
         complaint.setComplaint(request.getComplaintDescription());
         charity.getComplaints().add(complaint);
         complaint.setUser(jwtService.getUserInToken());
-
-        notification.setType(COMPLAINT);
-        notification.setSeen(false);
-        notification.setCreatedAt(LocalDate.now());
-        notification.setFromWhomUser(jwtService.getUserInToken());
-        notification.setToWhomUser(charity.getUser());
-        notification.setCharity(charity);
-
-        notificationRepository.save(notification);
 
         complaintRepository.save(complaint);
 
@@ -68,7 +55,6 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public SimpleResponse complaintToWish(ComplaintRequest request) {
-        Notification notification = new Notification();
         Complaint complaint = new Complaint();
         Wish wish = wishRepository.findById(request.getId()).
                 orElseThrow(() -> new NotFoundException("Not found!"));
@@ -76,15 +62,6 @@ public class ComplaintServiceImpl implements ComplaintService {
         complaint.setComplaint(request.getComplaintDescription());
         wish.getComplaints().add(complaint);
         complaint.setUser(jwtService.getUserInToken());
-
-        notification.setType(COMPLAINT);
-        notification.setSeen(false);
-        notification.setCreatedAt(LocalDate.now());
-        notification.setFromWhomUser(jwtService.getUserInToken());
-        notification.setToWhomUser(wish.getUser());
-        notification.setWish(wish);
-
-        notificationRepository.save(notification);
 
         complaintRepository.save(complaint);
 
@@ -150,8 +127,6 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public SimpleResponse deleteWish(Long id) {
-        Wish wish = wishRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("Wish with this id not found!"));
         Notification notification = notificationRepository.findByWishId(id);
         notification.setWish(null);
         notificationRepository.save(notification);

@@ -12,14 +12,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationImpl implements NotificationRepositoryCustom {
     private final JdbcTemplate jdbcTemplate;
-    private final JwtService jwtService;
 
     @Override
-    public List<NotificationResponse> getAll() {
-        Long userId = jwtService.getUserInToken().getId();
+    public List<NotificationResponse> getAll(Long userId) {
         String sql = """
                 select u.id as fromWhomUserId,
-                ui.image,concat(u.first_name,' ',u.last_name) as fullName,
+                ui.image as image,
+                concat(u.first_name,' ',u.last_name) as fullName,
                 n.type as type,
                 n.message as message,
                 n.created_at as createdAt 
@@ -35,6 +34,7 @@ public class NotificationImpl implements NotificationRepositoryCustom {
              new NotificationResponse(
                     resultSet.getLong("fromWhomUserId"),
                     resultSet.getString("fullName"),
+                     resultSet.getString("image"),
                     resultSet.getString("type"),
                     resultSet.getString("message"),
                      resultSet.getDate("createdAt").toLocalDate()

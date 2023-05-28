@@ -5,10 +5,13 @@ import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.wish.requests.WishRequest;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 import com.example.giftlistb8.entities.Holiday;
+import com.example.giftlistb8.entities.Notification;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.entities.Wish;
+import com.example.giftlistb8.enums.Type;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.HolidayRepository;
+import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.services.WishService;
 import jakarta.transaction.Transactional;
@@ -17,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,6 +32,8 @@ public class WishServiceImpl implements WishService {
     private final HolidayRepository holidayRepository;
     private final WishRepository wishRepository;
     private final JwtService jwtService;
+    private final NotificationRepository notificationRepository;
+
     @Override
     public List<WishResponse> findAll() {
         log.info("Finding all wishes");
@@ -61,8 +67,21 @@ public class WishServiceImpl implements WishService {
                 .user(user)
                 .description(request.descriptions())
                 .build();
-        wish.setUser(user);
         wishRepository.save(wish);
+
+        List<User> friends = user.getFriends();
+        List<Notification> notifications = friends.stream()
+                .map(friend -> Notification.builder()
+                        .wish(wish)
+                        .type(Type.ADD_GIFT_TO_WISH_LIST)
+                        .message(String.format("%s %s добавил новый желаемый подарок", user.getLastName(),user.getFirstName()))
+                        .seen(false)
+                        .fromWhomUser(user)
+                        .toWhomUser(friend)
+                        .createdAt(LocalDate.now())
+                        .build()).toList();
+        notificationRepository.saveAll(notifications);
+
         log.info("Saving wish with name: {}", request.name());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)

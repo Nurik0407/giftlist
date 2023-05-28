@@ -2,11 +2,9 @@ package com.example.giftlistb8.api;
 
 import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
-import com.example.giftlistb8.dto.notification.response.NotificationResponse;
 import com.example.giftlistb8.dto.user.requests.UpdateBlockStatus;
 import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
 import com.example.giftlistb8.dto.user.response.UserResponseGetById;
-import com.example.giftlistb8.services.NotificationService;
 import com.example.giftlistb8.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -24,17 +21,6 @@ import java.util.List;
 @Tag(name = "User API", description = "API for managing user data")
 public class UserAPI {
     private final UserService service;
-    private final NotificationService notificationService;
-
-    @GetMapping("/notifications")
-    public List<NotificationResponse> getAllNotifications() {
-        return notificationService.getAllMyNotifications();
-    }
-
-    @PostMapping
-    public SimpleResponse seenOrNot() {
-        return notificationService.seenOrNot();
-    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Get all users", description = "Returns a paginated list of all users.")
