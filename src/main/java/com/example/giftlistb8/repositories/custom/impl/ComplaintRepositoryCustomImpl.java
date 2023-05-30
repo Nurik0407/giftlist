@@ -24,7 +24,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     public ComplaintResponse getAllComplaints() {
 
         String sql = """
-                SELECT CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+                SELECT ch.id as id,CONCAT(u.first_name, ' ', u.last_name) AS full_name,
                        ui.image AS user_image,
                        ch.name AS charity_name,
                        ch.date_of_issue AS charity_date_of_issue,
@@ -43,7 +43,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                  """;
 
         String sql2 = """
-                SELECT CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+                SELECT wh.id as id,CONCAT(u.first_name, ' ', u.last_name) AS full_name,
                        ui.image AS user_image,
                        wh.name AS wish_name,
                        wh.date_of_holiday AS wish_holiday_date,
@@ -66,6 +66,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
 
         List<CharityResponseWIthComplaint> charityResponses = jdbcTemplate.query(sql, (resultSet, i) ->
                 new CharityResponseWIthComplaint(
+                        resultSet.getLong("id"),
                         resultSet.getString("full_name"),
                         resultSet.getString("user_image"),
                         resultSet.getString("charity_name"),
@@ -78,6 +79,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
         complaintResponse.setCharityResponseWIthComplaints(charityResponses);
         List<WishResponseWithComplaint> wishResponses = jdbcTemplate.query(sql2, (resultSet, i) ->
                 new WishResponseWithComplaint(
+                        resultSet.getLong("id"),
                         resultSet.getString("full_name"),
                         resultSet.getString("user_image"),
                         resultSet.getString("wish_name"),
