@@ -31,8 +31,8 @@ public class Charity {
     private String subCategory;
     private String description;
     private LocalDate dateOfIssue;
-
     private String image;
+    private Boolean status;
     private boolean isBlocked;
 
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})

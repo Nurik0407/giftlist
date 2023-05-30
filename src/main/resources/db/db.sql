@@ -66,7 +66,7 @@ values (1, 'a.asangazieva@gmail.com', 'Aijamal', false, 'Asangazieva',
        (10, 'admin@gmail.com', 'Admin', false, 'Admin',
         '$2a$12$TMQHpAfvViIwqb0aQPEJzueRqZvEUzzDkeT039fuP1xTD7i8lwota', 'ADMIN', true, 10);
 
-INSERT INTO charities (id, category, date_of_issue, description, image, name, state, sub_category,is_blocked, user_id)
+INSERT INTO charities (id, category, date_of_issue, description, image, name, state,sub_category,is_blocked, user_id)
 VALUES (1, 'Книги', current_date, '«Отве́рженные» — роман-эпопея французского классика Виктора Гюго.',
         'https://avatars.mds.yandex.net/get-mpic/4399709/img_id4103982150204587909.jpeg/orig', 'Отверженные', 'Новое',
         'Драма',false, 2),
@@ -139,13 +139,13 @@ VALUES (1, current_date, 'I wish for a new laptop',
         'https://example.com/fitness', 'Emily Davis', false,false, 1, 5),
        (7, current_date, 'I wish for a designer handbag',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'https://example.com/handbag', 'Jessica Wilson', false,false, 5, 6),
+        'https://example.com/handbag', 'Jessica Wilson', true,false, 5, 6),
        (8, current_date, 'I wish for a spa day',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy-V3K6s24J3pPaFZPruuzQ4d9mJXQ2fxBfA&usqp=CAU',
-        'https://example.com/spa', 'Alex Turner', false,false, 2, 7),
+        'https://example.com/spa', 'Alex Turner', true,false, 2, 7),
        (9, current_date, 'I wish for a new camera',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'https://example.com/camera', 'Olivia Thompson', false,false, 3, 8);
+        'https://example.com/camera', 'Olivia Thompson', true,false, 3, 8);
 
 
 INSERT INTO mailings (id, created_at, description, image, title)
