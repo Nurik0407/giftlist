@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseToken;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,7 +29,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 
@@ -99,47 +99,41 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-//    @PostConstruct
-//    void init() throws IOException {
-//
-//        FileInputStream serviceAccount =
-//                new FileInputStream("giftlist-b8.json");
-//
-//        FirebaseOptions options = new FirebaseOptions.Builder()
-//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//                .build();
-//
-//        FirebaseApp.initializeApp(options);
-//    }
-//
-//
-//    @Override
-//    public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
-//        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
-//        if (!userRepository.existsByEmail(firebaseToken.getEmail())) {
-//            User newUser = new User();
-//            String[] name = firebaseToken.getName().split(" ");
-//            newUser.setFirstName(name[0]);
-//            newUser.setLastName(name[1]);
-//            newUser.setEmail(firebaseToken.getEmail());
-//            newUser.setPassword(firebaseToken.getEmail());
-//            newUser.setRole(Role.USER);
-//            newUser.setSubscribeMailing(true);
-//            userRepository.save(newUser);
-//        }
-//
-//        User user = userRepository.findByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
-//            log.error("User not found for email {}", firebaseToken.getEmail());
-//            throw new NotFoundException(String.format("User with this %s email not found!!", firebaseToken.getEmail()));
-//        });
-//
-//        log.info("User authenticated successfully with Google for email {}", firebaseToken.getEmail());
-//
-//        String token = jwtService.generateToken(user);
-//
-//        return AuthRegisterResponse.builder()
-//                .email(firebaseToken.getEmail())
-//                .token(token)
-//                .build();
-//    }
+    @PostConstruct
+    void init() throws IOException {
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("giftlist-b8.json").getInputStream());
+        FirebaseOptions firebaseOptions = FirebaseOptions.builder().setCredentials(googleCredentials).build();
+        FirebaseApp firebaseApp = FirebaseApp.initializeApp(firebaseOptions);
+    }
+
+
+    @Override
+    public AuthRegisterResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
+        if (!userRepository.existsByEmail(firebaseToken.getEmail())) {
+            User newUser = new User();
+            String[] name = firebaseToken.getName().split(" ");
+            newUser.setFirstName(name[0]);
+            newUser.setLastName(name[1]);
+            newUser.setEmail(firebaseToken.getEmail());
+            newUser.setPassword(firebaseToken.getEmail());
+            newUser.setRole(Role.USER);
+            newUser.setSubscribeMailing(true);
+            userRepository.save(newUser);
+        }
+
+        User user = userRepository.findByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
+            log.error("User not found for email {}", firebaseToken.getEmail());
+            throw new NotFoundException(String.format("User with this %s email not found!!", firebaseToken.getEmail()));
+        });
+
+        log.info("User authenticated successfully with Google for email {}", firebaseToken.getEmail());
+
+        String token = jwtService.generateToken(user);
+
+        return AuthRegisterResponse.builder()
+                .email(firebaseToken.getEmail())
+                .token(token)
+                .build();
+    }
 }
