@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record CharityResponseWIthComplaint(
+        Long id,
         String fullName,
         String userImage,
         String name,
