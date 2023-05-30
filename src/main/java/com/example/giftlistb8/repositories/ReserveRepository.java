@@ -54,12 +54,4 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
             "LEFT JOIN c.reserve r " +
             "WHERE c.id = :charityId")
     boolean charityReserved(Long charityId);
-
-    @Query("SELECT CASE WHEN EXISTS " +
-            "(SELECT r FROM User u JOIN u.reserves r " +
-            "JOIN r.wish w WHERE u.id = ?1 and w.id = ?2) " +
-            "THEN FALSE ELSE TRUE END FROM User u WHERE u.id = ?1")
-    boolean wishExistInReserve(Long userId, Long wishId);
-
-
 }
