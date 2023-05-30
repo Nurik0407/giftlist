@@ -23,7 +23,6 @@ class CharityTest {
     @Test
     public void testCharitySave() {
 
-        // Создание тестовых данных
         CharityRequest request = CharityRequest.builder()
                 .name("Test Charity")
                 .state("Test State")
@@ -33,7 +32,6 @@ class CharityTest {
                 .image("test_image.jpg")
                 .build();
 
-        // Преобразование CharityRequest в Charity
         Charity charity = Charity.builder()
                 .name(request.name())
                 .state(request.state())
@@ -45,7 +43,6 @@ class CharityTest {
                 .isBlocked(false)
                 .build();
 
-        // Проверка соответствия CharityRequest и Charity
         assertAll("Charity fields",
                 () -> assertEquals(request.name(), charity.getName(), "Name mismatch"),
                 () -> assertEquals(request.state(), charity.getState(), "State mismatch"),
@@ -57,22 +54,16 @@ class CharityTest {
                 () -> assertFalse(charity.isBlocked(), "Blocked mismatch")
         );
 
-        // Созранение в базе данных
         Charity savedCharity = underTest.save(charity);
 
-        // Поле id должно быть установлено после сохранения
         assertNotNull(savedCharity.getId(), "Id mismatch");
 
-        // Получение Charity из репозитория по id
         Optional<Charity> retrievedCharity = underTest.findById(savedCharity.getId());
 
-        // Проверка наличия Charity
         assertTrue(retrievedCharity.isPresent(), "Charity should be present in the repository");
 
-        // Проверка соответствия сохраненного Charity и полученного из репозитория
         assertEquals(savedCharity, retrievedCharity.get());
 
-        // Проверка соответствия сохраненного Charity и полученного из репозитория
         assertAll("Charity fields",
                 () -> assertEquals(charity.getName(), retrievedCharity.get().getName(), "Name mismatch"),
                 () -> assertEquals(charity.getState(), retrievedCharity.get().getState(), "State mismatch"),
@@ -89,7 +80,6 @@ class CharityTest {
     @Test
     public void testFindCharityById() {
 
-        // Создание тестового объекта Charity
         Charity charity = Charity.builder()
                 .name("Test Charity")
                 .state("Test State")
@@ -101,19 +91,14 @@ class CharityTest {
                 .isBlocked(false)
                 .build();
 
-        // Сохранение Charity в репозитории
         Charity savedCharity = underTest.save(charity);
 
-        // Вызов метода findById() с идентификатором сохраненного Charity
         Optional<Charity> retrievedCharityOptional = underTest.findById(savedCharity.getId());
 
-        // Проверка наличия Charity
         assertTrue(retrievedCharityOptional.isPresent(), "Charity should be present in the repository");
 
-        // Получение полученного из репозитория Charity
         Charity retrievedCharity = retrievedCharityOptional.get();
 
-        // Проверка соответствия полей
         assertAll("Charity fields",
                 () -> assertEquals(charity.getName(), retrievedCharity.getName(), "Name mismatch"),
                 () -> assertEquals(charity.getState(), retrievedCharity.getState(), "State mismatch"),
@@ -125,7 +110,6 @@ class CharityTest {
                 () -> assertEquals(charity.isBlocked(), retrievedCharity.isBlocked(), "Blocked mismatch")
         );
 
-        // Проверка соответствия сохраненного Charity и полученного из репозитория
         assertEquals(savedCharity, retrievedCharity);
     }
 }
