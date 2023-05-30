@@ -10,9 +10,11 @@ public record FeedResponse(
         String image,
         String fullName,
         String holidayName,
+        Long wishId,
         String wishName,
         String photo,
         LocalDate date,
-        Boolean status,
-        String friendPhoto) {
+        boolean isReserved,
+        boolean isAnonymous,
+        String reserveUserImage) {
 }

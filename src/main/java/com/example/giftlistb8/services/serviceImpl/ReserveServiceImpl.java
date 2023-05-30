@@ -52,6 +52,8 @@ public class ReserveServiceImpl implements ReserveService {
                 .wish(wish)
                 .user(userInToken)
                 .build();
+        wish.setStatus(true);
+        wishRepository.save(wish);
         reserveRepository.save(reserve);
 
         Notification notification = Notification.builder()
@@ -91,6 +93,8 @@ public class ReserveServiceImpl implements ReserveService {
         reserve.setUser(userInToken);
         reserve.setCharity(charity);
         reserve.setIsAnonymous(isAnonymous);
+        charity.setStatus(true);
+        charityRepository.save(charity);
         reserveRepository.save(reserve);
 
         Notification notification = Notification.builder()
@@ -194,6 +198,8 @@ public class ReserveServiceImpl implements ReserveService {
         if (!reserve.getUser().equals(user)) {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
+        wish.setStatus(false);
+        wishRepository.save(wish);
         reserveRepository.delete(reserve);
         log.info("Deleting wish reserve for user {}", user.getId());
         return SimpleResponse.builder()
@@ -213,6 +219,8 @@ public class ReserveServiceImpl implements ReserveService {
         if (!reserve.getUser().equals(user)) {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }
+        charity.setStatus(false);
+        charityRepository.save(charity);
         reserveRepository.delete(reserve);
         log.info("Deleting charity reserve for user {}", user.getId());
         return SimpleResponse.builder()

@@ -1,10 +1,7 @@
 package com.example.giftlistb8.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,7 +12,8 @@ import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "charities")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,8 +29,8 @@ public class Charity {
     private String subCategory;
     private String description;
     private LocalDate dateOfIssue;
-
     private String image;
+    private Boolean status;
     private boolean isBlocked;
 
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})

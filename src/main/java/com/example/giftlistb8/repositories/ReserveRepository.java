@@ -19,13 +19,13 @@ import java.util.Optional;
 
 public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     @Query("SELECT NEW com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
-            "r.id,CONCAT(r.user.firstName, ' ', r.user.lastName)," +
-            " r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
+            "r.id,CONCAT(r.wish.user.firstName, ' ', r.wish.user.lastName)," +
+            " r.wish.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
             "FROM Reserve r JOIN r.user u where u.id = :id and r.wish.isBlocked = false")
     List<ReserveResponseWish> getAllReversesWish(Long id);
 
     @Query("SELECT NEW  com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(" +
-            " r.id,CONCAT(r.user.firstName,' ', r.user.lastName),r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue)" +
+            " r.id,CONCAT(r.charity.user.firstName,' ', r.charity.user.lastName),r.charity.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue)" +
             "FROM Reserve r JOIN r.user u where u.id = :id and r.charity.isBlocked = false")
     List<ReserveResponseCharity> getAllReversesCharity(Long id);
 
@@ -54,12 +54,4 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
             "LEFT JOIN c.reserve r " +
             "WHERE c.id = :charityId")
     boolean charityReserved(Long charityId);
-
-    @Query("SELECT CASE WHEN EXISTS " +
-            "(SELECT r FROM User u JOIN u.reserves r " +
-            "JOIN r.wish w WHERE u.id = ?1 and w.id = ?2) " +
-            "THEN FALSE ELSE TRUE END FROM User u WHERE u.id = ?1")
-    boolean wishExistInReserve(Long userId, Long wishId);
-
-
 }
