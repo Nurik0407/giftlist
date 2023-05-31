@@ -66,34 +66,38 @@ values (1, 'a.asangazieva@gmail.com', 'Aijamal', false, 'Asangazieva',
        (10, 'admin@gmail.com', 'Admin', false, 'Admin',
         '$2a$12$TMQHpAfvViIwqb0aQPEJzueRqZvEUzzDkeT039fuP1xTD7i8lwota', 'ADMIN', true, 10);
 
-INSERT INTO charities (id, category, date_of_issue, description, image, name, state,sub_category,is_blocked, user_id)
+INSERT INTO charities (id, category, date_of_issue, description, image, name, state, status, sub_category, is_blocked,
+                       user_id)
 VALUES (1, 'Книги', current_date, '«Отве́рженные» — роман-эпопея французского классика Виктора Гюго.',
         'https://avatars.mds.yandex.net/get-mpic/4399709/img_id4103982150204587909.jpeg/orig', 'Отверженные', 'Новое',
-        'Драма',false, 2),
+        true, 'Драма', false, 1),
        (2, 'Электроника', current_date, 'Беспроводные наушники Sony WI-C310 синие',
-        'https://www.kivano.kg/images/product/87444/full/1609232285_79466800.jpg', 'Наушник', 'Б/У', 'Аксессуары', true,3),
-       (3, 'Одежда',current_date,
+        'https://www.kivano.kg/images/product/87444/full/1609232285_79466800.jpg', 'Наушник', 'Б/У',true,'Аксессуары', true,
+        2),
+       (3, 'Одежда', current_date,
         'Niyar style Представляю вашему вниманию бренд одежды, исключительно новые модели. Всё выполнено в индивидуальном стиле Шьём в быстрые сроки и в высоком качестве',
-        'https://s.optlist.ru/i/54/78/16c4007793e3cf48-5478-1.jpg', 'Рубашка', 'Все', 'Рубашка',false, 4),
+        'https://s.optlist.ru/i/54/78/16c4007793e3cf48-5478-1.jpg', 'Рубашка', 'Все', false,'Рубашка', false, 3),
        (4, 'Одежда', current_date, 'Boys Chest Stripe Sun Farer Polo Shirt | Southern Tide',
         'https://cdn.shopify.com/s/files/1/2294/8559/products/youth-mesa-sun-farer-polo-shirt-9667_2048x2048.jpg?v=1676045990',
-        'Polo', 'новое', 'Рубашка',false, 5),
+        'Polo', 'новое',false, 'Рубашка', false, 4),
        (5, 'Электроника', current_date, 'СЕТЕВОЕ ЗАРЯДНОЕ УСТРОЙСТВО HOCO C26 QUICK CHARGE QUALCOMM QC3.0',
-        'https://softech.kg/image/cache/f4d29a07c9a0b69ba9cd6b03c4fb24b2.jpg', 'Зарядка', 'Все', 'Аксессуары',false, 6),
+        'https://softech.kg/image/cache/f4d29a07c9a0b69ba9cd6b03c4fb24b2.jpg', 'Зарядка', 'Все',false, 'Аксессуары', false,
+        5),
        (6, 'Книги', current_date,
         'На высоком холме стоит очень странный дом. С его хозяйкой, мисс Корицей, явно что-то не так! Она терпеть не может людей, и поэтому в доме не бывает гостей. По хозяйству странной мисс помогают ',
-        'https://moreknig.org/uploads/posts/covers/d7/90/medium/strannyy-dom-miss-koricy-hay-magdalena-359029.jpg', '',
-        'Б/У', 'Фантастика',false, 7),
+        'https://moreknig.org/uploads/posts/covers/d7/90/medium/strannyy-dom-miss-koricy-hay-magdalena-359029.jpg',
+        'Книга',
+        'Б/У',false, 'Фантастика', false, 6),
        (7, 'Электроника', current_date,
         'Сверхъемкий внешний аккумулятор Oarmio 23 000 mAh предназначен для использования в длительных путешествиях и зарядки большого количества девайсов. Cправ  другой мобильной техники. ',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8_qNmGALnxvCp0YWpwN182ee3cAo1YPU4HA&usqp=CAU',
-        'Повербанк', 'Новое', 'Аксессуары',false, 8),
+        'Повербанк', 'Новое',false, 'Аксессуары', false, 7),
        (8, 'Книги', current_date, 'В Лектории «Прямая речь» каждый день выступают выдающиеся ученые, писатели.',
         'https://cdn.ast.ru/v2/ASE000000000846056/COVER/cover1__w220.jpg', 'Русская литература: страсть и власть',
-        'Все', 'Литература', false,9),
+        'Все',false, 'Литература', false, 8),
        (9, 'Одежда', current_date, 'Джинсы широкие мужские',
-        'https://img.joomcdn.net/13ac3e05cdae7a01fbff88ef7d8513972bf08961_original.jpeg', 'Джинсы', 'Новое', 'Брюки',
-        false,10);
+        'https://img.joomcdn.net/13ac3e05cdae7a01fbff88ef7d8513972bf08961_original.jpeg', 'Джинсы', 'Новое',
+        false, 'Брюки', false, 9);
 
 INSERT INTO holidays (id, date, image, name, user_id)
 VALUES (1, current_date, 'https://contenthub-static.grammarly.com/blog/wp-content/uploads/2019/12/happy-new-year.jpeg',
@@ -119,33 +123,33 @@ VALUES (1, current_date, 'https://contenthub-static.grammarly.com/blog/wp-conten
        (9, current_date, 'https://imgeng.jagran.com/images/2022/oct/halloween20221666809033978.jpg', 'Halloween', 9);
 
 
-INSERT INTO wishes (id, date_of_holiday, description, image, link_gift, name, status,is_blocked, holiday_id, user_id)
+INSERT INTO wishes (id, date_of_holiday, description, image, link_gift, name, status, is_blocked, holiday_id, user_id)
 VALUES (1, current_date, 'I wish for a new laptop',
         'https://media.wired.com/photos/631bb97dd884b4dcc94164e3/3:2/w_2400,h_1600,c_limit/How-to-Choose-a-Laptop-Gear-GettyImages-1235728903.jpg',
-        'https://example.com/laptop', 'John Doe', false,false, 1, 1),
+        'https://example.com/laptop', 'Iphone 13 pro', false, false, 1, 1),
        (2, current_date, 'I wish for a vacation to Hawaii',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVuOwrxDw_RbgHYCUKb21bmPIlDOr0kRFnpw&usqp=CAU',
-        'https://example.com/hawaii', 'Jane Smith', false, false,2, 2),
+        'https://example.com/hawaii', 'Письма Элджертона', false, false, 2, 2),
        (3, current_date, 'I wish for a new car',
         'https://cdni.autocarindia.com/utils/imageresizer.ashx?n=https://cms.haymarketindia.net/model/uploads/modelimages/Hyundai-Grand-i10-Nios-200120231541.jpg',
-        'https://example.com/car', 'Michael Johnson', false,false, 3, 2),
+        'https://example.com/car', 'Тёмный шоколад', false, false, 3, 2),
        (4, current_date, 'I wish for a smartphone', 'https://guide-images.cdn.ifixit.com/igi/o4OjCNmNeOhvsS1P.medium',
-        'https://example.com/smartphone', 'Sarah Williams', false, false,1, 3),
+        'https://example.com/smartphone', 'Желтые тюльпаны', false, false, 1, 3),
        (5, current_date, 'I wish for a concert ticket',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'https://example.com/concert', 'David Brown', false,true, 4, 4),
+        'https://example.com/concert', 'Сертификат на море', false, true, 4, 4),
        (6, current_date, 'I wish for a fitness tracker',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'https://example.com/fitness', 'Emily Davis', false,false, 1, 5),
+        'https://example.com/fitness', 'Билет в кино', false, false, 1, 5),
        (7, current_date, 'I wish for a designer handbag',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'https://example.com/handbag', 'Jessica Wilson', true,false, 5, 6),
+        'https://example.com/handbag', 'Dyson', true, false, 5, 6),
        (8, current_date, 'I wish for a spa day',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy-V3K6s24J3pPaFZPruuzQ4d9mJXQ2fxBfA&usqp=CAU',
-        'https://example.com/spa', 'Alex Turner', true,false, 2, 7),
+        'https://example.com/spa', 'Toyota Supra', true, false, 2, 7),
        (9, current_date, 'I wish for a new camera',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'https://example.com/camera', 'Olivia Thompson', true,false, 3, 8);
+        'https://example.com/camera', 'MacBook', true, false, 3, 8);
 
 
 INSERT INTO mailings (id, created_at, description, image, title)
@@ -204,8 +208,8 @@ VALUES (1, false, null, 7, 7),
        (5, true, 2, 7, null);
 
 INSERT INTO complaints (id, complaint, seen, user_id)
-VALUES (1, 'мага жаккан жок', true, 2),
-       (2, 'Буга КР каршы', false, 3);
+VALUES (1, 'Проявление ненависти', false, 2),
+       (2, 'Спам', false, 3);
 
 
 INSERT INTO wishes_complaints(wish_id, complaints_id)
@@ -218,9 +222,13 @@ VALUES (1, 2);
 
 INSERT INTO notifications(id, created_at, message, seen, type, charity_id, from_whom_user_id, reserve_id,
                           to_whom_user_id, wish_id)
-VALUES (3, current_date, 'Nurkanov Nurislam добавил желаемый подарок.', false, 'ADD_GIFT_TO_WISH_LIST', null, 2, null,
+VALUES (1, current_date, 'Nurkanov Nurislam добавил желаемый подарок.', false, 'ADD_GIFT_TO_WISH_LIST', null, 2, null,
         3, 2),
-       (4, current_date, 'Alex Turner было забронировано Ravshanbekov Syimyk', false, 'BOOKED_NOT_ANONYMOUSLY', null, 3,
+       (2, current_date, 'Alex Turner было забронировано Ravshanbekov Syimyk', false, 'BOOKED_NOT_ANONYMOUSLY', null, 3,
         2, 3, null),
-       (5, current_date, 'Nurmatova Nuraim отправил запрос в друзья.', false, 'FRIEND_REQUEST', null, 6,
-        null, 1, null);
+       (3, current_date, 'Nurmatova Nuraim отправил(-a) запрос в друзья', false, 'FRIEND_REQUEST', null, 6,
+        null, 1, null),
+       (4,current_date,'Nurkanov Nurislam пожаловался на Iphone 13 pro',false,'COMPLAINT',null,2,null,1,1),
+       (5,current_date,'Odesov Syimyk пожаловался на Отверженные',true,'COMPLAINT',1,3,null,1,null),
+       (6,current_date,'Abdykalykova Nurisa отправил(-a) запрос в друзья',true,'FRIEND_REQUEST',null,7,null,1,null),
+       (7,current_date,'Ravshanbekov Syimyk отправил(-a) запрос в друзья',false,'FRIEND_REQUEST',null,9,null,1,null);
