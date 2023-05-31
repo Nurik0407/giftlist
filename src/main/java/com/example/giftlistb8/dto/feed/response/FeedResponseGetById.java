@@ -13,7 +13,8 @@ public record FeedResponseGetById(
         String description,
         String photo,
         LocalDate date,
-        Boolean status,
+        boolean isReserved,
+        boolean isAnonymous,
         String friendPhoto
 ) {
 }

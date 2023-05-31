@@ -70,28 +70,43 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedResponseGetById getById(Long wishId) {
         String sql = """
-                SELECT u.id as userId,
-                       ui.image as image,
-                       concat(u.first_name, ' ', u.last_name) as fullName,
-                       w.name as wishName,
-                       w.image as wishImage,
-                       w.status as status,
-                       w.description as wishDescription,
-                       h.date as holidayDate,
-                       h.name as holidayName,
-                        coalesce((select ui.image
-                                 from reserves r
-                                          join users u2 on r.user_id = u2.id and w.id = r.wish_id
-                                 where is_anonymous is false),
-                                null ) as reserveUserPhoto
-                FROM users u
-                         Join wishes w on u.id = w.user_id
-                         Join user_infos ui on u.user_info_id = ui.id
-                         JOIN holidays h ON u.id = h.user_id and w.holiday_id = h.id where w.id=? and w.is_blocked=false;
+                SELECT u.id AS userId,
+                       ui.image AS image,
+                       concat(u.first_name, ' ', u.last_name) AS fullName,
+                       w.name AS wishName,
+                       w.image AS wishImage,
+                       w.status AS status,
+                       w.description AS wishDescription,
+                       h.date AS holidayDate,
+                       h.name AS holidayName,
+                       COALESCE(CASE WHEN r.is_anonymous = FALSE THEN rui.image END, NULL) AS reserveUserPhoto,
+                       COALESCE(r.is_anonymous, FALSE) AS is_anonymous
+                FROM 
+                        wishes w 
+                        JOIN users u ON u.id = w.user_id
+                        JOIN user_infos ui ON u.user_info_id = ui.id
+                        JOIN holidays h ON w.holiday_id = h.id
+                        LEFT JOIN reserves r ON r.wish_id = w.id
+                        LEFT JOIN users ru ON r.user_id = ru.id
+                        LEFT JOIN user_infos rui ON rui.id = ru.user_info_id
+                WHERE 
+                        w.id=? AND w.is_blocked=FALSE;
                 """;
 
         Object[] args = {wishId};
         log.debug("Searching for charity with id {}...", wishId);
-        return jdbcTemplate.queryForObject(sql, args, (resultSet, i) -> new FeedResponseGetById(resultSet.getLong("userId"), resultSet.getString("image"), resultSet.getString("fullName"), resultSet.getString("holidayName"), resultSet.getString("wishName"), resultSet.getString("wishDescription"), resultSet.getString("wishImage"), resultSet.getDate("holidayDate").toLocalDate(), resultSet.getBoolean("status"), resultSet.getString("reserveUserPhoto")));
+        return jdbcTemplate.queryForObject(sql, args, (resultSet, i)
+                -> new FeedResponseGetById(
+                        resultSet.getLong("userId"),
+                resultSet.getString("image"),
+                resultSet.getString("fullName"),
+                resultSet.getString("holidayName"),
+                resultSet.getString("wishName"),
+                resultSet.getString("wishDescription"),
+                resultSet.getString("wishImage"),
+                resultSet.getDate("holidayDate").toLocalDate(),
+                resultSet.getBoolean("status"),
+                resultSet.getBoolean("is_anonymous"),
+                resultSet.getString("reserveUserPhoto")));
     }
 }
