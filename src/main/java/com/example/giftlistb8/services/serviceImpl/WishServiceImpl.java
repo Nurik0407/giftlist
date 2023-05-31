@@ -9,6 +9,7 @@ import com.example.giftlistb8.entities.Notification;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.entities.Wish;
 import com.example.giftlistb8.enums.Type;
+import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.HolidayRepository;
 import com.example.giftlistb8.repositories.NotificationRepository;
@@ -94,6 +95,9 @@ public class WishServiceImpl implements WishService {
         Wish wish = wishRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Wish with id %s not found.", id)));
+        if (wishRepository.isReserved(id)){
+            throw new BadRequestException("Unable to delete booked gift.");
+        }
         User userInToken = jwtService.getUserInToken();
         userInToken.deleteWish(wish);
         wishRepository.deleteById(id);
@@ -109,6 +113,9 @@ public class WishServiceImpl implements WishService {
         Wish wish = wishRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Wish with id %s not found.", id)));
+        if (wishRepository.isReserved(id)){
+            throw new BadRequestException("Unable to edit booked gift.");
+        }
         wish.setName(request.name());
         wish.setLinkGift(request.linkGift());
         wish.setDateOfHoliday(request.dateOfHoliday());
