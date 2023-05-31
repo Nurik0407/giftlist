@@ -70,9 +70,10 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                        ui.telegram as telegram,
                        ui.facebook as facebook,
                        ui.whats_app as whats_app,
-                         u.email as user_email
+                       u.email as user_email
                 from users u
-                         join user_infos ui on u.user_info_id = ui.id where u.id = ?
+                       join user_infos ui on u.user_info_id = ui.id
+                        where u.id = ?
                 """;
         jdbcTemplate.query(sql, new Object[]{userId}, (resultSet, i) -> {
                     user.setId(resultSet.getLong("user_id"));
@@ -103,9 +104,12 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                 h.date as date_of_holiday, 
                 w.status as wishStatus
                 from wishes w
-                         join holidays h on h.id = w.holiday_id where w.is_blocked=false
+                         join holidays h on h.id = w.holiday_id
+                         join users u on w.user_id = u.id 
+                         where u.id = ? and w.is_blocked = false
                 """;
-        List<WishResponseUser> wishResponses = jdbcTemplate.query(query, (resultSet, i) -> new WishResponseUser(
+        List<WishResponseUser> wishResponses = jdbcTemplate.query(query,new Object[]{userId},(resultSet, i)
+                -> new WishResponseUser(
                 resultSet.getLong("wishId"),
                 resultSet.getString("image"),
                 resultSet.getString("wishName"),
@@ -120,9 +124,12 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                 h.name as holidayName, 
                 h.image as image, 
                 h.date as holiday_date
-                from holidays h;
+                from holidays h
+                join users u on h.user_id = u.id
+                where u.id = ?;
                 """;
-        List<HolidayResponse> holidayResponses = jdbcTemplate.query(query1, (resultSet, i) -> new HolidayResponse(
+        List<HolidayResponse> holidayResponses = jdbcTemplate.query(query1,new Object[]{userId},(resultSet, i)
+                -> new HolidayResponse(
                 resultSet.getLong("id"),
                 resultSet.getString("holidayName"),
                 resultSet.getString("image"),
@@ -130,24 +137,21 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
         ));
         user.setHolidayResponses(holidayResponses);
         String query2 = """
-                SELECT ch.id as charityId,
-                       ch.image as image,
-                       ch.name as name,
-                       ch.state as state,
-                       h.date,
-                       coalesce((select ui.image
-                                 from reserves r
-                                          join users u2 on r.user_id = u2.id and w.id = r.wish_id
-                                 where is_anonymous is false), NULL) as reserveUserPhoto,
-                       CASE WHEN r.charity_id IS NULL THEN FALSE ELSE TRUE END AS isReserved
-                FROM charities ch
-                         JOIN holidays h ON ch.user_id = h.user_id
-                         JOIN reserves r ON ch.id = r.charity_id
-                         JOIN users u on u.id = ch.user_id
-                         JOIN user_infos ui on u.user_info_id = ui.id
-                         JOIN wishes w on u.id = w.user_id where ch.is_blocked=false
+                SELECT c.id as charityId,
+                       c.image as image,
+                       c.name as name,
+                       c.state as state,
+                       c.date_of_issue as date,
+                       coalesce(case when r.is_anonymous = false then rui.image end ,null) as reserveUserPhoto,
+                       c.status as isReserved
+                FROM charities c
+                         JOIN users u on u.id = c.user_id
+                         LEFT JOIN reserves r on c.id = r.charity_id
+                         LEFT JOIN users ru on r.user_id = ru.id
+                         LEFT JOIN user_infos rui on ru.user_info_id = rui.id
+                         where u.id = ? and c.is_blocked = false
                 """;
-        List<CharityResponseUser> charityResponseUsers = jdbcTemplate.query(query2, (resultSet, i) -> new CharityResponseUser(
+        List<CharityResponseUser> charityResponseUsers = jdbcTemplate.query(query2,new Object[]{userId},(resultSet, i) -> new CharityResponseUser(
                 resultSet.getLong("charityId"),
                 resultSet.getString("image"),
                 resultSet.getString("name"),
