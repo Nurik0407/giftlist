@@ -13,8 +13,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Notification findByCharityId(Long id);
 
-    List<Notification> findAllByReserveId(Long id);
-
     @Modifying
     @Query(nativeQuery = true,value = "delete from notifications n where n.reserve_id = ?")
     void deleteNotification(Long reserveId);

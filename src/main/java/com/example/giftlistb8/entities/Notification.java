@@ -12,7 +12,6 @@ import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "notifications")
-@Data
 @Builder
 @NoArgsConstructor
 @Getter
