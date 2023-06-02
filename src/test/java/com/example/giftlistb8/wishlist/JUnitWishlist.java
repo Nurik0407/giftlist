@@ -113,5 +113,4 @@ public class JUnitWishlist {
         // Проверка соответствия сохраненного Wish и полученного из репозитория
         assertEquals(savedWish, retrievedWish);
     }
-
 }
