@@ -5,7 +5,8 @@ import java.time.LocalDate;
 
 @Builder
 public record ReserveResponseCharity(
-        Long id,
+        Long reserveId,
+        Long charityId,
         String fullName,
         String photo,
         String charityName,

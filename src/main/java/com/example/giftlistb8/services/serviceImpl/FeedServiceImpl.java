@@ -3,6 +3,7 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.dto.feed.response.FeedResponse;
 import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.dto.feed.response.FeedResponseGetById;
+import com.example.giftlistb8.exceptions.DataLockedException;
 import com.example.giftlistb8.services.FeedService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +70,16 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public FeedResponseGetById getById(Long wishId) {
+        String isBlocked = """
+                select w.is_blocked from wishes w
+                where w.id = ?
+                """;
+        Boolean result = jdbcTemplate.queryForObject(isBlocked, Boolean.class,wishId);
+
+        if (result != null ? result : false){
+            throw new DataLockedException("Data locked.");
+        }
+
         String sql = """
                 SELECT u.id AS userId,
                        ui.image AS image,
@@ -90,14 +101,14 @@ public class FeedServiceImpl implements FeedService {
                         LEFT JOIN users ru ON r.user_id = ru.id
                         LEFT JOIN user_infos rui ON rui.id = ru.user_info_id
                 WHERE 
-                        w.id=? AND w.is_blocked=FALSE;
+                        w.id = ? AND w.is_blocked = FALSE;
                 """;
 
         Object[] args = {wishId};
         log.debug("Searching for charity with id {}...", wishId);
-        return jdbcTemplate.queryForObject(sql, args, (resultSet, i)
+        FeedResponseGetById feedResponseGetById = jdbcTemplate.queryForObject(sql, args, (resultSet, i)
                 -> new FeedResponseGetById(
-                        resultSet.getLong("userId"),
+                resultSet.getLong("userId"),
                 resultSet.getString("image"),
                 resultSet.getString("fullName"),
                 resultSet.getString("holidayName"),
@@ -108,5 +119,7 @@ public class FeedServiceImpl implements FeedService {
                 resultSet.getBoolean("status"),
                 resultSet.getBoolean("is_anonymous"),
                 resultSet.getString("reserveUserPhoto")));
+
+        return feedResponseGetById;
     }
 }
