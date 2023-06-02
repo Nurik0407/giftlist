@@ -9,6 +9,7 @@ import com.example.giftlistb8.dto.reserve.response.*;
 import com.example.giftlistb8.entities.*;
 import com.example.giftlistb8.enums.Type;
 import com.example.giftlistb8.exceptions.AlreadyExistsException;
+import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.ForbiddenException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.*;
@@ -43,6 +44,9 @@ public class ReserveServiceImpl implements ReserveService {
         User userInToken = jwtService.getUserInToken();
         Wish wish = wishRepository.findById(reserveRequest.wishId()).orElseThrow(
                 () -> new NotFoundException(String.format("Wish with %s id not found", reserveRequest.wishId())));
+        if (userInToken.getWishes().contains(wish)) {
+            throw new BadRequestException("The booking operation is not possible for the gifts you want.");
+        }
         if (reserveRepository.wishReserved(wish.getId())) {
             throw new AlreadyExistsException("Wish with id %s already reserved.".formatted(wish.getId()));
         }
@@ -63,12 +67,12 @@ public class ReserveServiceImpl implements ReserveService {
                 .fromWhomUser(userInToken)
                 .createdAt(LocalDate.now())
                 .build();
-        if (isAnonymous){
+        if (isAnonymous) {
             notification.setType(Type.BOOKED_ANONYMOUSLY);
             notification.setMessage("%s было забронировано анонимным пользователем.".formatted(wish.getName()));
-        }else {
+        } else {
             notification.setType(Type.BOOKED_NOT_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано пользователем %s %s".formatted(wish.getName(),userInToken.getLastName(),userInToken.getFirstName()));
+            notification.setMessage("%s было забронировано пользователем %s %s".formatted(wish.getName(), userInToken.getLastName(), userInToken.getFirstName()));
         }
         notificationRepository.save(notification);
 
@@ -85,8 +89,11 @@ public class ReserveServiceImpl implements ReserveService {
         User userInToken = jwtService.getUserInToken();
         Charity charity = charityRepository.findById(reserveRequestCharity.charityId()).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with id %s not found", reserveRequestCharity.charityId())));
+        if (userInToken.getCharities().contains(charity)) {
+            throw new BadRequestException("The booking operation is not possible for the charities you want.");
+        }
         if (reserveRepository.charityReserved(charity.getId())) {
-           throw new AlreadyExistsException("Charity with id %s already reserved.".formatted(charity.getId()));
+            throw new AlreadyExistsException("Charity with id %s already reserved.".formatted(charity.getId()));
         }
         boolean isAnonymous = reserveRequestCharity.isAnonymous();
         Reserve reserve = new Reserve();
@@ -104,12 +111,12 @@ public class ReserveServiceImpl implements ReserveService {
                 .fromWhomUser(userInToken)
                 .createdAt(LocalDate.now())
                 .build();
-        if (isAnonymous){
+        if (isAnonymous) {
             notification.setType(Type.BOOKED_ANONYMOUSLY);
             notification.setMessage("%s было забронировано анонимным пользователем.".formatted(charity.getName()));
-        }else {
+        } else {
             notification.setType(Type.BOOKED_NOT_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано пользователем %s %s".formatted(charity.getName(),userInToken.getLastName(),userInToken.getFirstName()));
+            notification.setMessage("%s было забронировано пользователем %s %s".formatted(charity.getName(), userInToken.getLastName(), userInToken.getFirstName()));
         }
         notificationRepository.save(notification);
 
@@ -200,7 +207,8 @@ public class ReserveServiceImpl implements ReserveService {
         }
         wish.setStatus(false);
         wishRepository.save(wish);
-        reserveRepository.delete(reserve);
+        notificationRepository.deleteNotification(reserve.getId());
+        reserveRepository.deleteWishReserve(reserve.getId());
         log.info("Deleting wish reserve for user {}", user.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
@@ -221,7 +229,8 @@ public class ReserveServiceImpl implements ReserveService {
         }
         charity.setStatus(false);
         charityRepository.save(charity);
-        reserveRepository.delete(reserve);
+        notificationRepository.deleteNotification(reserve.getId());
+        reserveRepository.deleteWishReserve(reserve.getId());
         log.info("Deleting charity reserve for user {}", user.getId());
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)

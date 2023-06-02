@@ -89,4 +89,14 @@ public class GlobalExceptionHandler {
                 e.getMessage()
         );
     }
+
+    @ExceptionHandler(DataLockedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ExceptionResponse handlerDataLockedException(DataLockedException e) {
+        return new ExceptionResponse(
+                HttpStatus.CONFLICT,
+                e.getClass().getSimpleName(),
+                e.getMessage()
+        );
+    }
 }

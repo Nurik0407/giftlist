@@ -4,7 +4,8 @@ import java.time.LocalDate;
 
 @Builder
 public record ReserveResponseWish(
-        Long id,
+        Long reserveId,
+        Long wishId,
         String fullName,
         String photo,
         String holidayName,

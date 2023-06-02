@@ -2,10 +2,7 @@ package com.example.giftlistb8.entities;
 
 import com.example.giftlistb8.enums.Type;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,12 +15,15 @@ import static jakarta.persistence.CascadeType.*;
 @Data
 @Builder
 @NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_id_gen")
     @SequenceGenerator(name = "notification_id_gen",
-            sequenceName = "notification_id_seq", allocationSize = 1, initialValue = 10)
+            sequenceName = "notification_id_gen", allocationSize = 1, initialValue = 10)
+    @Column(nullable = false)
     private Long id;
     @Enumerated(EnumType.STRING)
     private Type type;
@@ -31,20 +31,26 @@ public class Notification {
     private Boolean seen;
     private LocalDate createdAt;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User fromWhomUser;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User toWhomUser;
 
-    @OneToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @OneToOne
+    @JoinColumn
     private Wish wish;
 
-    @OneToOne(cascade = {PERSIST, MERGE, REMOVE, DETACH})
+    @OneToOne
+    @JoinColumn
     private Charity charity;
 
-    @OneToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
+    @OneToOne(cascade = {ALL},orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Reserve reserve;
+
 }
