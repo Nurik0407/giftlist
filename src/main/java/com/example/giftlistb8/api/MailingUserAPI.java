@@ -1,8 +1,6 @@
 package com.example.giftlistb8.api;
 
 import com.example.giftlistb8.dto.SimpleResponse;
-import com.example.giftlistb8.repositories.MailingRepository;
-import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.MailingServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
