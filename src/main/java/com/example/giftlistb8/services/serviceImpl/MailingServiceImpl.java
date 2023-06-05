@@ -1,12 +1,16 @@
 package com.example.giftlistb8.services.serviceImpl;
 
+import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.mailing.request.MailingRequest;
 import com.example.giftlistb8.dto.mailing.response.AllMailingResponse;
 import com.example.giftlistb8.dto.mailing.response.MailingResponse;
 import com.example.giftlistb8.entities.Mailing;
+import com.example.giftlistb8.entities.User;
+import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.MailingRepository;
+import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.MailingServices;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -29,6 +33,8 @@ public class MailingServiceImpl implements MailingServices {
     private final MailingRepository repository;
     private final JavaMailSender javaMailSender;
     private final JdbcTemplate jdbcTemplate;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     @Override
     public SimpleResponse sendMailWithAttachment(
@@ -43,7 +49,7 @@ public class MailingServiceImpl implements MailingServices {
             mimeMessageHelper.setFrom("amanbekovnurbek04@gmail.com");
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setSubject(request.getTitle());
-            String htmlMessage = "<html><body>"+request.getDescription()+"<br><br><img src=" + request.getImage() + "></body></html>";
+            String htmlMessage = "<html><body>" + request.getDescription() + "<br><br><img src=" + request.getImage() + "></body></html>";
             mimeMessageHelper.setText(htmlMessage, true);
             javaMailSender.send(mimeMessage);
         }
@@ -77,7 +83,7 @@ public class MailingServiceImpl implements MailingServices {
     @Override
     public List<AllMailingResponse> getAllMailingList() {
         String query = "SELECT m.id, m.image, m.title, m.created_at " +
-                "FROM mailings m";
+                "FROM mailings m ORDER BY m.id DESC";
         return jdbcTemplate.query(query, (rs, rowNum) -> new AllMailingResponse(
                 rs.getLong("id"),
                 rs.getString("image"),
@@ -94,6 +100,28 @@ public class MailingServiceImpl implements MailingServices {
         return SimpleResponse.builder()
                 .message("DELETE MAILING")
                 .status(HttpStatus.OK)
+                .build();
+    }
+
+    @Override
+    public SimpleResponse subscribeToMailing(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new NotFoundException("Пользователь с почтой %s не найден.".formatted(email)));
+
+        User userInToken = jwtService.getUserInToken();
+        if (!userInToken.getEmail().equals(user.getEmail())) {
+            throw new BadRequestException("Вы можете подписаться только на свою почту.");
+        }
+
+        if (user.isSubscribeMailing()) {
+            throw new BadRequestException("Вы уже подписаны на рассылку.");
+        }
+
+        user.setSubscribeMailing(true);
+        userRepository.save(user);
+        return SimpleResponse.builder()
+                .status(HttpStatus.OK)
+                .message("Вы успешно подписались на рассылки.")
                 .build();
     }
 }
