@@ -18,4 +18,6 @@ public interface MailingServices {
     List<AllMailingResponse> getAllMailingList();
 
     SimpleResponse delete(Long id);
+
+    SimpleResponse subscribeToMailing(String email);
 }

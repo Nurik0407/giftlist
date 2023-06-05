@@ -18,7 +18,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Friend API", description = "User can send request,add and delete friends")
 @RequestMapping("api/friends")
-public class FriendApi {
+public class FriendAPI {
 
     private final FriendService friendService;
 

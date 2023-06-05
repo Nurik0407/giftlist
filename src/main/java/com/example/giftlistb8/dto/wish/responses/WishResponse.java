@@ -8,4 +8,10 @@ public record WishResponse(
     String name,
     String image,
     Boolean status){
+    public WishResponse(Long id, String name, String image, Boolean status) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.status = status;
+    }
 }

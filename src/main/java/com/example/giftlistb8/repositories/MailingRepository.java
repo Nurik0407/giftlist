@@ -1,5 +1,6 @@
 package com.example.giftlistb8.repositories;
 
+import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.entities.Mailing;
 import org.springframework.data.jpa.repository.JpaRepository;
 

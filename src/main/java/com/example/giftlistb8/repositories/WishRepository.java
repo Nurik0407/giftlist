@@ -14,7 +14,7 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
     @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w where w.id=:id and w.isBlocked=false ")
     Optional<WishResponse> findWishById(Long id);
 
-    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w join w.user u where u.id=:id and w.isBlocked=false")
+    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image,w.status) from Wish w join w.user u where u.id=:id and w.isBlocked=false order by w.id desc ")
     List<WishResponse> findAllWishes(Long id);
 
     @Query("SELECT count(r.id) > 0 FROM Wish w JOIN w.reserve r WHERE w.id = :id")

@@ -22,20 +22,20 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     @Query("SELECT NEW com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
             "r.id,r.wish.id,CONCAT(r.wish.user.firstName, ' ', r.wish.user.lastName)," +
             " r.wish.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
-            "FROM Reserve r JOIN r.user u where u.id = :id and r.wish.isBlocked = false")
+            "FROM Reserve r JOIN r.user u where u.id = :id and r.wish.isBlocked = false ORDER BY r.id DESC ")
     List<ReserveResponseWish> getAllReversesWish(Long id);
 
     @Query("SELECT NEW  com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(" +
             " r.id,r.charity.id,CONCAT(r.charity.user.firstName,' ', r.charity.user.lastName),r.charity.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue)" +
-            "FROM Reserve r JOIN r.user u where u.id = :id and r.charity.isBlocked = false")
+            "FROM Reserve r JOIN r.user u where u.id = :id and r.charity.isBlocked = false ORDER BY r.id DESC")
     List<ReserveResponseCharity> getAllReversesCharity(Long id);
 
 
     @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
-            "r.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name,r.wish.image) from Reserve r")
+            "r.id,r.wish.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name,r.wish.image) from Reserve r ORDER BY r.id DESC ")
     Page<ReserveResponseWish> getAll(Pageable pageable);
 
-    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(r.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue) from Reserve r")
+    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(r.id,r.charity.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue) from Reserve r ORDER BY r.id DESC ")
     Page<ReserveResponseCharity> getAllCharity(Pageable pageable);
 
     @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.wish = :wish")

@@ -28,7 +28,7 @@ public class CharityAdminServiceImpl implements CharityAdminService {
 
     @Override
     public List<CharitiesResponse> findAll() {
-        String sql = "SELECT u.id as user_id,CONCAT(u.last_name, ',', u.first_name) AS full_name, ui.image," +
+        String sql = "SELECT u.id as user_id,CONCAT(u.last_name, ' ', u.first_name) AS full_name, ui.image," +
                 "c.id,c.name, c.image, c.date_of_issue,c.state,case when r.id = null then false else true end  AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
                 "FROM charities c " +
                 "JOIN users u ON c.user_id = u.id " +

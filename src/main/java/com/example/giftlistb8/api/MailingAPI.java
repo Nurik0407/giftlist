@@ -21,7 +21,7 @@ import java.util.Optional;
 @PreAuthorize("hasAuthority('ADMIN')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Mailing API", description = "API for managing mailings by admin")
-public class MailingApi {
+public class MailingAPI {
 
     private final MailingServices mailingService;
 
