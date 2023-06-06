@@ -1,6 +1,5 @@
 package com.example.giftlistb8.repositories.custom.impl;
 
-import com.example.giftlistb8.dto.feed.response.FeedResponse;
 import com.example.giftlistb8.dto.holiday.response.HolidayByIdResponse;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 import com.example.giftlistb8.repositories.custom.HolidayRepositoryCustom;
@@ -8,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -21,7 +19,9 @@ public class HolidayRepositoryCustomImpl implements HolidayRepositoryCustom {
     public HolidayByIdResponse getById(Long id) {
 
         String getWishesByHolidayId = """
-                SELECT w.id as id,w.name as name,w.image as image,w.date_of_holiday as date,w.status as isReserved,r.is_anonymous as isAnonymous,COALESCE(case when r.is_anonymous = false then ui.image end,null) as reserveUserImage
+                SELECT w.id as id,w.name as name,w.image as image,w.date_of_holiday as date,
+                w.status as isReserved,r.is_anonymous as isAnonymous,
+                COALESCE(case when r.is_anonymous = false then ui.image end,null) as reserveUserImage
                 FROM wishes w
                 JOIN holidays h on w.holiday_id = h.id
                 LEFT JOIN reserves r on w.id = r.wish_id
