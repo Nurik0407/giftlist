@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasAuthority('USER')")
 @Tag(name = "Reserve API", description = "API endpoints for managing reserves")
 @CrossOrigin(origins = "*")
-public class ReserveApi {
+public class ReserveAPI {
     private final ReserveService reserveService;
 
     @Operation(summary = "This method for reserve the wish",
