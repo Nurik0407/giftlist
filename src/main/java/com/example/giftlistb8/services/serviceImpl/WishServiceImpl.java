@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -45,14 +44,9 @@ public class WishServiceImpl implements WishService {
     @Override
     public WishResponse getById(Long id) {
         log.info("Finding wish by id: {}", id);
-        Wish wish = wishRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(
-                        String.format("Restaurant with id: %s not found!", id)));
-        wishRepository.save(wish);
-
         return wishRepository.findWishById(id)
-                .orElseThrow(() -> new NoSuchElementException(
-                        String.format("Restaurant with id: %s not found!", id)));
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Wish with id: %s not found!", id)));
     }
 
     @Override

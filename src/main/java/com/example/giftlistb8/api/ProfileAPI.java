@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name = "Profile API", description = "User profile  all information.")
 @CrossOrigin
-public class ProfileApi {
+public class ProfileAPI {
     private final ProfileService profileService;
 
     @PreAuthorize("hasAuthority('USER')")
