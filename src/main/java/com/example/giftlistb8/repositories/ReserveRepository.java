@@ -31,12 +31,19 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     List<ReserveResponseCharity> getAllReversesCharity(Long id);
 
 
-    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
-            "r.id,r.wish.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name,r.wish.image) from Reserve r ORDER BY r.id DESC ")
-    Page<ReserveResponseWish> getAll(Pageable pageable);
+    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseWish" +
+            "(r.id,r.wish.id,concat(r.wish.user.lastName,' ',r.wish.user.firstName) ," +
+            "r.wish.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name,r.wish.image) " +
+            "FROM Reserve r " +
+            "JOIN r.user u WHERE u.id = :currentUserId ORDER BY r.id DESC ")
+    Page<ReserveResponseWish> getAll(Pageable pageable,Long currentUserId);
 
-    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(r.id,r.charity.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue) from Reserve r ORDER BY r.id DESC ")
-    Page<ReserveResponseCharity> getAllCharity(Pageable pageable);
+    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity" +
+            "(r.id,r.charity.id,concat(r.charity.user.lastName,' ',r.charity.user.firstName) ,r.charity.user.userInfo.image," +
+            "r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue) " +
+            "FROM Reserve r " +
+            "JOIN r.user u WHERE u.id = :currentUserId ORDER BY r.id DESC ")
+    Page<ReserveResponseCharity> getAllCharity(Pageable pageable,Long currentUserId);
 
     @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.wish = :wish")
     Optional<Reserve> findByUserAndWish(@Param("user") User user, @Param("wish") Wish wish);

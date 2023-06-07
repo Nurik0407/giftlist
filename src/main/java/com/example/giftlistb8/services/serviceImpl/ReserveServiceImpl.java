@@ -171,8 +171,9 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public PaginationResponse getWishReservePagination(int page, int size) {
+        Long currentUserId = jwtService.getUserInToken().getId();
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<ReserveResponseWish> pagedWishes = reserveRepository.getAll(pageable);
+        Page<ReserveResponseWish> pagedWishes = reserveRepository.getAll(pageable,currentUserId);
         log.info("Getting wish reserve pagination, page {} , size {}", page, size);
         return PaginationResponse.builder()
                 .elements(Collections.singletonList(pagedWishes.getContent()))
@@ -184,8 +185,9 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public PaginationResponse getCharityReservePagination(int page, int size) {
+        Long currentUserId = jwtService.getUserInToken().getId();
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<ReserveResponseCharity> pagedCharity = reserveRepository.getAllCharity(pageable);
+        Page<ReserveResponseCharity> pagedCharity = reserveRepository.getAllCharity(pageable,currentUserId);
         log.info("Getting charity reserve pagination, page {}, size {}", page, size);
         return PaginationResponse.builder()
                 .elements(Collections.singletonList(pagedCharity.getContent()))
