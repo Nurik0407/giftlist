@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ComplaintServiceImpl implements ComplaintService {
     private final CharityRepository charityRepository;
-    private final ComplaintRepository complaintRepository;
     private final JwtService jwtService;
     private final NotificationRepository notificationRepository;
     private final WishRepository wishRepository;
