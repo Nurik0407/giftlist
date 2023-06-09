@@ -9,7 +9,6 @@ import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 import com.example.giftlistb8.entities.*;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
-import com.example.giftlistb8.repositories.ComplaintRepository;
 import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.repositories.custom.ComplaintRepositoryCustom;
