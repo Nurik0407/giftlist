@@ -6,10 +6,7 @@ import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
 import com.example.giftlistb8.dto.complaint.request.ComplaintRequest;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
-import com.example.giftlistb8.entities.Charity;
-import com.example.giftlistb8.entities.Complaint;
-import com.example.giftlistb8.entities.Notification;
-import com.example.giftlistb8.entities.Wish;
+import com.example.giftlistb8.entities.*;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
 import com.example.giftlistb8.repositories.ComplaintRepository;
@@ -20,7 +17,6 @@ import com.example.giftlistb8.services.ComplaintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 
 
 @Service
@@ -35,16 +31,20 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public SimpleResponse complaintToCharity(ComplaintRequest request) {
-        Complaint complaint = new Complaint();
 
         Charity charity = charityRepository.findById(request.getId()).
-                orElseThrow(() -> new NotFoundException("Not found!"));
+                orElseThrow(() -> new NotFoundException("Charity with id %s not found.".formatted(request.getId())));
 
-        complaint.setComplaint(request.getComplaintDescription());
+        User currentUser = jwtService.getUserInToken();
+
+        Complaint complaint = Complaint.builder()
+                .complaint(request.getComplaintDescription())
+                .user(currentUser)
+                .seen(false)
+                .build();
         charity.getComplaints().add(complaint);
-        complaint.setUser(jwtService.getUserInToken());
 
-        complaintRepository.save(complaint);
+        charityRepository.save(charity);
 
         return SimpleResponse.builder()
                 .message("Complaint to Charity added to database!")
@@ -55,15 +55,20 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public SimpleResponse complaintToWish(ComplaintRequest request) {
-        Complaint complaint = new Complaint();
+
         Wish wish = wishRepository.findById(request.getId()).
-                orElseThrow(() -> new NotFoundException("Not found!"));
+                orElseThrow(() -> new NotFoundException("Wish with id %s not found.".formatted(request.getId())));
 
-        complaint.setComplaint(request.getComplaintDescription());
+        User currentUser = jwtService.getUserInToken();
+
+        Complaint complaint = Complaint.builder()
+                .complaint(request.getComplaintDescription())
+                .user(currentUser)
+                .seen(false)
+                .build();
         wish.getComplaints().add(complaint);
-        complaint.setUser(jwtService.getUserInToken());
 
-        complaintRepository.save(complaint);
+        wishRepository.save(wish);
 
         return SimpleResponse.builder()
                 .message("Complaint to Charity added to database!")
