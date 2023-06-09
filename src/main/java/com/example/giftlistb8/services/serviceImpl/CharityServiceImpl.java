@@ -74,7 +74,7 @@ public class CharityServiceImpl implements CharityService {
                 "FROM charities c " +
                 "JOIN users u ON c.user_id = u.id " +
                 "LEFT JOIN user_infos ui ON u.user_info_id = ui.id " +
-                "LEFT JOIN reserves r ON c.id = r.charity_id";
+                "LEFT JOIN reserves r ON c.id = r.charity_id ORDER BY c.id DESC ";
         List<CharitiesResponse> charitiesResponses = jdbcTemplate.query(sql, (rs, rowNum) -> new CharitiesResponse(
                 rs.getLong("user_id"),
                 rs.getString("full_name"),

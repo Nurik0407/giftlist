@@ -25,7 +25,8 @@ public class NotificationImpl implements NotificationRepositoryCustom {
                 join users towhomuser on towhomuser.id = n.to_whom_user_id
                 join users u on u.id = n.from_whom_user_id 
                 join user_infos ui on u.user_info_id = ui.id 
-                where towhomuser.id = ? AND n.type NOT IN ('COMPLAINT');
+                WHERE towhomuser.id = ? AND n.type NOT IN ('COMPLAINT')
+                ORDER BY n.id DESC;
                 """;
 
 
@@ -54,7 +55,8 @@ public class NotificationImpl implements NotificationRepositoryCustom {
                 join users towhomuser on towhomuser.id = n.to_whom_user_id
                 join users u on u.id = n.from_whom_user_id 
                 join user_infos ui on u.user_info_id = ui.id 
-                where n.type IN ('COMPLAINT');
+                where n.type IN ('COMPLAINT')
+                ORDER BY n.id DESC ;
                 """;
         return jdbcTemplate.query(sql, (resultSet, i) ->
                 new NotificationResponse(

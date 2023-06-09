@@ -35,6 +35,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                        (SELECT COUNT(*) FROM wishes w WHERE w.user_id = u.id and w.is_blocked=false) as total_wishes
                 FROM users u
                          JOIN user_infos ui on u.user_info_id = ui.id
+                ORDER BY u.id DESC        
                 """;
         String countSql = "SELECT COUNT(*) FROM (" + sql + ") as count_query";
         int count = jdbcTemplate.queryForObject(countSql, Integer.class);
