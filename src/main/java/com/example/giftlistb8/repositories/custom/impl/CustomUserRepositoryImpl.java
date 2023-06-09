@@ -7,6 +7,7 @@ import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
 import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.dto.wish.response.WishResponseUser;
 import com.example.giftlistb8.enums.ClothingSize;
+import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.repositories.custom.CustomUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
