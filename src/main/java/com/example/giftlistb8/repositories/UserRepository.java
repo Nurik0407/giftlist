@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select new com.example.giftlistb8.dto.profile.response.ProfileResponseGetById(u.id,ui.image,concat(u.firstName,' ',u.lastName),u.email) from User u join u.userInfo ui where u.id=:userId")
     Optional<ProfileResponseGetById> getByIdUser(Long userId);
 
-    @Query("select new com.example.giftlistb8.dto.profile.response.ProfileResponse(u.id,ui.image,concat(u.firstName,' ',u.lastName),ui.country,u.email,ui.hobby,ui.dateOfBirth,ui.phoneNumber,ui.important," +
+    @Query("select new com.example.giftlistb8.dto.profile.response.ProfileResponse(u.id,ui.image,u.lastName,u.firstName,ui.country,u.email,ui.hobby,ui.dateOfBirth,ui.phoneNumber,ui.important," +
             "ui.clothingSize,ui.shoeSize,ui.facebook ,ui.instagram,ui.telegram,ui.whatsApp) from User u join u.userInfo ui where u.id=:userId")
     Optional<ProfileResponse> getByIdUserDetail(Long userId);
 

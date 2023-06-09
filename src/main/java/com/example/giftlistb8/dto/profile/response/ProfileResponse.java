@@ -9,7 +9,8 @@ import java.time.LocalDate;
 public record ProfileResponse(
         Long id,
         String image,
-        String fullName,
+        String lastName,
+        String firstName,
         String country,
         String email,
         String hobby,
@@ -24,10 +25,11 @@ public record ProfileResponse(
         String whatsApp
 
 ) {
-    public ProfileResponse(Long id, String image, String fullName, String country, String email, String hobby, LocalDate dateOfBirth, String phoneNumber, String important, ClothingSize clothingSize, String shoeSize, String faceBook, String instagram, String telegram, String whatsApp) {
+    public ProfileResponse(Long id, String image, String lastName, String firstName, String country, String email, String hobby, LocalDate dateOfBirth, String phoneNumber, String important, ClothingSize clothingSize, String shoeSize, String faceBook, String instagram, String telegram, String whatsApp) {
         this.id = id;
         this.image = image;
-        this.fullName = fullName;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.country = country;
         this.email = email;
         this.hobby = hobby;

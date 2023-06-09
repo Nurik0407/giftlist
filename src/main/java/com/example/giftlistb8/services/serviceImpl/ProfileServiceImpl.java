@@ -42,7 +42,8 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileResponse getByIdDetailInformation() {
         User userInToken = jwtService.getUserInToken();
-        return userRepository.getByIdUserDetail(userInToken.getId()).orElseThrow(() -> new NotFoundException(String.format("User with %s id not found", userInToken.getId())));
+        return userRepository.getByIdUserDetail(userInToken.getId())
+                .orElseThrow(() -> new NotFoundException(String.format("User with %s id not found", userInToken.getId())));
     }
 
     @Override
