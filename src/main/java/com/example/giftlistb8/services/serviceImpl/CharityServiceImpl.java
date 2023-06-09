@@ -12,6 +12,7 @@ import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.enums.Type;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
+import com.example.giftlistb8.repositories.ComplaintRepository;
 import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.services.CharityService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class CharityServiceImpl implements CharityService {
                 .image(request.image())
                 .dateOfIssue(LocalDate.now())
                 .user(userInToken)
+                .status(false)
                 .build();
         repository.save(charity);
 
@@ -103,12 +105,18 @@ public class CharityServiceImpl implements CharityService {
 
     @Override
     public SimpleResponse delete(Long id) {
+
         User userInToken = jwtService.getUserInToken();
         Charity charity = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Charity with id %s not found.", id)));
+                .orElseThrow(() -> new NotFoundException("Charity with id %s not found.".formatted(id)));
+
         userInToken.deleteCharity(charity);
-        repository.deleteById(id);
+        repository.deleteFromReserve(id);
+        repository.deleteFromNotifications(id);
+        repository.deleteFromCharityComplaints(id);
+        notificationRepository.deleteFromCharity(id);
+        repository.deleteCharity(id);
+
         log.info("Charity with id {} successfully deleted",id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)

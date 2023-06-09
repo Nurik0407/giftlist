@@ -6,6 +6,7 @@ import com.example.giftlistb8.dto.profile.response.ProfileResponseGetById;
 import com.example.giftlistb8.entities.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -33,4 +34,32 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT count (u.id) > 0 FROM User u " +
            "JOIN u.requestsForFriends r where u.id = ?1 and r.id = ?2")
     boolean inMyRequests(Long currentUser,Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM users u WHERE u.id = ?1")
+    void deleteUser(Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM reserves r WHERE r.user_id = ?1")
+    void deleteFromReserve(Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM users_requests_for_friends  WHERE requests_for_friends_id = ?1")
+    void deleteFromUsersRequestsForFriends(Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM notifications WHERE from_whom_user_id = ?1 OR to_whom_user_id = ?1")
+    void deleteFromNotifications(Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM users_friends WHERE user_id = ?1 OR friends_id = ?1")
+    void deleteFromFriends(Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM wishes WHERE user_id = ?1")
+    void deleteFromWish(Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM holidays WHERE user_id = ?1")
+    void deleteFromHoliday(Long userId);
 }

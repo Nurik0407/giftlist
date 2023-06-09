@@ -3,6 +3,7 @@ package com.example.giftlistb8.repositories;
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
 import com.example.giftlistb8.entities.Charity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 
@@ -19,4 +20,19 @@ public interface CharityRepository extends JpaRepository<Charity, Long> {
            "WHERE c.id= ?1")
     Optional<CharityResponse> findCharityById(Long id);
 
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM charities WHERE id = ?1")
+    void deleteCharity(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM reserves WHERE charity_id = ?1")
+    void deleteFromReserve(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM notifications WHERE charity_id = ?1")
+    void deleteFromNotifications(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM charities_complaints WHERE charity_id = ?1")
+    void deleteFromCharityComplaints(Long id);
 }
