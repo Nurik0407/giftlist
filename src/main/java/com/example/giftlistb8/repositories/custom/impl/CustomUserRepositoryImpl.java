@@ -1,7 +1,6 @@
 package com.example.giftlistb8.repositories.custom.impl;
 
 import com.example.giftlistb8.dto.PaginationResponse;
-import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponseUser;
 import com.example.giftlistb8.dto.holiday.response.HolidayResponse;
 import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
@@ -9,10 +8,7 @@ import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.dto.wish.response.WishResponseUser;
 import com.example.giftlistb8.enums.ClothingSize;
 import com.example.giftlistb8.repositories.custom.CustomUserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -23,8 +19,8 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class CustomUserRepositoryImpl implements CustomUserRepository {
-    private final JdbcTemplate jdbcTemplate;
 
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public PaginationResponse<UserResponseGetAll> getAllUsers(int size, int page) {
@@ -165,80 +161,5 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
         user.setCharityResponseUsers(charityResponseUsers);
 
         return user;
-    }
-
-    @Transactional
-    @Override
-    public SimpleResponse deleteById(Long userId) {
-        try {
-
-            String updateReservesSql = "UPDATE reserves SET charity_id = NULL, wish_id = NULL WHERE charity_id IN (SELECT id FROM charities WHERE user_id = ?) OR wish_id IN (SELECT id FROM wishes WHERE user_id = ?) OR user_id = ?";
-            jdbcTemplate.update(updateReservesSql, userId, userId, userId);
-
-            String updateNotificationsSql = "UPDATE notifications SET from_whom_user_id = NULL, to_whom_user_id = NULL, reserve_id = NULL, charity_id = NULL, wish_id = NULL WHERE from_whom_user_id = ? OR to_whom_user_id = ? OR reserve_id = ? OR charity_id = ? OR wish_id = ?";
-            jdbcTemplate.update(updateNotificationsSql, userId, userId, userId, userId, userId);
-
-            String updateWishesSql = "UPDATE wishes SET holiday_id=NULL WHERE holiday_id=?";
-            jdbcTemplate.update(updateWishesSql, userId);
-
-            String updateReserveSql = "UPDATE reserves SET charity_id = NULL, wish_id = NULL, user_id = NULL WHERE charity_id = ? OR wish_id = ? OR user_id = ?";
-            jdbcTemplate.update(updateReserveSql, userId, userId, userId);
-
-            String updateUserFriendSql = "UPDATE users_friends SET friends_id=NULL WHERE friends_id=?";
-            jdbcTemplate.update(updateUserFriendSql, userId);
-
-            String updateFriendsSql = "UPDATE users_friends SET friends_id = NULL WHERE friends_id = ?";
-            jdbcTemplate.update(updateFriendsSql, userId);
-
-            String updateWishComplaintSql = "UPDATE wishes_complaints SET wish_id=NULL ,complaints_id=NULL where wish_id=? OR complaints_id=?";
-            jdbcTemplate.update(updateWishComplaintSql, userId, userId);
-
-            String updateRequestForFriend = "UPDATE users_requests_for_friends SET requests_for_friends_id=NULL ,user_id=NULL WHERE requests_for_friends_id=? OR user_id=?";
-            jdbcTemplate.update(updateRequestForFriend, userId,userId);
-
-            String updateCharityComplaintSql="UPDATE charities_complaints SET charity_id=NULL ,complaints_id=NULL WHERE charity_id=? OR complaints_id=?";
-            jdbcTemplate.update(updateCharityComplaintSql,userId,userId);
-
-
-            String deleteCharitiesComplaintsSql = "DELETE FROM charities_complaints WHERE charity_id IN (SELECT charity_id FROM charities WHERE user_id = ?)";
-            jdbcTemplate.update(deleteCharitiesComplaintsSql, userId);
-
-            String deleteWishesComplaintsSql = "DELETE FROM wishes_complaints WHERE complaints_id IN (SELECT complaints_id FROM complaints WHERE user_id = ?)";
-            jdbcTemplate.update(deleteWishesComplaintsSql, userId);
-
-            String deleteReservesSql = "DELETE FROM reserves WHERE wish_id IN (SELECT wish_id FROM wishes WHERE user_id = ?)";
-            jdbcTemplate.update(deleteReservesSql, userId);
-
-
-            String deleteNotificationsSql = "DELETE FROM notifications WHERE from_whom_user_id = ? OR to_whom_user_id = ?";
-            jdbcTemplate.update(deleteNotificationsSql, userId, userId);
-
-            String deleteWishesSql = "DELETE FROM wishes WHERE user_id = ? OR holiday_id IN (SELECT id FROM holidays WHERE user_id = ?)";
-            jdbcTemplate.update(deleteWishesSql, userId, userId);
-
-            String deleteWishes1Sql = "DELETE FROM wishes WHERE user_id = ?";
-            jdbcTemplate.update(deleteWishes1Sql, userId);
-
-            String deleteCharitiesSql = "DELETE FROM charities WHERE user_id = ?";
-            jdbcTemplate.update(deleteCharitiesSql, userId);
-
-            String deleteComplaintsSql = "DELETE FROM complaints WHERE user_id = ?";
-            jdbcTemplate.update(deleteComplaintsSql, userId);
-
-            String deleteHolidaysSql = "DELETE FROM holidays WHERE user_id = ?";
-            jdbcTemplate.update(deleteHolidaysSql, userId);
-
-            String deleteFriendshipSql = "DELETE FROM users_friends WHERE user_id = ?";
-            jdbcTemplate.update(deleteFriendshipSql, userId);
-
-            String deleteUserSql = "DELETE FROM users WHERE id = ?";
-            jdbcTemplate.update(deleteUserSql, userId);
-            return SimpleResponse.builder()
-                    .status(HttpStatus.OK)
-                    .message(String.format("User with %s id successfully deleted", userId))
-                    .build();
-        } catch (DataAccessException ex) {
-            throw new RuntimeException("Error deleting user with id " + userId, ex);
-        }
     }
 }

@@ -45,6 +45,7 @@ public class CharityServiceImpl implements CharityService {
                 .image(request.image())
                 .dateOfIssue(LocalDate.now())
                 .user(userInToken)
+                .status(false)
                 .build();
         repository.save(charity);
 
@@ -103,12 +104,18 @@ public class CharityServiceImpl implements CharityService {
 
     @Override
     public SimpleResponse delete(Long id) {
+
         User userInToken = jwtService.getUserInToken();
         Charity charity = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Charity with id %s not found.", id)));
+                .orElseThrow(() -> new NotFoundException("Charity with id %s not found.".formatted(id)));
+
         userInToken.deleteCharity(charity);
-        repository.deleteById(id);
+        repository.deleteFromReserve(id);
+        repository.deleteFromNotifications(id);
+        repository.deleteFromCharityComplaints(id);
+        notificationRepository.deleteFromCharity(id);
+        repository.deleteCharity(id);
+
         log.info("Charity with id {} successfully deleted",id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
