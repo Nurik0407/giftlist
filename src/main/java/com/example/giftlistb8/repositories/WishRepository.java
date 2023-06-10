@@ -3,6 +3,7 @@ package com.example.giftlistb8.repositories;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 import com.example.giftlistb8.entities.Wish;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,28 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
 
     @Query("SELECT count(r.id) > 0 FROM Wish w JOIN w.reserve r WHERE w.id = :id")
     boolean isReserved(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "UPDATE wishes SET holiday_id = NULL WHERE user_id = ?1")
+    void updateFromHoliday(Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "UPDATE reserves SET wish_id = NULL WHERE wish_id IN (SELECT w.id FROM wishes w WHERE w.user_id = ?1)")
+    void deleteFromReserveWish(Long userId);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM wishes WHERE id = ?1")
+    void deleteWish(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM wishes_complaints WHERE wish_id = ?1")
+    void deleteFromWishComplaints(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM notifications WHERE wish_id = ?1")
+    void deleteFromNotification(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM reserves WHERE wish_id = ?1")
+    void deleteFromReserve(Long id);
 }

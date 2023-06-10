@@ -6,10 +6,8 @@ import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
 import com.example.giftlistb8.dto.complaint.request.ComplaintRequest;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
-import com.example.giftlistb8.entities.Charity;
-import com.example.giftlistb8.entities.Complaint;
-import com.example.giftlistb8.entities.Notification;
-import com.example.giftlistb8.entities.Wish;
+import com.example.giftlistb8.entities.*;
+import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
 import com.example.giftlistb8.repositories.ComplaintRepository;
@@ -17,17 +15,17 @@ import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.repositories.custom.ComplaintRepositoryCustom;
 import com.example.giftlistb8.services.ComplaintService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ComplaintServiceImpl implements ComplaintService {
     private final CharityRepository charityRepository;
-    private final ComplaintRepository complaintRepository;
     private final JwtService jwtService;
     private final NotificationRepository notificationRepository;
     private final WishRepository wishRepository;
@@ -35,16 +33,20 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public SimpleResponse complaintToCharity(ComplaintRequest request) {
-        Complaint complaint = new Complaint();
 
         Charity charity = charityRepository.findById(request.getId()).
-                orElseThrow(() -> new NotFoundException("Not found!"));
+                orElseThrow(() -> new NotFoundException("Charity with id %s not found.".formatted(request.getId())));
 
-        complaint.setComplaint(request.getComplaintDescription());
+        User currentUser = jwtService.getUserInToken();
+
+        Complaint complaint = Complaint.builder()
+                .complaint(request.getComplaintDescription())
+                .user(currentUser)
+                .seen(false)
+                .build();
         charity.getComplaints().add(complaint);
-        complaint.setUser(jwtService.getUserInToken());
 
-        complaintRepository.save(complaint);
+        charityRepository.save(charity);
 
         return SimpleResponse.builder()
                 .message("Complaint to Charity added to database!")
@@ -55,15 +57,20 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public SimpleResponse complaintToWish(ComplaintRequest request) {
-        Complaint complaint = new Complaint();
+
         Wish wish = wishRepository.findById(request.getId()).
-                orElseThrow(() -> new NotFoundException("Not found!"));
+                orElseThrow(() -> new NotFoundException("Wish with id %s not found.".formatted(request.getId())));
 
-        complaint.setComplaint(request.getComplaintDescription());
+        User currentUser = jwtService.getUserInToken();
+
+        Complaint complaint = Complaint.builder()
+                .complaint(request.getComplaintDescription())
+                .user(currentUser)
+                .seen(false)
+                .build();
         wish.getComplaints().add(complaint);
-        complaint.setUser(jwtService.getUserInToken());
 
-        complaintRepository.save(complaint);
+        wishRepository.save(wish);
 
         return SimpleResponse.builder()
                 .message("Complaint to Charity added to database!")
@@ -112,28 +119,40 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public SimpleResponse deleteCharity(Long id) {
-        Charity charity = charityRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("Charity with " + id + " is not found!"));
-        charity.setUser(null);
-        Notification notification = notificationRepository.findByCharityId(id);
-        notification.setCharity(null);
-        notificationRepository.save(notification);
-        charityRepository.deleteById(id);
+
+        if (!charityRepository.existsById(id)) {
+            throw new BadRequestException("Благотворительность с id %s не найден.".formatted(id));
+        }
+
+        charityRepository.deleteFromReserve(id);
+        charityRepository.deleteFromNotifications(id);
+        charityRepository.deleteFromCharityComplaints(id);
+        notificationRepository.deleteFromCharity(id);
+
+        charityRepository.deleteCharity(id);
+
         return SimpleResponse.builder()
-                .message("Wish charity id " + id + "is deleted!")
+                .message("Благотворительность с id %s успешно удалена".formatted(id))
                 .status(HttpStatus.OK)
                 .build();
     }
 
     @Override
     public SimpleResponse deleteWish(Long id) {
-        Notification notification = notificationRepository.findByWishId(id);
-        notification.setWish(null);
-        notificationRepository.save(notification);
 
-        wishRepository.deleteById(id);
+        if (!wishRepository.existsById(id)) {
+            throw new BadRequestException("Желаемый подарок с id %s не найден.".formatted(id));
+        }
+
+        wishRepository.deleteFromReserve(id);
+        wishRepository.deleteFromNotification(id);
+        wishRepository.deleteFromWishComplaints(id);
+        notificationRepository.deleteFromWish(id);
+
+        wishRepository.deleteWish(id);
+
         return SimpleResponse.builder()
-                .message("Wish with id " + id + "is deleted!")
+                .message("Желаемый подарок с id %s успешно удалена".formatted(id))
                 .status(HttpStatus.OK)
                 .build();
     }

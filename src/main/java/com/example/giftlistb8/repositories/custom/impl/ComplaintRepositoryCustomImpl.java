@@ -39,7 +39,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                        JOIN users u ON ch.user_id = u.id
                        JOIN user_infos ui ON u.user_info_id = ui.id
                        JOIN charities_complaints cc on ch.id = cc.charity_id
-                       JOIN complaints c on cc.complaints_id = c.id;
+                       JOIN complaints c on cc.complaints_id = c.id
+                       ORDER BY ch.id DESC;
                  """;
 
         String sql2 = """
@@ -58,7 +59,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                          JOIN users u ON wh.user_id = u.id
                          JOIN user_infos ui ON u.user_info_id = ui.id
                          JOIN wishes_complaints cc on wh.id = cc.wish_id
-                         JOIN complaints c on cc.complaints_id = c.id;
+                         JOIN complaints c on cc.complaints_id = c.id
+                         ORDER BY wh.id DESC;
                  """;
 
 

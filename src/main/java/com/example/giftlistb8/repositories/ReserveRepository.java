@@ -66,4 +66,8 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     @Modifying
     @Query("delete from Reserve r where r.id=:id")
     void deleteWishReserve(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "UPDATE reserves SET wish_id = NULL WHERE user_id = ?1")
+    void updateFromWish(Long id);
 }
