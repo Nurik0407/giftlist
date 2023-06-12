@@ -4,6 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record AuthRegisterResponse(
+        String firstName,
+        String lastname,
         String token,
         Long id,
         String email,

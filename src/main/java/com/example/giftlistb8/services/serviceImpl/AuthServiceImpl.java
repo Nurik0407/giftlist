@@ -63,6 +63,8 @@ public class AuthServiceImpl implements AuthService {
 
         return AuthRegisterResponse.builder()
                 .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastname(user.getLastName())
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .token(jwtToken)
@@ -93,6 +95,8 @@ public class AuthServiceImpl implements AuthService {
 
         return AuthRegisterResponse.builder()
                 .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastname(user.getLastName())
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .token(token)
@@ -132,6 +136,9 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtService.generateToken(user);
 
         return AuthRegisterResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastname(user.getLastName())
                 .email(firebaseToken.getEmail())
                 .token(token)
                 .role(user.getRole().name())
