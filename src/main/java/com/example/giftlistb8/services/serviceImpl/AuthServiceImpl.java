@@ -134,6 +134,7 @@ public class AuthServiceImpl implements AuthService {
         return AuthRegisterResponse.builder()
                 .email(firebaseToken.getEmail())
                 .token(token)
+                .role(user.getRole().name())
                 .build();
     }
 }
