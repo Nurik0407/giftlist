@@ -4,12 +4,14 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.holiday.request.HolidayRequest;
+import com.example.giftlistb8.dto.holiday.response.HolidayByIdResponse;
 import com.example.giftlistb8.dto.holiday.response.HolidayResponse;
 import com.example.giftlistb8.entities.Holiday;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.HolidayRepository;
+import com.example.giftlistb8.repositories.custom.HolidayRepositoryCustom;
 import com.example.giftlistb8.services.HolidayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +28,12 @@ public class HolidayServiceImpl implements HolidayService {
     private final HolidayRepository repository;
     private final JwtService jwtService;
     private final JdbcTemplate jdbcTemplate;
+    private final HolidayRepositoryCustom holidayRepositoryCustom;
 
     @Override
     public List<HolidayResponse> findAll() {
         User user = jwtService.getUserInToken();
-        String sql = "SELECT h.id,h.name, h.image, h.date FROM holidays h JOIN users u ON h.user_id = u.id WHERE u.email = ?";
+        String sql = "SELECT h.id,h.name, h.image, h.date FROM holidays h JOIN users u ON h.user_id = u.id WHERE u.email = ? ORDER BY h.id DESC ";
         List<HolidayResponse> holidays = jdbcTemplate.query(sql, new Object[]{user.getEmail()}, (rs, rowNum) ->
                 new HolidayResponse(
                         rs.getLong("id"),
@@ -86,5 +89,10 @@ public class HolidayServiceImpl implements HolidayService {
                 .status(HttpStatus.OK)
                 .message(String.format("Holiday with id %s successfully deleted.", id))
                 .build();
+    }
+
+    @Override
+    public HolidayByIdResponse getById(Long id) {
+        return holidayRepositoryCustom.getById(id);
     }
 }

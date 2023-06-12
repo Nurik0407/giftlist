@@ -9,6 +9,7 @@ import com.example.giftlistb8.entities.Wish;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,23 +20,30 @@ import java.util.Optional;
 
 public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     @Query("SELECT NEW com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
-            "r.id,CONCAT(r.user.firstName, ' ', r.user.lastName)," +
-            " r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
-            "FROM Reserve r JOIN r.user u where u.id = :id and r.wish.isBlocked = false")
+            "r.id,r.wish.id,CONCAT(r.wish.user.firstName, ' ', r.wish.user.lastName)," +
+            " r.wish.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name, r.wish.image )" +
+            "FROM Reserve r JOIN r.user u where u.id = :id and r.wish.isBlocked = false ORDER BY r.id DESC ")
     List<ReserveResponseWish> getAllReversesWish(Long id);
 
     @Query("SELECT NEW  com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(" +
-            " r.id,CONCAT(r.user.firstName,' ', r.user.lastName),r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue)" +
-            "FROM Reserve r JOIN r.user u where u.id = :id and r.charity.isBlocked = false")
+            " r.id,r.charity.id,CONCAT(r.charity.user.firstName,' ', r.charity.user.lastName),r.charity.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue)" +
+            "FROM Reserve r JOIN r.user u where u.id = :id and r.charity.isBlocked = false ORDER BY r.id DESC")
     List<ReserveResponseCharity> getAllReversesCharity(Long id);
 
 
-    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseWish(" +
-            "r.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name,r.wish.image) from Reserve r")
-    Page<ReserveResponseWish> getAll(Pageable pageable);
+    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseWish" +
+            "(r.id,r.wish.id,concat(r.wish.user.lastName,' ',r.wish.user.firstName) ," +
+            "r.wish.user.userInfo.image, r.wish.holiday.name, r.wish.holiday.date, r.wish.name,r.wish.image) " +
+            "FROM Reserve r " +
+            "JOIN r.user u WHERE u.id = :currentUserId ORDER BY r.id DESC ")
+    Page<ReserveResponseWish> getAll(Pageable pageable,Long currentUserId);
 
-    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity(r.id,concat(r.user.lastName,' ',r.user.firstName) ,r.user.userInfo.image,r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue) from Reserve r")
-    Page<ReserveResponseCharity> getAllCharity(Pageable pageable);
+    @Query("select new com.example.giftlistb8.dto.reserve.response.ReserveResponseCharity" +
+            "(r.id,r.charity.id,concat(r.charity.user.lastName,' ',r.charity.user.firstName) ,r.charity.user.userInfo.image," +
+            "r.charity.name,r.charity.image,r.charity.state,r.charity.dateOfIssue) " +
+            "FROM Reserve r " +
+            "JOIN r.user u WHERE u.id = :currentUserId ORDER BY r.id DESC ")
+    Page<ReserveResponseCharity> getAllCharity(Pageable pageable,Long currentUserId);
 
     @Query("SELECT r FROM Reserve r WHERE r.user = :user AND r.wish = :wish")
     Optional<Reserve> findByUserAndWish(@Param("user") User user, @Param("wish") Wish wish);
@@ -55,11 +63,11 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
             "WHERE c.id = :charityId")
     boolean charityReserved(Long charityId);
 
-    @Query("SELECT CASE WHEN EXISTS " +
-            "(SELECT r FROM User u JOIN u.reserves r " +
-            "JOIN r.wish w WHERE u.id = ?1 and w.id = ?2) " +
-            "THEN FALSE ELSE TRUE END FROM User u WHERE u.id = ?1")
-    boolean wishExistInReserve(Long userId, Long wishId);
+    @Modifying
+    @Query("delete from Reserve r where r.id=:id")
+    void deleteWishReserve(Long id);
 
-
+    @Modifying
+    @Query(nativeQuery = true,value = "UPDATE reserves SET wish_id = NULL WHERE user_id = ?1")
+    void updateFromWish(Long id);
 }

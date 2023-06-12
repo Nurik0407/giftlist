@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface NotificationRepositoryCustom {
     List<NotificationResponse> getAll(Long id);
+
+    List<NotificationResponse> getAllComplaintNotifications();
 }

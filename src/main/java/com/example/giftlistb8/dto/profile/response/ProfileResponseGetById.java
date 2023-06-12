@@ -10,4 +10,10 @@ public record ProfileResponseGetById(
         String email
 
 ) {
+    public ProfileResponseGetById(Long id, String image, String fullName, String email) {
+        this.id = id;
+        this.image = image;
+        this.fullName = fullName;
+        this.email = email;
+    }
 }

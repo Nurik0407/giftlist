@@ -1,18 +1,15 @@
 package com.example.giftlistb8.repositories.custom.impl;
 
 import com.example.giftlistb8.dto.PaginationResponse;
-import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponseUser;
 import com.example.giftlistb8.dto.holiday.response.HolidayResponse;
 import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
 import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.dto.wish.response.WishResponseUser;
 import com.example.giftlistb8.enums.ClothingSize;
+import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.repositories.custom.CustomUserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -23,8 +20,8 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class CustomUserRepositoryImpl implements CustomUserRepository {
-    private final JdbcTemplate jdbcTemplate;
 
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public PaginationResponse<UserResponseGetAll> getAllUsers(int size, int page) {
@@ -35,6 +32,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                        (SELECT COUNT(*) FROM wishes w WHERE w.user_id = u.id and w.is_blocked=false) as total_wishes
                 FROM users u
                          JOIN user_infos ui on u.user_info_id = ui.id
+                ORDER BY u.id DESC        
                 """;
         String countSql = "SELECT COUNT(*) FROM (" + sql + ") as count_query";
         int count = jdbcTemplate.queryForObject(countSql, Integer.class);
@@ -70,9 +68,10 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                        ui.telegram as telegram,
                        ui.facebook as facebook,
                        ui.whats_app as whats_app,
-                         u.email as user_email
+                       u.email as user_email
                 from users u
-                         join user_infos ui on u.user_info_id = ui.id where u.id = ?
+                       join user_infos ui on u.user_info_id = ui.id
+                        where u.id = ?
                 """;
         jdbcTemplate.query(sql, new Object[]{userId}, (resultSet, i) -> {
                     user.setId(resultSet.getLong("user_id"));
@@ -103,9 +102,12 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                 h.date as date_of_holiday, 
                 w.status as wishStatus
                 from wishes w
-                         join holidays h on h.id = w.holiday_id where w.is_blocked=false
+                         join holidays h on h.id = w.holiday_id
+                         join users u on w.user_id = u.id 
+                         where u.id = ? and w.is_blocked = false
                 """;
-        List<WishResponseUser> wishResponses = jdbcTemplate.query(query, (resultSet, i) -> new WishResponseUser(
+        List<WishResponseUser> wishResponses = jdbcTemplate.query(query,new Object[]{userId},(resultSet, i)
+                -> new WishResponseUser(
                 resultSet.getLong("wishId"),
                 resultSet.getString("image"),
                 resultSet.getString("wishName"),
@@ -120,9 +122,12 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                 h.name as holidayName, 
                 h.image as image, 
                 h.date as holiday_date
-                from holidays h;
+                from holidays h
+                join users u on h.user_id = u.id
+                where u.id = ?;
                 """;
-        List<HolidayResponse> holidayResponses = jdbcTemplate.query(query1, (resultSet, i) -> new HolidayResponse(
+        List<HolidayResponse> holidayResponses = jdbcTemplate.query(query1,new Object[]{userId},(resultSet, i)
+                -> new HolidayResponse(
                 resultSet.getLong("id"),
                 resultSet.getString("holidayName"),
                 resultSet.getString("image"),
@@ -130,24 +135,21 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
         ));
         user.setHolidayResponses(holidayResponses);
         String query2 = """
-                SELECT ch.id as charityId,
-                       ch.image as image,
-                       ch.name as name,
-                       ch.state as state,
-                       h.date,
-                       coalesce((select ui.image
-                                 from reserves r
-                                          join users u2 on r.user_id = u2.id and w.id = r.wish_id
-                                 where is_anonymous is false), NULL) as reserveUserPhoto,
-                       CASE WHEN r.charity_id IS NULL THEN FALSE ELSE TRUE END AS isReserved
-                FROM charities ch
-                         JOIN holidays h ON ch.user_id = h.user_id
-                         JOIN reserves r ON ch.id = r.charity_id
-                         JOIN users u on u.id = ch.user_id
-                         JOIN user_infos ui on u.user_info_id = ui.id
-                         JOIN wishes w on u.id = w.user_id where ch.is_blocked=false
+                SELECT c.id as charityId,
+                       c.image as image,
+                       c.name as name,
+                       c.state as state,
+                       c.date_of_issue as date,
+                       coalesce(case when r.is_anonymous = false then rui.image end ,null) as reserveUserPhoto,
+                       c.status as isReserved
+                FROM charities c
+                         JOIN users u on u.id = c.user_id
+                         LEFT JOIN reserves r on c.id = r.charity_id
+                         LEFT JOIN users ru on r.user_id = ru.id
+                         LEFT JOIN user_infos rui on ru.user_info_id = rui.id
+                         where u.id = ? and c.is_blocked = false
                 """;
-        List<CharityResponseUser> charityResponseUsers = jdbcTemplate.query(query2, (resultSet, i) -> new CharityResponseUser(
+        List<CharityResponseUser> charityResponseUsers = jdbcTemplate.query(query2,new Object[]{userId},(resultSet, i) -> new CharityResponseUser(
                 resultSet.getLong("charityId"),
                 resultSet.getString("image"),
                 resultSet.getString("name"),
@@ -160,80 +162,5 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
         user.setCharityResponseUsers(charityResponseUsers);
 
         return user;
-    }
-
-    @Transactional
-    @Override
-    public SimpleResponse deleteById(Long userId) {
-        try {
-
-            String updateReservesSql = "UPDATE reserves SET charity_id = NULL, wish_id = NULL WHERE charity_id IN (SELECT id FROM charities WHERE user_id = ?) OR wish_id IN (SELECT id FROM wishes WHERE user_id = ?) OR user_id = ?";
-            jdbcTemplate.update(updateReservesSql, userId, userId, userId);
-
-            String updateNotificationsSql = "UPDATE notifications SET from_whom_user_id = NULL, to_whom_user_id = NULL, reserve_id = NULL, charity_id = NULL, wish_id = NULL WHERE from_whom_user_id = ? OR to_whom_user_id = ? OR reserve_id = ? OR charity_id = ? OR wish_id = ?";
-            jdbcTemplate.update(updateNotificationsSql, userId, userId, userId, userId, userId);
-
-            String updateWishesSql = "UPDATE wishes SET holiday_id=NULL WHERE holiday_id=?";
-            jdbcTemplate.update(updateWishesSql, userId);
-
-            String updateReserveSql = "UPDATE reserves SET charity_id = NULL, wish_id = NULL, user_id = NULL WHERE charity_id = ? OR wish_id = ? OR user_id = ?";
-            jdbcTemplate.update(updateReserveSql, userId, userId, userId);
-
-            String updateUserFriendSql = "UPDATE users_friends SET friends_id=NULL WHERE friends_id=?";
-            jdbcTemplate.update(updateUserFriendSql, userId);
-
-            String updateFriendsSql = "UPDATE users_friends SET friends_id = NULL WHERE friends_id = ?";
-            jdbcTemplate.update(updateFriendsSql, userId);
-
-            String updateWishComplaintSql = "UPDATE wishes_complaints SET wish_id=NULL ,complaints_id=NULL where wish_id=? OR complaints_id=?";
-            jdbcTemplate.update(updateWishComplaintSql, userId, userId);
-
-            String updateRequestForFriend = "UPDATE users_requests_for_friends SET requests_for_friends_id=NULL ,user_id=NULL WHERE requests_for_friends_id=? OR user_id=?";
-            jdbcTemplate.update(updateRequestForFriend, userId,userId);
-
-            String updateCharityComplaintSql="UPDATE charities_complaints SET charity_id=NULL ,complaints_id=NULL WHERE charity_id=? OR complaints_id=?";
-            jdbcTemplate.update(updateCharityComplaintSql,userId,userId);
-
-
-            String deleteCharitiesComplaintsSql = "DELETE FROM charities_complaints WHERE charity_id IN (SELECT charity_id FROM charities WHERE user_id = ?)";
-            jdbcTemplate.update(deleteCharitiesComplaintsSql, userId);
-
-            String deleteWishesComplaintsSql = "DELETE FROM wishes_complaints WHERE complaints_id IN (SELECT complaints_id FROM complaints WHERE user_id = ?)";
-            jdbcTemplate.update(deleteWishesComplaintsSql, userId);
-
-            String deleteReservesSql = "DELETE FROM reserves WHERE wish_id IN (SELECT wish_id FROM wishes WHERE user_id = ?)";
-            jdbcTemplate.update(deleteReservesSql, userId);
-
-
-            String deleteNotificationsSql = "DELETE FROM notifications WHERE from_whom_user_id = ? OR to_whom_user_id = ?";
-            jdbcTemplate.update(deleteNotificationsSql, userId, userId);
-
-            String deleteWishesSql = "DELETE FROM wishes WHERE user_id = ? OR holiday_id IN (SELECT id FROM holidays WHERE user_id = ?)";
-            jdbcTemplate.update(deleteWishesSql, userId, userId);
-
-            String deleteWishes1Sql = "DELETE FROM wishes WHERE user_id = ?";
-            jdbcTemplate.update(deleteWishes1Sql, userId);
-
-            String deleteCharitiesSql = "DELETE FROM charities WHERE user_id = ?";
-            jdbcTemplate.update(deleteCharitiesSql, userId);
-
-            String deleteComplaintsSql = "DELETE FROM complaints WHERE user_id = ?";
-            jdbcTemplate.update(deleteComplaintsSql, userId);
-
-            String deleteHolidaysSql = "DELETE FROM holidays WHERE user_id = ?";
-            jdbcTemplate.update(deleteHolidaysSql, userId);
-
-            String deleteFriendshipSql = "DELETE FROM users_friends WHERE user_id = ?";
-            jdbcTemplate.update(deleteFriendshipSql, userId);
-
-            String deleteUserSql = "DELETE FROM users WHERE id = ?";
-            jdbcTemplate.update(deleteUserSql, userId);
-            return SimpleResponse.builder()
-                    .status(HttpStatus.OK)
-                    .message(String.format("User with %s id successfully deleted", userId))
-                    .build();
-        } catch (DataAccessException ex) {
-            throw new RuntimeException("Error deleting user with id " + userId, ex);
-        }
     }
 }

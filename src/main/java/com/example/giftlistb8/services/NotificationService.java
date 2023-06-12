@@ -9,4 +9,6 @@ public interface NotificationService {
     List<NotificationResponse> getAllMyNotifications();
 
     SimpleResponse markAllAsRead();
+
+    List<NotificationResponse> getAllComplaintNotifications();
 }

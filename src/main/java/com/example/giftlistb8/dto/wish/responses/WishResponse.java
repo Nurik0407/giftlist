@@ -2,10 +2,15 @@ package com.example.giftlistb8.dto.wish.responses;
 
 import lombok.Builder;
 
+import java.time.LocalDate;
+
 @Builder
 public record WishResponse(
     Long id,
     String name,
     String image,
-    Boolean status){
-}
+    LocalDate date,
+    boolean isReserved,
+    boolean isAnonymous,
+    String reserveUserImage
+){}
