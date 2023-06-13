@@ -177,10 +177,7 @@ VALUES (1, current_date, 'Don t miss our exclusive sale!',
         'Holiday Gift Guide'),
        (9, current_date, 'New year, new you! Shop our activewear collection',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'Activewear Collection'),
-       (10, current_date, 'Find the perfect Valentines Day gift',
-        'https://www.hindustantimes.com/ht-img/img/2023/02/13/1600x900/valentines_day_2023_1676267034832_1676267046643_1676267046643.jpg',
-        'Valentines Day Gifts');
+        'Activewear Collection');
 
 
 INSERT INTO users_friends(user_id, friends_id)
