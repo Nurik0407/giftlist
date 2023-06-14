@@ -55,6 +55,7 @@ public class FriendServiceImpl implements FriendService {
         }
         if (user.getFriends().contains(friend)) {
             user.getFriends().remove(friend);
+            friend.getFriends().remove(user);
             log.info("User {} has deleted friend {}", user.getEmail(), friend.getEmail());
             return new SimpleResponse(HttpStatus.OK, "removed from friends");
         }
@@ -87,6 +88,7 @@ public class FriendServiceImpl implements FriendService {
 
         if (user.getRequestsForFriends().contains(request)) {
             user.getFriends().add(request);
+            request.getFriends().add(user);
             user.getRequestsForFriends().remove(request);
 
             Notification notification = Notification.builder()
