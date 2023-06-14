@@ -61,6 +61,7 @@ public class WishServiceImpl implements WishService {
                 .holiday(holiday)
                 .user(user)
                 .description(request.descriptions())
+                .status(false)
                 .build();
         wishRepository.save(wish);
 
