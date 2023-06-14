@@ -123,6 +123,7 @@ public class AuthServiceImpl implements AuthService {
             newUser.setPassword(firebaseToken.getEmail());
             newUser.setRole(Role.USER);
             newUser.setSubscribeMailing(true);
+            newUser.setIsBlocked(false);
             userRepository.save(newUser);
         }
 
