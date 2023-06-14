@@ -33,6 +33,7 @@ public class HolidayRepositoryCustomImpl implements HolidayRepositoryCustom {
         List<WishResponse> wishesByHolidayId = jdbcTemplate.query(getWishesByHolidayId, new Object[]{id}, (resultSet, i) -> new WishResponse(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
+                resultSet.getString("holidayName"),
                 resultSet.getString("image"),
                 resultSet.getDate("date").toLocalDate(),
                 resultSet.getBoolean("isReserved"),
