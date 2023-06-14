@@ -15,11 +15,14 @@ public class NotificationImpl implements NotificationRepositoryCustom {
     @Override
     public List<NotificationResponse> getAll(Long userId) {
         String sql = """
-                select u.id as fromWhomUserId,
+                select
+                n.id as id,
+                u.id as fromWhomUserId,
                 ui.image as image,
                 concat(u.first_name,' ',u.last_name) as fullName,
                 n.type as type,
                 n.message as message,
+                n.seen as seen,
                 n.created_at as createdAt 
                 from notifications n 
                 join users towhomuser on towhomuser.id = n.to_whom_user_id
@@ -32,11 +35,12 @@ public class NotificationImpl implements NotificationRepositoryCustom {
 
         return jdbcTemplate.query(sql, (resultSet, i) ->
              new NotificationResponse(
+                     resultSet.getLong("id"),
                     resultSet.getLong("fromWhomUserId"),
-                    resultSet.getString("fullName"),
                      resultSet.getString("image"),
                     resultSet.getString("type"),
                     resultSet.getString("message"),
+                     resultSet.getBoolean("seen"),
                      resultSet.getDate("createdAt").toLocalDate()
             ),userId
         );
@@ -45,11 +49,14 @@ public class NotificationImpl implements NotificationRepositoryCustom {
     @Override
     public List<NotificationResponse> getAllComplaintNotifications() {
         String sql = """
-                select u.id as fromWhomUserId,
+                select 
+                n.id as id,
+                u.id as fromWhomUserId,
                 ui.image as image,
                 concat(u.first_name,' ',u.last_name) as fullName,
                 n.type as type,
                 n.message as message,
+                n.seen as seen,
                 n.created_at as createdAt 
                 from notifications n 
                 join users towhomuser on towhomuser.id = n.to_whom_user_id
@@ -60,11 +67,12 @@ public class NotificationImpl implements NotificationRepositoryCustom {
                 """;
         return jdbcTemplate.query(sql, (resultSet, i) ->
                 new NotificationResponse(
+                        resultSet.getLong("id"),
                         resultSet.getLong("fromWhomUserId"),
-                        resultSet.getString("fullName"),
                         resultSet.getString("image"),
                         resultSet.getString("type"),
                         resultSet.getString("message"),
+                        resultSet.getBoolean("seen"),
                         resultSet.getDate("createdAt").toLocalDate()
                 )
         );

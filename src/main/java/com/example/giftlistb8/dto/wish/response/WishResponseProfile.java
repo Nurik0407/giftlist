@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class WishResponseProfile{
         private Long userId;
+        private Long wishId;
         private String fullName;
         private String userImage;
         private String phoneNumber;

@@ -1,7 +1,7 @@
 package com.example.giftlistb8.repositories.custom.impl;
 
 import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
-import com.example.giftlistb8.dto.charity.response.CharityResponseWIthComplaint;
+import com.example.giftlistb8.dto.charity.response.CharityResponseWithComplaint;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.user.response.WhoComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
@@ -24,7 +24,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     public ComplaintResponse getAllComplaints() {
 
         String sql = """
-                SELECT ch.id as id,CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+                SELECT ch.id as id,CONCAT(u.last_name, ' ', u.first_name) AS full_name,
                        ui.image AS user_image,
                        ch.name AS charity_name,
                        ch.date_of_issue AS charity_date_of_issue,
@@ -38,8 +38,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                             FROM charities ch
                        JOIN users u ON ch.user_id = u.id
                        JOIN user_infos ui ON u.user_info_id = ui.id
-                       JOIN charities_complaints cc on ch.id = cc.charity_id
-                       JOIN complaints c on cc.complaints_id = c.id
+                       RIGHT JOIN charities_complaints cc on ch.id = cc.charity_id
+                       RIGHT JOIN complaints c on cc.complaints_id = c.id
                        ORDER BY ch.id DESC;
                  """;
 
@@ -66,8 +66,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
 
         ComplaintResponse complaintResponse = new ComplaintResponse();
 
-        List<CharityResponseWIthComplaint> charityResponses = jdbcTemplate.query(sql, (resultSet, i) ->
-                new CharityResponseWIthComplaint(
+        List<CharityResponseWithComplaint> charityResponses = jdbcTemplate.query(sql, (resultSet, i) ->
+                new CharityResponseWithComplaint(
                         resultSet.getLong("id"),
                         resultSet.getString("full_name"),
                         resultSet.getString("user_image"),
@@ -78,7 +78,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                         resultSet.getString("complaint_text")
                 ));
 
-        complaintResponse.setCharityResponseWIthComplaints(charityResponses);
+        complaintResponse.setCharityResponseWithComplaints(charityResponses);
         List<WishResponseWithComplaint> wishResponses = jdbcTemplate.query(sql2, (resultSet, i) ->
                 new WishResponseWithComplaint(
                         resultSet.getLong("id"),
@@ -98,8 +98,10 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     @Override
     public WishResponseProfile wishGetById(Long id) {
         String sql = """
-                SELECT u.id,
-                concat(u.first_name,' ',u.last_name) AS fullName,
+                SELECT 
+                       u.id,
+                       w.id,
+                       concat(u.first_name,' ',u.last_name) AS fullName,
                        ui.image AS userImage,
                        ui.phone_number,
                        w.name AS wishName,
@@ -142,6 +144,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     (rs, rowNum) -> {
                         WishResponseProfile response = new WishResponseProfile();
                         response.setUserId(rs.getLong("id"));
+                        response.setWishId(rs.getLong("wishId"));
                         response.setFullName(rs.getString("fullName"));
                         response.setUserImage(rs.getString("userImage"));
                         response.setPhoneNumber(rs.getString("phone_number"));

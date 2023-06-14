@@ -21,7 +21,7 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
             "where w.id = :id and w.isBlocked = false ")
     Optional<WishResponse> findWishById(Long id);
 
-    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image," +
+    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.holiday.name,w.image," +
             "w.dateOfHoliday,w.status,COALESCE(r.isAnonymous,false) ,COALESCE(case when r.isAnonymous = false then ui.image end,null)) " +
             "FROM Wish w " +
             "JOIN w.user u " +
