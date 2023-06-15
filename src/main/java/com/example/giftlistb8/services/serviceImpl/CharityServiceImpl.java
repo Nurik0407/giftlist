@@ -12,7 +12,6 @@ import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.enums.Type;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
-import com.example.giftlistb8.repositories.ComplaintRepository;
 import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.services.CharityService;
 import lombok.RequiredArgsConstructor;
