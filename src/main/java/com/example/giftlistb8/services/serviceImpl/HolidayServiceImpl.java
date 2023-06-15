@@ -11,8 +11,10 @@ import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.HolidayRepository;
+import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.repositories.custom.HolidayRepositoryCustom;
 import com.example.giftlistb8.services.HolidayService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,8 +25,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class HolidayServiceImpl implements HolidayService {
+    private final WishRepository wishRepository;
     private final HolidayRepository repository;
     private final JwtService jwtService;
     private final JdbcTemplate jdbcTemplate;
@@ -74,16 +78,21 @@ public class HolidayServiceImpl implements HolidayService {
 
     @Override
     public SimpleResponse delete(Long id) {
+
         Holiday holiday = repository.findById(id).orElseThrow(() -> {
             log.error("Holiday with id {} not found.", id);
             return new NotFoundException(String.format("Holiday with id %s not found.", id));});
+
         User userInToken = jwtService.getUserInToken();
         if (!userInToken.getHolidays().contains(holiday)) {
             throw new BadRequestException(
                     String.format("The holiday with id %s cannot be deleted as it does not belong to the current user.", id));
         }
+
         userInToken.deleteHoliday(holiday);
-        repository.deleteById(id);
+        wishRepository.updateFromHoliday(userInToken.getId());
+        repository.deleteHoliday(id);
+
         log.info("Holiday with id {} successfully deleted.", id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)

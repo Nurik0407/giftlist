@@ -95,6 +95,7 @@ public class WishServiceImpl implements WishService {
         }
         User userInToken = jwtService.getUserInToken();
         userInToken.deleteWish(wish);
+        notificationRepository.deleteFromWishUser(id);
         wishRepository.deleteById(id);
         log.info("Deleting wish with id: {}", id);
         return SimpleResponse.builder()

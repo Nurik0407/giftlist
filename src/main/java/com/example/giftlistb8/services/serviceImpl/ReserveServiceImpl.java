@@ -220,12 +220,16 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public SimpleResponse deleteCharity(Long charityId) {
+
         User user = jwtService.getUserInToken();
+
         Charity charity = charityRepository.findById(charityId).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with %s id not found", charityId)));
+
         Reserve reserve = reserveRepository.findByUserAndCharity(user, charity)
                 .orElseThrow(() -> new NotFoundException(String.format("Reserve for user %s and wish %s not found",
                         user.getId(), charity.getId())));
+
         if (!reserve.getUser().equals(user)) {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }

@@ -20,4 +20,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Modifying
     @Query(nativeQuery = true,value = "DELETE FROM notifications WHERE type = 'COMPLAINT' and charity_id = ?1")
     void deleteFromCharity(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM notifications WHERE wish_id = ?1")
+    void deleteFromWishUser(Long id);
 }
