@@ -19,7 +19,10 @@ public class HolidayRepositoryCustomImpl implements HolidayRepositoryCustom {
     public HolidayByIdResponse getById(Long id) {
 
         String getWishesByHolidayId = """
-                SELECT w.id as id,w.name as name,w.image as image,w.date_of_holiday as date,
+                SELECT w.id as id,
+                w.name as name,
+                h.name as holidayName,
+                w.image as image,w.date_of_holiday as date,
                 w.status as isReserved,r.is_anonymous as isAnonymous,
                 COALESCE(case when r.is_anonymous = false then ui.image end,null) as reserveUserImage
                 FROM wishes w
