@@ -9,6 +9,7 @@ import com.example.giftlistb8.dto.profile.response.ProfileResponse;
 import com.example.giftlistb8.dto.profile.response.ProfileResponseGetById;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.entities.UserInfo;
+import com.example.giftlistb8.exceptions.AlreadyExistsException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.UserRepository;
 import com.example.giftlistb8.services.ProfileService;
@@ -26,9 +27,33 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public SimpleResponse saveUser(ProfileRequest profileRequest) {
-        UserInfo userInfo = UserInfo.builder().image(profileRequest.image()).country(profileRequest.country()).dateOfBirth(profileRequest.dateOfBirth()).phoneNumber(profileRequest.phoneNumber()).clothingSize(profileRequest.clothingSize()).shoeSize(profileRequest.shoeSize()).hobby(profileRequest.hobby()).important(profileRequest.important()).facebook(profileRequest.faceBook()).whatsApp(profileRequest.whatsApp()).instagram(profileRequest.instagram()).telegram(profileRequest.instagram()).build();
 
-        User user = User.builder().userInfo(userInfo).firstName(profileRequest.firstName()).lastName(profileRequest.lastName()).email(profileRequest.email()).build();
+        if (userRepository.existsByEmail(profileRequest.email())) {
+            throw new AlreadyExistsException("User with email %s already exist.".formatted(profileRequest.email()));
+        }
+
+        UserInfo userInfo = UserInfo.builder()
+                .image(profileRequest.image())
+                .country(profileRequest.country())
+                .dateOfBirth(profileRequest.dateOfBirth())
+                .phoneNumber(profileRequest.phoneNumber())
+                .clothingSize(profileRequest.clothingSize())
+                .shoeSize(profileRequest.shoeSize())
+                .hobby(profileRequest.hobby())
+                .important(profileRequest.important())
+                .facebook(profileRequest.faceBook())
+                .whatsApp(profileRequest.whatsApp())
+                .instagram(profileRequest.instagram())
+                .telegram(profileRequest.instagram())
+                .build();
+
+        User user = User.builder()
+                .userInfo(userInfo)
+                .firstName(profileRequest.firstName())
+                .lastName(profileRequest.lastName())
+                .email(profileRequest.email())
+                .build();
+
         userRepository.save(user);
         return SimpleResponse.builder().status(HttpStatus.OK).message(String.format("User with %s name successfully saved", profileRequest.firstName())).build();
     }
