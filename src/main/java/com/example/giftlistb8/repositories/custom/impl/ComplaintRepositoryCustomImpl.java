@@ -264,9 +264,10 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
             if (whoComplaintResponses == null) {
                 whoComplaintResponses = new ArrayList<>();
                 charityResponseProfile.setWhoComplaintResponses(whoComplaintResponses);
+
             }
+            charityResponseProfile.getWhoComplaintResponses().addAll(complaintResponses);
         }
-        charityResponseProfile.getWhoComplaintResponses().addAll(complaintResponses);
         return charityResponseProfile;
     }
 }
