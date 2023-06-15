@@ -69,10 +69,10 @@ public class ReserveServiceImpl implements ReserveService {
                 .build();
         if (isAnonymous) {
             notification.setType(Type.BOOKED_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано анонимным пользователем.".formatted(wish.getName()));
+            notification.setMessage("было забронировано анонимным пользователем.");
         } else {
             notification.setType(Type.BOOKED_NOT_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано пользователем %s %s".formatted(wish.getName(), userInToken.getLastName(), userInToken.getFirstName()));
+            notification.setMessage("было забронировано пользователем");
         }
         notificationRepository.save(notification);
 
@@ -113,10 +113,10 @@ public class ReserveServiceImpl implements ReserveService {
                 .build();
         if (isAnonymous) {
             notification.setType(Type.BOOKED_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано анонимным пользователем.".formatted(charity.getName()));
+            notification.setMessage("было забронировано анонимным пользователем.");
         } else {
             notification.setType(Type.BOOKED_NOT_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано пользователем %s %s".formatted(charity.getName(), userInToken.getLastName(), userInToken.getFirstName()));
+            notification.setMessage("было забронировано пользователем");
         }
         notificationRepository.save(notification);
 

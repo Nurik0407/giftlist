@@ -55,7 +55,7 @@ public class CharityServiceImpl implements CharityService {
                 .map(friend -> Notification.builder()
                         .charity(charity)
                         .type(Type.ADD_GIFT_TO_WISH_LIST)
-                        .message(String.format("%s %s добавил новый благотворительность", userInToken.getLastName(),userInToken.getFirstName()))
+                        .message(" добавил(а-) новый благотворительность")
                         .seen(false)
                         .fromWhomUser(userInToken)
                         .toWhomUser(friend)

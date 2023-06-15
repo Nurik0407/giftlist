@@ -70,7 +70,7 @@ public class WishServiceImpl implements WishService {
                 .map(friend -> Notification.builder()
                         .wish(wish)
                         .type(Type.ADD_GIFT_TO_WISH_LIST)
-                        .message(String.format("%s %s добавил новый желаемый подарок", user.getLastName(),user.getFirstName()))
+                        .message("добавил(-а) новый желаемый подарок")
                         .seen(false)
                         .fromWhomUser(user)
                         .toWhomUser(friend)
