@@ -10,10 +10,12 @@ import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.Notification;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.enums.Type;
+import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
 import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.services.CharityService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CharityServiceImpl implements CharityService {
     private final CharityRepository repository;
     private final JdbcTemplate jdbcTemplate;
@@ -109,6 +112,9 @@ public class CharityServiceImpl implements CharityService {
         Charity charity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Charity with id %s not found.".formatted(id)));
 
+        if (!userInToken.getCharities().contains(charity)){
+            throw new BadRequestException("Благотворительность не принадлежит текущему пользователю.");
+        }
         userInToken.deleteCharity(charity);
         repository.deleteFromReserve(id);
         repository.deleteFromNotifications(id);

@@ -10,7 +10,9 @@ import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
+import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.services.CharityAdminService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,11 +22,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class CharityAdminServiceImpl implements CharityAdminService {
     private final JdbcTemplate jdbcTemplate;
     private final CharityRepository charityRepository;
     private final JwtService jwtService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public List<CharitiesResponse> findAll() {
@@ -86,12 +90,17 @@ public class CharityAdminServiceImpl implements CharityAdminService {
 
     @Override
     public SimpleResponse delete(Long id) {
+
         User userInToken = jwtService.getUserInToken();
         Charity charity = charityRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Charity with id %s not found.", id)));
+                .orElseThrow(() -> new NotFoundException("Charity with id %s not found.".formatted(id)));
+
         userInToken.deleteCharity(charity);
-        charityRepository.deleteById(id);
+        charityRepository.deleteFromReserve(id);
+        charityRepository.deleteFromNotifications(id);
+        charityRepository.deleteFromCharityComplaints(id);
+        notificationRepository.deleteFromCharity(id);
+        charityRepository.deleteCharity(id);
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("Charity with id %s successfully deleted.", id))
