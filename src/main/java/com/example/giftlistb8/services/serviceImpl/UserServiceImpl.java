@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
     public SimpleResponse deleteById(Long userId) {
 
         Long currentUserId = jwtService.getUserInToken().getId();
-        if (currentUserId.equals(userId)){
+        if (currentUserId.equals(userId)) {
             throw new BadRequestException("Невозможно удалить самого себя.");
         }
 
-        if (!userRepository.existsById(userId)){
+        if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User with id %s not found.".formatted(userId));
         }
 
@@ -88,15 +88,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public SimpleResponse updateBlockedStatus(UpdateBlockStatus updateBlockStatus) {
         log.info("Updating blocked status of user with id: {}", updateBlockStatus.userId());
-        Optional<User> userOptional = userRepository.getUserById(updateBlockStatus.userId());
-        if (!userOptional.isPresent()) {
-            return SimpleResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .message(String.format("User with %s id not found", updateBlockStatus.userId()))
-                    .build();
-        }
-        User user = userOptional.get();
-        user.setIsBlocked(true);
+
+        User user = userRepository.findById(updateBlockStatus.userId())
+                .orElseThrow(() -> new NotFoundException("Пользователь с id %s не найден.".formatted(updateBlockStatus.userId())));
+
+        user.setIsBlocked(updateBlockStatus.blocked());
         userRepository.save(user);
         log.info("Successfully updated blocked status of user with id: {}", updateBlockStatus.userId());
 

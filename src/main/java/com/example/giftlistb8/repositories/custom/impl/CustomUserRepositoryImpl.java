@@ -26,13 +26,14 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
     @Override
     public PaginationResponse<UserResponseGetAll> getAllUsers(int size, int page) {
         String sql = """
-                SELECT u.id as userId, 
-                 ui.image as user_image,
-                  concat(u.first_name, ' ', u.last_name) as full_name,
-                       (SELECT COUNT(*) FROM wishes w WHERE w.user_id = u.id and w.is_blocked=false) as total_wishes
+                SELECT u.id as userId,
+                ui.image as user_image,
+                concat(u.first_name, ' ', u.last_name) as full_name,
+                (SELECT COUNT(*) FROM wishes w WHERE w.user_id = u.id and w.is_blocked=false) as total_wishes,
+                u.is_blocked as isBlocker
                 FROM users u
                          JOIN user_infos ui on u.user_info_id = ui.id
-                ORDER BY u.id DESC        
+                ORDER BY u.id DESC   \s
                 """;
         String countSql = "SELECT COUNT(*) FROM (" + sql + ") as count_query";
         int count = jdbcTemplate.queryForObject(countSql, Integer.class);
@@ -43,8 +44,8 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                 resultSet.getLong("userId"),
                 resultSet.getString("user_image"),
                 resultSet.getString("full_name"),
-                resultSet.getInt("total_wishes")
-
+                resultSet.getInt("total_wishes"),
+                resultSet.getBoolean("isBlocker")
         ));
         return PaginationResponse.<UserResponseGetAll>builder().elements(userResponse).currentPage(page).pageSize(totalCount).build();
     }
