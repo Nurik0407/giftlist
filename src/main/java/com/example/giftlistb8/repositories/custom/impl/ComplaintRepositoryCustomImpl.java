@@ -100,7 +100,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
         String sql = """
                 SELECT 
                        u.id,
-                       w.id,
+                       w.id as wishId,
                        concat(u.first_name,' ',u.last_name) AS fullName,
                        ui.image AS userImage,
                        ui.phone_number,
@@ -110,9 +110,9 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                        h.name AS holidayName,
                        w.status,
                        w.image AS wishImage,
-                       case when r.id is null then false else true end as hasReserve,
-                       r.is_anonymous,
-                       ui2.image
+                       w.status as hasReserve,
+                       COALESCE(r.is_anonymous,false) as is_anonymous,
+                       COALESCE(CASE WHEN r.is_anonymous = false THEN ui2.image END,NULL) as reserveUserImage
                 FROM wishes w
                     JOIN users u on w.user_id = u.id
                     JOIN user_infos ui on u.user_info_id = ui.id
@@ -156,7 +156,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                         response.setWishImage(rs.getString("wishImage"));
                         response.setReserved(rs.getBoolean("hasReserve"));
                         response.setAnonymous(rs.getBoolean("is_anonymous"));
-                        response.setReserveUserImage(rs.getString("image"));
+                        response.setReserveUserImage(rs.getString("reserveUserImage"));
                         return response;
                     });
         } catch (NotFoundException ex) {
@@ -187,6 +187,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     public CharityResponseProfile charityGetById(Long id) {
         String sql = """
                 SELECT u.id AS userId,
+                       ch.id as charityId,
                        concat(u.first_name,' ',u.last_name) AS fullName,
                        ui.image AS userImage,
                        ui.phone_number,
@@ -197,12 +198,15 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                        ch.state,
                        ch.date_of_issue,
                        ch.image AS charityImage,
-                       case when r.id is null then false else true end as hasReserve,
-                       r.is_anonymous
+                       ch.status as hasReserve,
+                       COALESCE(r.is_anonymous,false) as is_anonymous,
+                       COALESCE(CASE WHEN r.is_anonymous = false THEN rui.image END,NULL) as reserveUserImage
                 FROM charities ch
-                         JOIN users u on ch.user_id = u.id
-                         JOIN user_infos ui on u.user_info_id = ui.id
-                         JOIN reserves r on ch.id = r.charity_id
+                        JOIN users u on ch.user_id = u.id
+                        JOIN user_infos ui on u.user_info_id = ui.id
+                        LEFT JOIN reserves r on ch.id = r.charity_id
+                        LEFT JOIN users ru on r.user_id = ru.id
+                        LEFT JOIN user_infos rui on ru.user_info_id = rui.id
                 WHERE ch.id = ?;
                 """;
 
@@ -226,6 +230,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                 (rs, rowNum) -> {
                     CharityResponseProfile response = new CharityResponseProfile();
                     response.setUserId(rs.getLong("userId"));
+                    response.setCharityId(rs.getLong("charityId"));
                     response.setFullName(rs.getString("fullName"));
                     response.setUserImage(rs.getString("userImage"));
                     response.setPhoneNumber(rs.getString("phone_number"));
@@ -238,6 +243,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     response.setCharityImage(rs.getString("charityImage"));
                     response.setReserved(rs.getBoolean("hasReserve"));
                     response.setAnonymous(rs.getBoolean("is_anonymous"));
+                    response.setReserveUserImage(rs.getString("reserveUserImage"));
                     return response;
                 });
 
