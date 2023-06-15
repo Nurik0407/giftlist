@@ -69,10 +69,10 @@ public class ReserveServiceImpl implements ReserveService {
                 .build();
         if (isAnonymous) {
             notification.setType(Type.BOOKED_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано анонимным пользователем.".formatted(wish.getName()));
+            notification.setMessage("было забронировано анонимным пользователем.");
         } else {
             notification.setType(Type.BOOKED_NOT_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано пользователем %s %s".formatted(wish.getName(), userInToken.getLastName(), userInToken.getFirstName()));
+            notification.setMessage("было забронировано пользователем");
         }
         notificationRepository.save(notification);
 
@@ -113,10 +113,10 @@ public class ReserveServiceImpl implements ReserveService {
                 .build();
         if (isAnonymous) {
             notification.setType(Type.BOOKED_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано анонимным пользователем.".formatted(charity.getName()));
+            notification.setMessage("было забронировано анонимным пользователем.");
         } else {
             notification.setType(Type.BOOKED_NOT_ANONYMOUSLY);
-            notification.setMessage("%s было забронировано пользователем %s %s".formatted(charity.getName(), userInToken.getLastName(), userInToken.getFirstName()));
+            notification.setMessage("было забронировано пользователем");
         }
         notificationRepository.save(notification);
 
@@ -220,12 +220,16 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public SimpleResponse deleteCharity(Long charityId) {
+
         User user = jwtService.getUserInToken();
+
         Charity charity = charityRepository.findById(charityId).orElseThrow(
                 () -> new NotFoundException(String.format("Charity with %s id not found", charityId)));
+
         Reserve reserve = reserveRepository.findByUserAndCharity(user, charity)
                 .orElseThrow(() -> new NotFoundException(String.format("Reserve for user %s and wish %s not found",
                         user.getId(), charity.getId())));
+
         if (!reserve.getUser().equals(user)) {
             throw new ForbiddenException("You are not authorized to delete this reserve");
         }

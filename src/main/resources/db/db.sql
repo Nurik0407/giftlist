@@ -222,15 +222,10 @@ VALUES (1, 2);
 
 INSERT INTO notifications(id, created_at, message, seen, type, charity_id, from_whom_user_id, reserve_id,
                           to_whom_user_id, wish_id)
-VALUES (1, current_date, 'Nurkanov Nurislam добавил желаемый подарок.', false, 'ADD_GIFT_TO_WISH_LIST', null, 2, null,
-        3, 2),
-       (2, current_date, 'Alex Turner было забронировано Ravshanbekov Syimyk', false, 'BOOKED_NOT_ANONYMOUSLY', null, 3,
-        2, 3, null),
-       (3, current_date, 'Nurmatova Nuraim отправил(-a) запрос в друзья', false, 'FRIEND_REQUEST', null, 6,
-        null, 1, null),
-       (4, current_date, 'Nurkanov Nurislam пожаловался на Iphone 13 pro', false, 'COMPLAINT', null, 2, null, 1, 1),
-       (5, current_date, 'Odesov Syimyk пожаловался на Отверженные', true, 'COMPLAINT', 1, 3, null, 1, null),
-       (6, current_date, 'Abdykalykova Nurisa отправил(-a) запрос в друзья', true, 'FRIEND_REQUEST', null, 7, null, 1,
-        null),
-       (7, current_date, 'Ravshanbekov Syimyk отправил(-a) запрос в друзья', false, 'FRIEND_REQUEST', null, 9, null, 1,
-        null);
+VALUES (2, current_date, 'было забронировано', false, 'BOOKED_NOT_ANONYMOUSLY', null, 6,4, 1, null),
+       (3, current_date, 'отправил(-a) запрос в друзья', false, 'FRIEND_REQUEST', null, 6,null, 1, null),
+       (4, current_date, 'пожаловался(-ась) на', false, 'COMPLAINT', null, 2, null, 1, 1),
+       (5, current_date, 'пожаловался(-ась) на', true, 'COMPLAINT', 1, 3, null, 1, null),
+       (6, current_date, 'отправил(-a) запрос в друзья', true, 'FRIEND_REQUEST', null, 7, null, 1,null),
+       (7, current_date, 'отправил(-a) запрос в друзья', false, 'FRIEND_REQUEST', null, 8, null, 1,null),
+       (8, current_date, 'добавил(-а) желаемый подарок', false, 'ADD_GIFT_TO_WISH_LIST', null, 2, null,1, 2);

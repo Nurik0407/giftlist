@@ -7,6 +7,7 @@ public record UserResponseGetAll(
         Long id,
         String photo,
         String fullName,
-        int count
+        int count,
+        boolean isBlocked
 ) {
 }

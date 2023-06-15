@@ -5,6 +5,8 @@ import com.example.giftlistb8.entities.Holiday;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -17,3 +19,10 @@ public interface HolidayRepository extends JpaRepository<Holiday, Long> {
             "OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(h.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<GlobalSearchHoliday> globalSearch(@Param("keyword") String keyword);}
+
+
+    @Modifying
+    @Query(nativeQuery = true,value = "DELETE FROM holidays h where h.id = ?1")
+    void deleteHoliday(Long id);
+}
+

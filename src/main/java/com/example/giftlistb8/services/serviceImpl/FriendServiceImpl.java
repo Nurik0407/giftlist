@@ -68,7 +68,7 @@ public class FriendServiceImpl implements FriendService {
             friend.getRequestsForFriends().add(user);
             Notification notification = Notification.builder()
                     .type(Type.FRIEND_REQUEST)
-                    .message("%s %s отправил(-а) вам запрос в друзья.".formatted(user.getLastName(), user.getFirstName()))
+                    .message("отправил(-а) вам запрос в друзья.")
                     .seen(false)
                     .toWhomUser(friend)
                     .fromWhomUser(user)
@@ -94,7 +94,7 @@ public class FriendServiceImpl implements FriendService {
 
             Notification notification = Notification.builder()
                     .type(Type.ACCEPTED_THE_REQUEST)
-                    .message("%s %s принял ваш запрос в друзья".formatted(user.getLastName(), user.getFirstName()))
+                    .message("принял(-а) ваш запрос в друзья")
                     .seen(false)
                     .toWhomUser(request)
                     .fromWhomUser(user)

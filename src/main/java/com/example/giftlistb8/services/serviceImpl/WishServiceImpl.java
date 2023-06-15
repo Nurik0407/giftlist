@@ -71,7 +71,7 @@ public class WishServiceImpl implements WishService {
                 .map(friend -> Notification.builder()
                         .wish(wish)
                         .type(Type.ADD_GIFT_TO_WISH_LIST)
-                        .message(String.format("%s %s добавил новый желаемый подарок", user.getLastName(),user.getFirstName()))
+                        .message("добавил(-а) новый желаемый подарок")
                         .seen(false)
                         .fromWhomUser(user)
                         .toWhomUser(friend)
@@ -96,6 +96,7 @@ public class WishServiceImpl implements WishService {
         }
         User userInToken = jwtService.getUserInToken();
         userInToken.deleteWish(wish);
+        notificationRepository.deleteFromWishUser(id);
         wishRepository.deleteById(id);
         log.info("Deleting wish with id: {}", id);
         return SimpleResponse.builder()
