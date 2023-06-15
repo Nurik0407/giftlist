@@ -179,9 +179,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                 existWhoComplaintResponse = new ArrayList<>();
                 wishResponseProfile.setWhoComplaintResponses(existWhoComplaintResponse);
             }
+            wishResponseProfile.getWhoComplaintResponses().addAll(complaints);
         }
-
-        wishResponseProfile.getWhoComplaintResponses().addAll(complaints);
         return wishResponseProfile;
     }
 
