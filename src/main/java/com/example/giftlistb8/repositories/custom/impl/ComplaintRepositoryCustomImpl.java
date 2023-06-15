@@ -98,7 +98,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     @Override
     public WishResponseProfile wishGetById(Long id) {
         String sql = """
-                SELECT 
+                SELECT
                        u.id,
                        w.id as wishId,
                        concat(u.first_name,' ',u.last_name) AS fullName,
@@ -173,10 +173,12 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     return response;
                 });
 
-        List<WhoComplaintResponse> existWhoComplaintResponse = wishResponseProfile.getWhoComplaintResponses();
-        if (existWhoComplaintResponse == null) {
-            existWhoComplaintResponse = new ArrayList<>();
-            wishResponseProfile.setWhoComplaintResponses(existWhoComplaintResponse);
+        if (wishResponseProfile != null) {
+            List<WhoComplaintResponse> existWhoComplaintResponse = wishResponseProfile.getWhoComplaintResponses();
+            if (existWhoComplaintResponse == null) {
+                existWhoComplaintResponse = new ArrayList<>();
+                wishResponseProfile.setWhoComplaintResponses(existWhoComplaintResponse);
+            }
         }
 
         wishResponseProfile.getWhoComplaintResponses().addAll(complaints);
@@ -257,11 +259,12 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     response.setCausesOfComplaint(rs.getString("complaint"));
                     return response;
                 });
-
-        List<WhoComplaintResponse> whoComplaintResponses = charityResponseProfile.getWhoComplaintResponses();
-        if (whoComplaintResponses == null) {
-            whoComplaintResponses = new ArrayList<>();
-            charityResponseProfile.setWhoComplaintResponses(whoComplaintResponses);
+        if (charityResponseProfile != null) {
+            List<WhoComplaintResponse> whoComplaintResponses = charityResponseProfile.getWhoComplaintResponses();
+            if (whoComplaintResponses == null) {
+                whoComplaintResponses = new ArrayList<>();
+                charityResponseProfile.setWhoComplaintResponses(whoComplaintResponses);
+            }
         }
         charityResponseProfile.getWhoComplaintResponses().addAll(complaintResponses);
         return charityResponseProfile;
