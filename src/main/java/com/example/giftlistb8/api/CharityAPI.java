@@ -5,7 +5,9 @@ import com.example.giftlistb8.dto.charity.request.CharityRequest;
 import com.example.giftlistb8.dto.charity.request.CharityUpdateRequest;
 import com.example.giftlistb8.dto.charity.response.CharitiesResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
+import com.example.giftlistb8.dto.charity.response.GlobalSearchCharity;
 import com.example.giftlistb8.services.CharityService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +47,10 @@ public class CharityAPI {
     @DeleteMapping
     public SimpleResponse delete(@RequestParam Long id) {
         return service.delete(id);
+    }
+    @Operation(summary = "The method for searching charities information",description = "Global search for charity")
+    @GetMapping("/search")
+    public List<GlobalSearchCharity>globalSearches(@RequestParam(required = false) String keyWord){
+        return service.globalSearch(keyWord);
     }
 }

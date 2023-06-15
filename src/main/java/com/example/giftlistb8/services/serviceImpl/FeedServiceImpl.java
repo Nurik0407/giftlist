@@ -18,40 +18,50 @@ import java.util.List;
 public class FeedServiceImpl implements FeedService {
     private final JdbcTemplate jdbcTemplate;
 
+
     @Override
-    public PaginationResponse<FeedResponse> getAll(int page, int size) {
+    public PaginationResponse<FeedResponse> getAll(int page, int size, String keyWord) {
         log.info("Fetching feed with page {} and size {}", page, size);
+        String escapedSearchTerm = keyWord != null ? "%" + keyWord.replace("%", "\\%").replace("_", "\\_") + "%" : "%";
+
         String sql = """
-                SELECT u.id as userId,
-                       ui.image as image,
-                       concat(u.first_name, ' ', u.last_name) as fullName,
-                       w.id as wishId,
-                       w.name as wishName,
-                       w.image as wishImage,
-                       w.status as isReserved,
-                       h.date as holidayDate,
-                       h.name as holidayName,
-                       COALESCE(CASE WHEN r.is_anonymous = false THEN rui.image END, null) as reserveUserPhoto,
-                       COALESCE(r.is_anonymous, false) AS is_anonymous
-                    FROM
-                       wishes w
-                       JOIN users u on u.id = w.user_id
-                       JOIN user_infos ui on u.user_info_id = ui.id
-                       JOIN holidays h on w.holiday_id = h.id
-                       LEFT JOIN reserves r on r.wish_id = w.id
-                       LEFT JOIN users ru on r.user_id = ru.id
-                       LEFT JOIN user_infos rui on ru.user_info_id = rui.id
-                     WHERE 
-                         w.is_blocked=false
-                     ORDER BY 
-                         u.id DESC\s
-                """;
-        String countSql = "SELECT COUNT(*) FROM (" + sql + ") as count_query";
-        int count = jdbcTemplate.queryForObject(countSql, Integer.class);
+            SELECT u.id as userId,
+                   ui.image as image,
+                   concat(u.first_name, ' ', u.last_name) as fullName,
+                   w.id as wishId,
+                   w.name as wishName,
+                   w.image as wishImage,
+                   w.status as isReserved,
+                   h.date as holidayDate,
+                   h.name as holidayName,
+                   COALESCE(CASE WHEN r.is_anonymous = false THEN rui.image END, null) as reserveUserPhoto,
+                   COALESCE(r.is_anonymous, false) AS is_anonymous
+                FROM
+                   wishes w
+                   JOIN users u on u.id = w.user_id
+                   JOIN user_infos ui on u.user_info_id = ui.id
+                   JOIN holidays h on w.holiday_id = h.id
+                   LEFT JOIN reserves r on r.wish_id = w.id
+                   LEFT JOIN users ru on r.user_id = ru.id
+                   LEFT JOIN user_infos rui on ru.user_info_id = rui.id
+                 WHERE 
+                     w.is_blocked = false
+                     AND (u.first_name ILIKE ? OR u.last_name ILIKE ? OR w.name ILIKE ?)
+                 ORDER BY 
+                     u.id DESC\s
+            """;
+
+        String countSql = "SELECT COUNT(*) FROM (" + sql + ") AS count_query";
+
+        int count = jdbcTemplate.queryForObject(countSql, Integer.class, escapedSearchTerm, escapedSearchTerm, escapedSearchTerm);
         int totalCount = (int) Math.ceil((double) count / size);
         int offset = (page - 1) * size;
-        sql = sql + "LIMIT " + size + " OFFSET "+offset;
-        List<FeedResponse> feedResponses = jdbcTemplate.query(sql, (resultSet, i) -> new FeedResponse(
+
+        String paginatedSql = sql + " LIMIT ? OFFSET ?";
+
+        Object[] params = new Object[] { escapedSearchTerm, escapedSearchTerm, escapedSearchTerm, size, offset };
+
+        List<FeedResponse> feedResponses = jdbcTemplate.query(paginatedSql, params, (resultSet, i) -> new FeedResponse(
                 resultSet.getLong("userId"),
                 resultSet.getString("image"),
                 resultSet.getString("fullName"),
@@ -64,10 +74,15 @@ public class FeedServiceImpl implements FeedService {
                 resultSet.getBoolean("is_anonymous"),
                 resultSet.getString("reserveUserPhoto")
         ));
-        log.info("Fetched feed with {} elements", feedResponses.size());
-        return PaginationResponse.<FeedResponse>builder().elements(feedResponses).currentPage(page).pageSize(totalCount).build();
-    }
 
+        log.info("Fetched feed with {} elements", feedResponses.size());
+
+        return PaginationResponse.<FeedResponse>builder()
+                .elements(feedResponses)
+                .currentPage(page)
+                .pageSize(totalCount)
+                .build();
+    }
     @Override
     public FeedResponseGetById getById(Long wishId) {
         String isBlocked = """

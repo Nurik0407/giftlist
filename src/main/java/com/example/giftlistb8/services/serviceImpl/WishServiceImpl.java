@@ -3,6 +3,7 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.wish.requests.WishRequest;
+import com.example.giftlistb8.dto.wish.response.GlobalSearchWish;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 import com.example.giftlistb8.entities.Holiday;
 import com.example.giftlistb8.entities.Notification;
@@ -122,5 +123,10 @@ public class WishServiceImpl implements WishService {
                 .status(HttpStatus.OK)
                 .message(String.format("Wish with name %s successfully updated.", id))
                 .build();
+    }
+
+    @Override
+    public List<GlobalSearchWish> search(String keyWord) {
+        return wishRepository.globalSearch(keyWord);
     }
 }

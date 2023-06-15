@@ -5,6 +5,7 @@ import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.user.requests.UpdateBlockStatus;
+import com.example.giftlistb8.dto.user.response.GlobalSearchFriend;
 import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
 import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.entities.User;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -103,6 +105,11 @@ public class UserServiceImpl implements UserService {
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("User with id %s successfully blocked", updateBlockStatus.userId())).build();
+    }
+
+    @Override
+    public List<GlobalSearchFriend> search(String keyWord) {
+        return userRepository.globalSearch(keyWord);
     }
 }
 

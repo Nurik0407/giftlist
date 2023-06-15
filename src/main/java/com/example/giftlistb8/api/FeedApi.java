@@ -18,10 +18,11 @@ public class FeedApi {
     private final FeedService feedService;
 
     @Operation(summary = "Get all wishes", description = "Returns a paginated list of all wishes.")
-    @GetMapping
+    @GetMapping("/search")
     public PaginationResponse<FeedResponse> getAll(@RequestParam(defaultValue = "1") int page,
-                                                   @RequestParam(defaultValue = "6") int size) {
-        return feedService.getAll(page, size);
+                                                   @RequestParam(defaultValue = "6") int size,
+                                                   @RequestParam(required = false) String keyWord) {
+        return feedService.getAll(page, size,keyWord);
     }
 
     @Operation(summary = "Get wish by id", description = "Returns a single wish by its id.")
