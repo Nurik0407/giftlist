@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public interface HolidayRepository extends JpaRepository<Holiday, Long> {
             "WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(h.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    List<GlobalSearchHoliday> globalSearch(@Param("keyword") String keyword);}
+    List<GlobalSearchHoliday> globalSearch(@Param("keyword") String keyword);
 
 
     @Modifying
