@@ -2,6 +2,7 @@ package com.example.giftlistb8.api;
 
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.holiday.request.HolidayRequest;
+import com.example.giftlistb8.dto.holiday.response.GlobalSearchHoliday;
 import com.example.giftlistb8.dto.holiday.response.HolidayByIdResponse;
 import com.example.giftlistb8.dto.holiday.response.HolidayResponse;
 import com.example.giftlistb8.services.HolidayService;
@@ -51,4 +52,25 @@ public class HolidayAPI {
     @Operation(summary = "Delete a holiday", description = "Delete a holiday by its ID")
     public SimpleResponse deleteHoliday(@RequestParam Long holidayId) {
         return service.delete(holidayId);
+    }
+    @Operation(summary = "The method for searching holiday",description = "Global search of holiday")
+    @GetMapping("/search")
+    public List<GlobalSearchHoliday>globalSearch(@RequestParam(required = false) String keyWord){
+        return service.globalSearch(keyWord);
     }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

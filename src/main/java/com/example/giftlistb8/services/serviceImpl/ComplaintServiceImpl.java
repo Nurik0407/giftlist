@@ -7,10 +7,10 @@ import com.example.giftlistb8.dto.complaint.request.ComplaintRequest;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
 import com.example.giftlistb8.entities.*;
+import com.example.giftlistb8.enums.Type;
 import com.example.giftlistb8.exceptions.BadRequestException;
 import com.example.giftlistb8.exceptions.NotFoundException;
 import com.example.giftlistb8.repositories.CharityRepository;
-import com.example.giftlistb8.repositories.ComplaintRepository;
 import com.example.giftlistb8.repositories.NotificationRepository;
 import com.example.giftlistb8.repositories.WishRepository;
 import com.example.giftlistb8.repositories.custom.ComplaintRepositoryCustom;
@@ -19,6 +19,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 
 @Service
@@ -46,6 +48,17 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .build();
         charity.getComplaints().add(complaint);
 
+        Notification notification = Notification.builder()
+                .fromWhomUser(currentUser)
+                .toWhomUser(charity.getUser())
+                .charity(charity)
+                .type(Type.COMPLAINT)
+                .seen(false)
+                .message("пожаловался(-ась) на")
+                .createdAt(LocalDate.now())
+                .build();
+        notificationRepository.save(notification);
+
         charityRepository.save(charity);
 
         return SimpleResponse.builder()
@@ -69,6 +82,17 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .seen(false)
                 .build();
         wish.getComplaints().add(complaint);
+
+        Notification notification = Notification.builder()
+                .fromWhomUser(currentUser)
+                .toWhomUser(wish.getUser())
+                .wish(wish)
+                .type(Type.COMPLAINT)
+                .seen(false)
+                .message("пожаловался(-ась) на")
+                .createdAt(LocalDate.now())
+                .build();
+        notificationRepository.save(notification);
 
         wishRepository.save(wish);
 

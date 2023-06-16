@@ -3,6 +3,7 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.wish.requests.WishRequest;
+import com.example.giftlistb8.dto.wish.response.GlobalSearchWish;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 import com.example.giftlistb8.entities.Holiday;
 import com.example.giftlistb8.entities.Notification;
@@ -70,7 +71,7 @@ public class WishServiceImpl implements WishService {
                 .map(friend -> Notification.builder()
                         .wish(wish)
                         .type(Type.ADD_GIFT_TO_WISH_LIST)
-                        .message(String.format("%s %s добавил новый желаемый подарок", user.getLastName(),user.getFirstName()))
+                        .message("добавил(-а) новый желаемый подарок")
                         .seen(false)
                         .fromWhomUser(user)
                         .toWhomUser(friend)
@@ -95,6 +96,7 @@ public class WishServiceImpl implements WishService {
         }
         User userInToken = jwtService.getUserInToken();
         userInToken.deleteWish(wish);
+        notificationRepository.deleteFromWishUser(id);
         wishRepository.deleteById(id);
         log.info("Deleting wish with id: {}", id);
         return SimpleResponse.builder()
@@ -122,5 +124,10 @@ public class WishServiceImpl implements WishService {
                 .status(HttpStatus.OK)
                 .message(String.format("Wish with name %s successfully updated.", id))
                 .build();
+    }
+
+    @Override
+    public List<GlobalSearchWish> search(String keyWord) {
+        return wishRepository.globalSearch(keyWord);
     }
 }

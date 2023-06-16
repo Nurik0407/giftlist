@@ -15,16 +15,28 @@ public class NotificationImpl implements NotificationRepositoryCustom {
     @Override
     public List<NotificationResponse> getAll(Long userId) {
         String sql = """
-                select u.id as fromWhomUserId,
+                select
+                n.id as id,
+                u.id as fromWhomUserId,
+                concat(u.last_name,' ',u.first_name) as fromWhomUserFullName,
+                COALESCE(w.name,COALESCE(w1.name,null)) as wishName,
+                COALESCE(w.id,COALESCE(w1.id,null)) as wishId,
+                COALESCE(c.name,COALESCE(c1.name,null)) as charityName,
+                COALESCE(c.id,COALESCE(c1.id,null)) as charityId,
                 ui.image as image,
-                concat(u.first_name,' ',u.last_name) as fullName,
                 n.type as type,
                 n.message as message,
+                n.seen as seen,
                 n.created_at as createdAt 
-                from notifications n 
-                join users towhomuser on towhomuser.id = n.to_whom_user_id
-                join users u on u.id = n.from_whom_user_id 
-                join user_infos ui on u.user_info_id = ui.id 
+                FROM notifications n 
+                JOIN users towhomuser on towhomuser.id = n.to_whom_user_id
+                JOIN users u on u.id = n.from_whom_user_id 
+                JOIN user_infos ui on u.user_info_id = ui.id
+                LEFT JOIN reserves r on n.reserve_id = r.id
+                LEFT JOIN wishes w on r.wish_id = w.id
+                LEFT JOIN charities c on r.charity_id = c.id
+                LEFT JOIN wishes w1 on n.wish_id = w1.id
+                LEFT JOIN charities c1 on n.charity_id = c1.id
                 WHERE towhomuser.id = ? AND n.type NOT IN ('COMPLAINT')
                 ORDER BY n.id DESC;
                 """;
@@ -32,11 +44,17 @@ public class NotificationImpl implements NotificationRepositoryCustom {
 
         return jdbcTemplate.query(sql, (resultSet, i) ->
              new NotificationResponse(
+                     resultSet.getLong("id"),
                     resultSet.getLong("fromWhomUserId"),
-                    resultSet.getString("fullName"),
+                     resultSet.getString("fromWhomUserFullName"),
+                     resultSet.getString("wishName"),
+                     resultSet.getLong("wishId"),
+                     resultSet.getString("charityName"),
+                     resultSet.getLong("charityId"),
                      resultSet.getString("image"),
                     resultSet.getString("type"),
                     resultSet.getString("message"),
+                     resultSet.getBoolean("seen"),
                      resultSet.getDate("createdAt").toLocalDate()
             ),userId
         );
@@ -45,26 +63,43 @@ public class NotificationImpl implements NotificationRepositoryCustom {
     @Override
     public List<NotificationResponse> getAllComplaintNotifications() {
         String sql = """
-                select u.id as fromWhomUserId,
+                select
+                n.id as id,
+                u.id as fromWhomUserId,
+                concat(u.last_name,' ',u.first_name) as fromWhomUserFullName,
+                COALESCE(w.name,null) as wishName,
+                COALESCE(w.id,null) as wishId,
+                COALESCE(c.name,null) as charityName,
+                COALESCE(c.id,null) as charityId,
                 ui.image as image,
-                concat(u.first_name,' ',u.last_name) as fullName,
                 n.type as type,
                 n.message as message,
-                n.created_at as createdAt 
-                from notifications n 
-                join users towhomuser on towhomuser.id = n.to_whom_user_id
-                join users u on u.id = n.from_whom_user_id 
-                join user_infos ui on u.user_info_id = ui.id 
-                where n.type IN ('COMPLAINT')
-                ORDER BY n.id DESC ;
+                n.seen as seen,
+                n.created_at as createdAt
+                FROM notifications n
+                JOIN users towhomuser on towhomuser.id = n.to_whom_user_id
+                JOIN users u on u.id = n.from_whom_user_id
+                JOIN user_infos ui on u.user_info_id = ui.id
+                LEFT JOIN wishes w on n.wish_id = w.id
+                LEFT JOIN charities c on n.charity_id = c.id
+                WHERE n.type IN ('COMPLAINT')
+                ORDER BY n.id DESC;
                 """;
+
+
         return jdbcTemplate.query(sql, (resultSet, i) ->
                 new NotificationResponse(
+                        resultSet.getLong("id"),
                         resultSet.getLong("fromWhomUserId"),
-                        resultSet.getString("fullName"),
+                        resultSet.getString("fromWhomUserFullName"),
+                        resultSet.getString("wishName"),
+                        resultSet.getLong("wishId"),
+                        resultSet.getString("charityName"),
+                        resultSet.getLong("charityId"),
                         resultSet.getString("image"),
                         resultSet.getString("type"),
                         resultSet.getString("message"),
+                        resultSet.getBoolean("seen"),
                         resultSet.getDate("createdAt").toLocalDate()
                 )
         );

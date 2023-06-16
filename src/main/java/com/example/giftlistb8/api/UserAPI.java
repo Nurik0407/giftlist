@@ -3,6 +3,7 @@ package com.example.giftlistb8.api;
 import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.user.requests.UpdateBlockStatus;
+import com.example.giftlistb8.dto.user.response.GlobalSearchFriend;
 import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
 import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.services.UserService;
@@ -12,6 +13,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -49,5 +52,11 @@ public class UserAPI {
     @PutMapping
     public SimpleResponse blockUser(@RequestBody @Valid UpdateBlockStatus updateBlockStatus) {
         return service.updateBlockedStatus(updateBlockStatus);
+    }
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @Operation(summary = "The method for searching users",description = "Global search")
+    @GetMapping("/search")
+    public List<GlobalSearchFriend> searchFriends(@RequestParam(required = false)String keyWord){
+        return service.search(keyWord);
     }
 }

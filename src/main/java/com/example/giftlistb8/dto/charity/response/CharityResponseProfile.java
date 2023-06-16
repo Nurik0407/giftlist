@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class CharityResponseProfile {
     private Long userId;
+    private Long charityId;
     private String fullName;
     private String userImage;
     private String phoneNumber;
@@ -24,5 +25,6 @@ public class CharityResponseProfile {
     private String charityImage;
     private boolean isReserved;
     private boolean isAnonymous;
+    private String reserveUserImage;
     private List<WhoComplaintResponse> whoComplaintResponses;
 }

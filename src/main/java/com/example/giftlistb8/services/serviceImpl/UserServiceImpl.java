@@ -5,6 +5,7 @@ import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.PaginationResponse;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.user.requests.UpdateBlockStatus;
+import com.example.giftlistb8.dto.user.response.GlobalSearchFriend;
 import com.example.giftlistb8.dto.user.response.UserResponseGetAll;
 import com.example.giftlistb8.dto.user.response.UserResponseGetById;
 import com.example.giftlistb8.entities.User;
@@ -18,8 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-
+import java.util.List;
 import java.util.Optional;
 
 
@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
     public SimpleResponse deleteById(Long userId) {
 
         Long currentUserId = jwtService.getUserInToken().getId();
-        if (currentUserId.equals(userId)){
+        if (currentUserId.equals(userId)) {
             throw new BadRequestException("Невозможно удалить самого себя.");
         }
 
-        if (!userRepository.existsById(userId)){
+        if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User with id %s not found.".formatted(userId));
         }
 
@@ -88,21 +88,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public SimpleResponse updateBlockedStatus(UpdateBlockStatus updateBlockStatus) {
         log.info("Updating blocked status of user with id: {}", updateBlockStatus.userId());
-        Optional<User> userOptional = userRepository.getUserById(updateBlockStatus.userId());
-        if (!userOptional.isPresent()) {
-            return SimpleResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .message(String.format("User with %s id not found", updateBlockStatus.userId()))
-                    .build();
-        }
-        User user = userOptional.get();
-        user.setIsBlocked(true);
+
+        User user = userRepository.findById(updateBlockStatus.userId())
+                .orElseThrow(() -> new NotFoundException("Пользователь с id %s не найден.".formatted(updateBlockStatus.userId())));
+
+        user.setIsBlocked(updateBlockStatus.blocked());
         userRepository.save(user);
         log.info("Successfully updated blocked status of user with id: {}", updateBlockStatus.userId());
 
         return SimpleResponse.builder()
                 .status(HttpStatus.OK)
                 .message(String.format("User with id %s successfully blocked", updateBlockStatus.userId())).build();
+    }
+
+    @Override
+    public List<GlobalSearchFriend> search(String keyWord) {
+        return userRepository.globalSearch(keyWord);
     }
 }
 

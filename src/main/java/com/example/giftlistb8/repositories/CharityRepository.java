@@ -1,12 +1,15 @@
 package com.example.giftlistb8.repositories;
 
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
+import com.example.giftlistb8.dto.charity.response.GlobalSearchCharity;
 import com.example.giftlistb8.entities.Charity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CharityRepository extends JpaRepository<Charity, Long> {
@@ -35,4 +38,19 @@ public interface CharityRepository extends JpaRepository<Charity, Long> {
     @Modifying
     @Query(nativeQuery = true,value = "DELETE FROM charities_complaints WHERE charity_id = ?1")
     void deleteFromCharityComplaints(Long id);
+
+    @Query("SELECT NEW com.example.giftlistb8.dto.charity.response.GlobalSearchCharity(c.id,u.firstName, u.lastName, c.name, ui.phoneNumber, ui.image, c.dateOfIssue, ui.country, c.state, c.category, c.subCategory, CASE WHEN r.charity.id IS NULL THEN FALSE ELSE TRUE END) " +
+            "FROM User u " +
+            "JOIN u.userInfo ui " +
+            "LEFT JOIN u.charities c " +
+            "LEFT JOIN u.reserves r " +
+            "WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(ui.phoneNumber) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(ui.country) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(c.category) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(c.subCategory) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(c.state) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<GlobalSearchCharity> globalSearch(@Param("keyword") String keyword);
 }

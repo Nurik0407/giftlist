@@ -1,10 +1,12 @@
 package com.example.giftlistb8.repositories;
 
+import com.example.giftlistb8.dto.wish.response.GlobalSearchWish;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 import com.example.giftlistb8.entities.Wish;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
             "where w.id = :id and w.isBlocked = false ")
     Optional<WishResponse> findWishById(Long id);
 
-    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.image," +
+    @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.holiday.name,w.image," +
             "w.dateOfHoliday,w.status,COALESCE(r.isAnonymous,false) ,COALESCE(case when r.isAnonymous = false then ui.image end,null)) " +
             "FROM Wish w " +
             "JOIN w.user u " +
@@ -57,4 +59,14 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
     @Modifying
     @Query(nativeQuery = true,value = "DELETE FROM reserves WHERE wish_id = ?1")
     void deleteFromReserve(Long id);
+    @Query("SELECT NEW com.example.giftlistb8.dto.wish.response.GlobalSearchWish(w.id, u.firstName, u.lastName, w.name, w.image, ui.phoneNumber, w.description, w.status, ui.country) " +
+            "FROM User u " +
+            "JOIN u.userInfo ui " +
+            "LEFT JOIN u.wishes w " +
+            "WHERE LOWER(u.firstName) LIKE LOWER(concat('%', :keyword, '%')) " +
+            "OR LOWER(u.lastName) LIKE LOWER(concat('%', :keyword, '%')) " +
+            "OR LOWER(w.name) LIKE LOWER(concat('%', :keyword, '%')) " +
+            "OR ui.phoneNumber LIKE concat('%', :keyword, '%') " +
+            "OR LOWER(ui.country) LIKE LOWER(concat('%', :keyword, '%'))")
+    List<GlobalSearchWish> globalSearch(@Param("keyword") String keyword);
 }

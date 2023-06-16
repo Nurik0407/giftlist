@@ -2,8 +2,10 @@ package com.example.giftlistb8.api;
 
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.wish.requests.WishRequest;
+import com.example.giftlistb8.dto.wish.response.GlobalSearchWish;
 import com.example.giftlistb8.dto.wish.responses.WishResponse;
 import com.example.giftlistb8.services.WishService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,5 +50,10 @@ public class WishAPI {
     @PutMapping
     public SimpleResponse update(@RequestParam Long id,@RequestBody WishRequest request){
         return service.update(id, request);
+    }
+    @Operation(summary = "The method for searching wish",description = "Global search of wish")
+    @GetMapping("/search")
+    public List<GlobalSearchWish>globalSearches(@RequestParam(required = false) String keyWord){
+        return service.search(keyWord);
     }
 }

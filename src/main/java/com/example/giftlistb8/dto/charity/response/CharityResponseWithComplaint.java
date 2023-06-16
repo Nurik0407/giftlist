@@ -3,7 +3,7 @@ package com.example.giftlistb8.dto.charity.response;
 import lombok.Builder;
 
 @Builder
-public record CharityResponseWIthComplaint(
+public record CharityResponseWithComplaint(
         Long id,
         String fullName,
         String userImage,

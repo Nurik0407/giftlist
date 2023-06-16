@@ -3,6 +3,7 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.friend.response.FriendInfoResponse;
+import com.example.giftlistb8.dto.user.response.GlobalSearchFriend;
 import com.example.giftlistb8.entities.Notification;
 import com.example.giftlistb8.entities.User;
 import com.example.giftlistb8.enums.Type;
@@ -67,7 +68,7 @@ public class FriendServiceImpl implements FriendService {
             friend.getRequestsForFriends().add(user);
             Notification notification = Notification.builder()
                     .type(Type.FRIEND_REQUEST)
-                    .message("%s %s отправил(-а) вам запрос в друзья.".formatted(user.getLastName(), user.getFirstName()))
+                    .message("отправил(-а) вам запрос в друзья.")
                     .seen(false)
                     .toWhomUser(friend)
                     .fromWhomUser(user)
@@ -93,7 +94,7 @@ public class FriendServiceImpl implements FriendService {
 
             Notification notification = Notification.builder()
                     .type(Type.ACCEPTED_THE_REQUEST)
-                    .message("%s %s принял ваш запрос в друзья".formatted(user.getLastName(), user.getFirstName()))
+                    .message("принял(-а) ваш запрос в друзья")
                     .seen(false)
                     .toWhomUser(request)
                     .fromWhomUser(user)
@@ -123,6 +124,11 @@ public class FriendServiceImpl implements FriendService {
             log.warn("User {} tried to reject friend request from user {} but no such request found", user.getEmail(), sender.getEmail());
             throw new NotFoundException("User with id [%s] not found in your friend requests".formatted(senderUserId));
         }
+    }
+
+    @Override
+    public List<GlobalSearchFriend> search(String keyWord) {
+        return friendRepository.globalSearch(keyWord);
     }
 }
 

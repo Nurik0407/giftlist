@@ -2,6 +2,7 @@ package com.example.giftlistb8.api;
 
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.friend.response.FriendInfoResponse;
+import com.example.giftlistb8.dto.user.response.GlobalSearchFriend;
 import com.example.giftlistb8.services.FriendService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,5 +45,10 @@ public class FriendAPI {
     @PostMapping("accept/{id}")
     public SimpleResponse accept(@PathVariable Long id) {
         return friendService.acceptRequest(id);
+    }
+    @Operation(summary = "The method for searching friends",description = "Global search")
+    @GetMapping("/search")
+    public List<GlobalSearchFriend>searchFriends(@RequestParam(required = false)String keyWord){
+        return friendService.search(keyWord);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.giftlistb8.repositories.custom.impl;
 
 import com.example.giftlistb8.dto.charity.response.CharityResponseProfile;
-import com.example.giftlistb8.dto.charity.response.CharityResponseWIthComplaint;
+import com.example.giftlistb8.dto.charity.response.CharityResponseWithComplaint;
 import com.example.giftlistb8.dto.complaint.response.ComplaintResponse;
 import com.example.giftlistb8.dto.user.response.WhoComplaintResponse;
 import com.example.giftlistb8.dto.wish.response.WishResponseProfile;
@@ -24,7 +24,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     public ComplaintResponse getAllComplaints() {
 
         String sql = """
-                SELECT ch.id as id,CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+                SELECT ch.id as id,CONCAT(u.last_name, ' ', u.first_name) AS full_name,
                        ui.image AS user_image,
                        ch.name AS charity_name,
                        ch.date_of_issue AS charity_date_of_issue,
@@ -38,8 +38,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                             FROM charities ch
                        JOIN users u ON ch.user_id = u.id
                        JOIN user_infos ui ON u.user_info_id = ui.id
-                       JOIN charities_complaints cc on ch.id = cc.charity_id
-                       JOIN complaints c on cc.complaints_id = c.id
+                       RIGHT JOIN charities_complaints cc on ch.id = cc.charity_id
+                       RIGHT JOIN complaints c on cc.complaints_id = c.id
                        ORDER BY ch.id DESC;
                  """;
 
@@ -66,8 +66,8 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
 
         ComplaintResponse complaintResponse = new ComplaintResponse();
 
-        List<CharityResponseWIthComplaint> charityResponses = jdbcTemplate.query(sql, (resultSet, i) ->
-                new CharityResponseWIthComplaint(
+        List<CharityResponseWithComplaint> charityResponses = jdbcTemplate.query(sql, (resultSet, i) ->
+                new CharityResponseWithComplaint(
                         resultSet.getLong("id"),
                         resultSet.getString("full_name"),
                         resultSet.getString("user_image"),
@@ -78,7 +78,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                         resultSet.getString("complaint_text")
                 ));
 
-        complaintResponse.setCharityResponseWIthComplaints(charityResponses);
+        complaintResponse.setCharityResponseWithComplaints(charityResponses);
         List<WishResponseWithComplaint> wishResponses = jdbcTemplate.query(sql2, (resultSet, i) ->
                 new WishResponseWithComplaint(
                         resultSet.getLong("id"),
@@ -98,8 +98,10 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     @Override
     public WishResponseProfile wishGetById(Long id) {
         String sql = """
-                SELECT u.id,
-                concat(u.first_name,' ',u.last_name) AS fullName,
+                SELECT
+                       u.id,
+                       w.id as wishId,
+                       concat(u.first_name,' ',u.last_name) AS fullName,
                        ui.image AS userImage,
                        ui.phone_number,
                        w.name AS wishName,
@@ -108,9 +110,9 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                        h.name AS holidayName,
                        w.status,
                        w.image AS wishImage,
-                       case when r.id is null then false else true end as hasReserve,
-                       r.is_anonymous,
-                       ui2.image
+                       w.status as hasReserve,
+                       COALESCE(r.is_anonymous,false) as is_anonymous,
+                       COALESCE(CASE WHEN r.is_anonymous = false THEN ui2.image END,NULL) as reserveUserImage
                 FROM wishes w
                     JOIN users u on w.user_id = u.id
                     JOIN user_infos ui on u.user_info_id = ui.id
@@ -142,6 +144,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     (rs, rowNum) -> {
                         WishResponseProfile response = new WishResponseProfile();
                         response.setUserId(rs.getLong("id"));
+                        response.setWishId(rs.getLong("wishId"));
                         response.setFullName(rs.getString("fullName"));
                         response.setUserImage(rs.getString("userImage"));
                         response.setPhoneNumber(rs.getString("phone_number"));
@@ -153,7 +156,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                         response.setWishImage(rs.getString("wishImage"));
                         response.setReserved(rs.getBoolean("hasReserve"));
                         response.setAnonymous(rs.getBoolean("is_anonymous"));
-                        response.setReserveUserImage(rs.getString("image"));
+                        response.setReserveUserImage(rs.getString("reserveUserImage"));
                         return response;
                     });
         } catch (NotFoundException ex) {
@@ -170,13 +173,14 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     return response;
                 });
 
-        List<WhoComplaintResponse> existWhoComplaintResponse = wishResponseProfile.getWhoComplaintResponses();
-        if (existWhoComplaintResponse == null) {
-            existWhoComplaintResponse = new ArrayList<>();
-            wishResponseProfile.setWhoComplaintResponses(existWhoComplaintResponse);
+        if (wishResponseProfile != null) {
+            List<WhoComplaintResponse> existWhoComplaintResponse = wishResponseProfile.getWhoComplaintResponses();
+            if (existWhoComplaintResponse == null) {
+                existWhoComplaintResponse = new ArrayList<>();
+                wishResponseProfile.setWhoComplaintResponses(existWhoComplaintResponse);
+            }
+            wishResponseProfile.getWhoComplaintResponses().addAll(complaints);
         }
-
-        wishResponseProfile.getWhoComplaintResponses().addAll(complaints);
         return wishResponseProfile;
     }
 
@@ -184,6 +188,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
     public CharityResponseProfile charityGetById(Long id) {
         String sql = """
                 SELECT u.id AS userId,
+                       ch.id as charityId,
                        concat(u.first_name,' ',u.last_name) AS fullName,
                        ui.image AS userImage,
                        ui.phone_number,
@@ -194,12 +199,15 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                        ch.state,
                        ch.date_of_issue,
                        ch.image AS charityImage,
-                       case when r.id is null then false else true end as hasReserve,
-                       r.is_anonymous
+                       ch.status as hasReserve,
+                       COALESCE(r.is_anonymous,false) as is_anonymous,
+                       COALESCE(CASE WHEN r.is_anonymous = false THEN rui.image END,NULL) as reserveUserImage
                 FROM charities ch
-                         JOIN users u on ch.user_id = u.id
-                         JOIN user_infos ui on u.user_info_id = ui.id
-                         JOIN reserves r on ch.id = r.charity_id
+                        JOIN users u on ch.user_id = u.id
+                        JOIN user_infos ui on u.user_info_id = ui.id
+                        LEFT JOIN reserves r on ch.id = r.charity_id
+                        LEFT JOIN users ru on r.user_id = ru.id
+                        LEFT JOIN user_infos rui on ru.user_info_id = rui.id
                 WHERE ch.id = ?;
                 """;
 
@@ -223,6 +231,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                 (rs, rowNum) -> {
                     CharityResponseProfile response = new CharityResponseProfile();
                     response.setUserId(rs.getLong("userId"));
+                    response.setCharityId(rs.getLong("charityId"));
                     response.setFullName(rs.getString("fullName"));
                     response.setUserImage(rs.getString("userImage"));
                     response.setPhoneNumber(rs.getString("phone_number"));
@@ -235,6 +244,7 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     response.setCharityImage(rs.getString("charityImage"));
                     response.setReserved(rs.getBoolean("hasReserve"));
                     response.setAnonymous(rs.getBoolean("is_anonymous"));
+                    response.setReserveUserImage(rs.getString("reserveUserImage"));
                     return response;
                 });
 
@@ -248,13 +258,15 @@ public class ComplaintRepositoryCustomImpl implements ComplaintRepositoryCustom 
                     response.setCausesOfComplaint(rs.getString("complaint"));
                     return response;
                 });
+        if (charityResponseProfile != null) {
+            List<WhoComplaintResponse> whoComplaintResponses = charityResponseProfile.getWhoComplaintResponses();
+            if (whoComplaintResponses == null) {
+                whoComplaintResponses = new ArrayList<>();
+                charityResponseProfile.setWhoComplaintResponses(whoComplaintResponses);
 
-        List<WhoComplaintResponse> whoComplaintResponses = charityResponseProfile.getWhoComplaintResponses();
-        if (whoComplaintResponses == null) {
-            whoComplaintResponses = new ArrayList<>();
-            charityResponseProfile.setWhoComplaintResponses(whoComplaintResponses);
+            }
+            charityResponseProfile.getWhoComplaintResponses().addAll(complaintResponses);
         }
-        charityResponseProfile.getWhoComplaintResponses().addAll(complaintResponses);
         return charityResponseProfile;
     }
 }
