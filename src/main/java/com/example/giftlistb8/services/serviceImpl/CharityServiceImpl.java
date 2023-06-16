@@ -6,6 +6,7 @@ import com.example.giftlistb8.dto.charity.request.CharityRequest;
 import com.example.giftlistb8.dto.charity.request.CharityUpdateRequest;
 import com.example.giftlistb8.dto.charity.response.CharitiesResponse;
 import com.example.giftlistb8.dto.charity.response.CharityResponse;
+import com.example.giftlistb8.dto.charity.response.GlobalSearchCharity;
 import com.example.giftlistb8.entities.Charity;
 import com.example.giftlistb8.entities.Notification;
 import com.example.giftlistb8.entities.User;
@@ -137,5 +138,10 @@ public class CharityServiceImpl implements CharityService {
                         String.format("Charity with id %s not found.", id)));
         log.debug("Found charity with id {}: {}", id, charityResponse);
         return charityResponse;
+    }
+
+    @Override
+    public List<GlobalSearchCharity> globalSearch(String keyWord) {
+        return repository.globalSearch(keyWord);
     }
 }

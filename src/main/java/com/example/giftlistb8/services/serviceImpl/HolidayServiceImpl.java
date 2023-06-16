@@ -4,6 +4,7 @@ package com.example.giftlistb8.services.serviceImpl;
 import com.example.giftlistb8.config.JwtService;
 import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.holiday.request.HolidayRequest;
+import com.example.giftlistb8.dto.holiday.response.GlobalSearchHoliday;
 import com.example.giftlistb8.dto.holiday.response.HolidayByIdResponse;
 import com.example.giftlistb8.dto.holiday.response.HolidayResponse;
 import com.example.giftlistb8.entities.Holiday;
@@ -103,5 +104,10 @@ public class HolidayServiceImpl implements HolidayService {
     @Override
     public HolidayByIdResponse getById(Long id) {
         return holidayRepositoryCustom.getById(id);
+    }
+
+    @Override
+    public List<GlobalSearchHoliday> globalSearch(String keyWord) {
+        return repository.globalSearch(keyWord);
     }
 }
