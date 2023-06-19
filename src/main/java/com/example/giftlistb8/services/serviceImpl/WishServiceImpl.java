@@ -57,7 +57,7 @@ public class WishServiceImpl implements WishService {
         Wish wish = Wish.builder()
                 .name(request.name())
                 .linkGift(request.linkGift())
-                .dateOfHoliday(request.dateOfHoliday())
+                .dateOfHoliday(holiday.getDate())
                 .image(request.image())
                 .holiday(holiday)
                 .user(user)
@@ -113,11 +113,14 @@ public class WishServiceImpl implements WishService {
         if (wishRepository.isReserved(id)){
             throw new BadRequestException("Unable to edit booked gift.");
         }
+        Holiday holiday = holidayRepository.findById(request.holidayId())
+                .orElseThrow(() -> new NotFoundException("Желаемый подарок с id %s не найден.".formatted(request.holidayId())));
         wish.setName(request.name());
         wish.setLinkGift(request.linkGift());
-        wish.setDateOfHoliday(request.dateOfHoliday());
+        wish.setDateOfHoliday(holiday.getDate());
         wish.setImage(request.image());
         wish.setDescription(request.descriptions());
+        wish.setHoliday(holiday);
         wishRepository.save(wish);
         log.info("Updating wish with id: {}", id);
         return SimpleResponse.builder()
