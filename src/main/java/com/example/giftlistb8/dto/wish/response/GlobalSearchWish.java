@@ -1,6 +1,5 @@
 package com.example.giftlistb8.dto.wish.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 @Builder

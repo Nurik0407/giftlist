@@ -93,7 +93,7 @@ public class JwtService {
             String email = authentication.getName();
             return userRepository.findByEmail(email).orElseThrow(() -> {
                 log.error("User not found!");
-                throw new NotFoundException("User not found!");
+                return new NotFoundException("User not found!");
             });
         } catch (IOException e) {
             throw new IOException("Method invalid!");
