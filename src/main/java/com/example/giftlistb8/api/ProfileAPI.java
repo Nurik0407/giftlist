@@ -9,7 +9,6 @@ import com.example.giftlistb8.dto.profile.response.ProfileResponseGetById;
 import com.example.giftlistb8.services.ProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
