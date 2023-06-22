@@ -46,6 +46,7 @@ public class FriendAPI {
     public SimpleResponse accept(@PathVariable Long id) {
         return friendService.acceptRequest(id);
     }
+
     @Operation(summary = "The method for searching friends",description = "Global search")
     @GetMapping("/search")
     public List<GlobalSearchFriend>searchFriends(@RequestParam(required = false)String keyWord){

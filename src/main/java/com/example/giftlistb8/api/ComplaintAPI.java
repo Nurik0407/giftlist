@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.*;
 public class ComplaintAPI {
     private final ComplaintService complaintService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "Complaint to Charity", description = "Complaint to charity method")
     @PostMapping("/charity")
     public SimpleResponse complaintToCharity(@RequestBody ComplaintRequest request) {
         return complaintService.complaintToCharity(request);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "Complaint to Wish", description = "Complaint to wish method")
     @PostMapping("/wish")
     public SimpleResponse complaintToWish(@RequestBody ComplaintRequest request) {

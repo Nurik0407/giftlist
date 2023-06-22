@@ -26,7 +26,7 @@ public class NotificationAPI {
     }
 
     @PostMapping
-    @PermitAll
+    @PreAuthorize("permitAll()")
     public SimpleResponse markAllAsRead() {
         return notificationService.markAllAsRead();
     }

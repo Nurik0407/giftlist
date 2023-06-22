@@ -5,6 +5,7 @@ import com.example.giftlistb8.dto.s3.response.S3Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/api/file")
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasAnyAuthority('ADMIN','USER')")
 @Tag(name = "S3 API", description = "API for working with files in Amazon S3 storage")
 public class S3API {
 

@@ -30,14 +30,14 @@ public class ProfileAPI {
         return profileService.saveUser(profileRequest);
     }
 
-    @PermitAll
+    @PreAuthorize("permitAll()")
     @Operation(summary = "Get user by id", description = "Get user base information  by id")
     @GetMapping
     public ProfileResponseGetById getById() {
         return profileService.getById();
     }
 
-    @PermitAll
+    @PreAuthorize("permitAll()")
     @Operation(summary = "Get user detail information by id", description = "Get user all information by id")
     @GetMapping("/detail")
     public ProfileResponse getByIdUserDetail() {
