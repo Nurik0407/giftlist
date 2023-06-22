@@ -51,6 +51,8 @@ public class WishAPI {
     public SimpleResponse update(@RequestParam Long id,@RequestBody WishRequest request){
         return service.update(id, request);
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @Operation(summary = "The method for searching wish",description = "Global search of wish")
     @GetMapping("/search")
     public List<GlobalSearchWish>globalSearches(@RequestParam(required = false) String keyWord){

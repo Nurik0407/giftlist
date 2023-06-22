@@ -4,7 +4,6 @@ import com.example.giftlistb8.dto.SimpleResponse;
 import com.example.giftlistb8.dto.notification.response.NotificationResponse;
 import com.example.giftlistb8.services.NotificationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class NotificationAPI {
     }
 
     @PostMapping
-    @PermitAll
+    @PreAuthorize("permitAll()")
     public SimpleResponse markAllAsRead() {
         return notificationService.markAllAsRead();
     }

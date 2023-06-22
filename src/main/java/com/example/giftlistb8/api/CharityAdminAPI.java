@@ -9,6 +9,7 @@ import com.example.giftlistb8.services.CharityAdminService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/charity-admin")
 @Tag(name = "Admin Charity API", description = "API for managing charity organizations by admin")
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class CharityAdminAPI {
     private final CharityAdminService service;
     @GetMapping
