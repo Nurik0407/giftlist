@@ -13,6 +13,7 @@ public record WishResponse(
         LocalDate date,
         boolean isReserved,
         boolean isAnonymous,
-        String reserveUserImage
-) {
+        String reserveUserImage,
+        String description,
+        String linkGift) {
 }

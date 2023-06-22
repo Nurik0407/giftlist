@@ -24,7 +24,9 @@ public class HolidayRepositoryCustomImpl implements HolidayRepositoryCustom {
                 h.name as holidayName,
                 w.image as image,w.date_of_holiday as date,
                 w.status as isReserved,r.is_anonymous as isAnonymous,
-                COALESCE(case when r.is_anonymous = false then ui.image end,null) as reserveUserImage
+                COALESCE(case when r.is_anonymous = false then ui.image end,null) as reserveUserImage,
+                w.description,
+                w.link_gift as linkGift
                 FROM wishes w
                 JOIN holidays h on w.holiday_id = h.id
                 LEFT JOIN reserves r on w.id = r.wish_id
@@ -41,7 +43,9 @@ public class HolidayRepositoryCustomImpl implements HolidayRepositoryCustom {
                 resultSet.getDate("date").toLocalDate(),
                 resultSet.getBoolean("isReserved"),
                 resultSet.getBoolean("isAnonymous"),
-                resultSet.getString("reserveUserImage")
+                resultSet.getString("reserveUserImage"),
+                resultSet.getString("description"),
+                resultSet.getString("linkGift")
         ));
 
         String getHolidayById = """

@@ -24,7 +24,8 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
     Optional<WishResponse> findWishById(Long id);
 
     @Query("select new com.example.giftlistb8.dto.wish.responses.WishResponse(w.id,w.name,w.holiday.name,w.image," +
-            "w.dateOfHoliday,w.status,COALESCE(r.isAnonymous,false) ,COALESCE(case when r.isAnonymous = false then ui.image end,null)) " +
+            "w.dateOfHoliday,w.status,COALESCE(r.isAnonymous,false) ,COALESCE(case when r.isAnonymous = false then ui.image end,null)," +
+            "w.description,w.linkGift) " +
             "FROM Wish w " +
             "JOIN w.user u " +
             "LEFT JOIN w.reserve r " +
