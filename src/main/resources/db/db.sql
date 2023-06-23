@@ -156,7 +156,7 @@ VALUES (1, current_date, 'I wish for a new laptop',
 
 INSERT INTO mailings (id, created_at, description, image, title)
 VALUES (1, current_date, 'Don t miss our exclusive sale!',
-        'https://www.shutterstock.com/image-vector/brush-sale-banner-vector-260nw-1090866878.jpg', 'Exclusive Sale'),
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnFxb8nrozvMh17gwlt9X1A2dZDLG0s00voA&usqp=CAU', 'Exclusive Sale'),
        (2, current_date, 'New arrivals are here!',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
         'New Arrivals'),
@@ -167,19 +167,7 @@ VALUES (1, current_date, 'Don t miss our exclusive sale!',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
         'Mothers Day Gifts'),
        (5, current_date, 'Dont forget to celebrate Fathers Day',
-        'https://static.toiimg.com/thumb/resizemode-4,width-1200,height-900,msid-92257176/92257176.jpg', 'Fathers Day'),
-       (6, current_date, 'Get your back-to-school wardrobe ready',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'Back-to-School'),
-       (7, current_date, 'Fall in love with our fall fashion collection',
-        'https://thumbs.dreamstime.com/b/new-collection-banner-autumn-fall-leaves-colorful-seasonal-rowan-acorns-shopping-discount-promotion-128357091.jpg',
-        'Fall Collection'),
-       (8, current_date, 'Shop our holiday gift guide',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1fKdHV-51JT9qchdVc-l0BYuGfK2BJSfiFw&usqp=CAU',
-        'Holiday Gift Guide'),
-       (9, current_date, 'New year, new you! Shop our activewear collection',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeY2IeB7EpYk8T9pbeKkrn3zoYFD_rfS1ETQ&usqp=CAU',
-        'Activewear Collection');
+        'https://static.toiimg.com/thumb/resizemode-4,width-1200,height-900,msid-92257176/92257176.jpg', 'Fathers Day');
 
 
 INSERT INTO users_friends(user_id, friends_id)
