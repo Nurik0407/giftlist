@@ -58,7 +58,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
                        concat(u.first_name, ' ', u.last_name) as full_name,
                        ui.image as image,
                        ui.phone_number as user_phone,
-                   ui.date_of_birth as user_date_of_birth,
+                       ui.date_of_birth as user_date_of_birth,
                        ui.country as country,
                        ui.hobby as hobby,
                        ui.important as important,

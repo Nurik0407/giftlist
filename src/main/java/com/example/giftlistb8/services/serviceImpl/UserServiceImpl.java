@@ -25,6 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final ComplaintRepository complaintRepository;

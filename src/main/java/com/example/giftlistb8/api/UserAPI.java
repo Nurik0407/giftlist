@@ -35,15 +35,15 @@ public class UserAPI {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @Operation(summary = "Get user by id", description = "Returns a single user  and user's holiday,wishes,charities.")
-    @GetMapping("/{userId}")
-    private UserResponseGetById getById(@PathVariable Long userId) {
+    @GetMapping("/profile")
+    public UserResponseGetById getById(@RequestParam Long userId) {
         return service.getById(userId);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Delete user by id", description = "Delete user with all information by id")
     @DeleteMapping
-    private SimpleResponse deleteById(@RequestParam Long userId) {
+    public SimpleResponse deleteById(@RequestParam Long userId) {
         return service.deleteById(userId);
     }
 
