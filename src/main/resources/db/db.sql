@@ -189,11 +189,11 @@ VALUES (1, 6),
 
 
 INSERT INTO reserves (id, is_anonymous, charity_id, user_id, wish_id)
-VALUES (1, false, null, 7, 7),
-       (2, true, null, 8, 8),
+VALUES (1, false, null, 2, 7),
+       (2, true, null, 1, 8),
        (3, false, null, 9, 9),
        (4, true, 1, 6, null),
-       (5, true, 2, 7, null);
+       (5, true, 2, 1, null);
 
 INSERT INTO complaints (id, complaint, seen, user_id)
 VALUES (1, 'Проявление ненависти', false, 2),
