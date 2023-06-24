@@ -10,7 +10,7 @@ public record WishResponse(
         String name,
         String holidayName,
         String image,
-        LocalDate date,
+        LocalDate dateOfHoliday,
         boolean isReserved,
         boolean isAnonymous,
         String reserveUserImage,
