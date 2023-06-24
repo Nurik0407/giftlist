@@ -33,11 +33,16 @@ public class CharityAdminServiceImpl implements CharityAdminService {
     @Override
     public List<CharitiesResponse> findAll() {
         String sql = "SELECT u.id as user_id,CONCAT(u.last_name, ' ', u.first_name) AS full_name, ui.image," +
-                "c.id,c.name, c.image, c.date_of_issue,c.state,c.status  AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
+                "c.id,c.name, c.image, c.date_of_issue,c.state," +
+                "COALESCE(case when r.is_anonymous=false then rui.image end ,NULL) as reserveUserImage," +
+                "c.status  AS is_reserved, COALESCE(r.is_anonymous, false) AS is_anonymous " +
                 "FROM charities c " +
                 "JOIN users u ON c.user_id = u.id " +
                 "LEFT JOIN user_infos ui ON u.user_info_id = ui.id " +
-                "LEFT JOIN reserves r ON c.id = r.charity_id ORDER BY c.id DESC ";
+                "LEFT JOIN reserves r ON c.id = r.charity_id " +
+                "LEFT JOIN users ru ON r.user_id = ru.id " +
+                "LEFT JOIN user_infos rui ON ru.user_info_id = rui.id " +
+                "ORDER BY c.id DESC ";
         return jdbcTemplate.query(sql, (resultSet, rowNum) -> new CharitiesResponse(
                 resultSet.getLong("user_id"),
                 resultSet.getString("full_name"),
@@ -47,6 +52,7 @@ public class CharityAdminServiceImpl implements CharityAdminService {
                 resultSet.getString("image"),
                 resultSet.getDate("date_of_issue").toLocalDate(),
                 resultSet.getString("state"),
+                resultSet.getString("reserveUserImage"),
                 resultSet.getBoolean("is_reserved"),
                 resultSet.getBoolean("is_anonymous")));
     }

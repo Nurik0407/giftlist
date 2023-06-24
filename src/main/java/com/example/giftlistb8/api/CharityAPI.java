@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Charity API",description = "API for managing charity organizations")
-@PreAuthorize("hasAuthority('USER')")
+@PreAuthorize("hasAnyAuthority('USER','ADMIN')")
 public class CharityAPI {
 
     private final CharityService service;

@@ -14,6 +14,7 @@ public record CharitiesResponse(
         String image,
         LocalDate dateAdded,
         String state,
+        String reserveUserImage,
         boolean isReserved,
         boolean isAnonymous
 ) {}
